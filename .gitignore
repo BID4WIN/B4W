@@ -1,0 +1,11 @@
+# Compiled sources #
+####################
+*.class
+
+# Working directories #
+#######################
+/*/bin
+
+# Workspace directory #
+#######################
+/.metadata
