@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+  <!-- ####################################################################### -->
+  <!-- Logging definition -->
+  <bean id="log4jInitialization"
+        class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <property name="targetClass" value="org.springframework.util.Log4jConfigurer" />
+    <property name="targetMethod" value="initLogging" />
+    <property name="arguments">
+      <list>
+        <value>classpath:log4j.properties</value>
+      </list>
+    </property>
+  </bean>
+
+  <!-- ####################### DATA SOURCE DEFINITION ###################### -->
+  <import resource="classpath:META-INF/config/persistence/spring-data-source-test-CommonsPersistence.xml"/>
+
+  <!-- ########################### AOP DEFINITION ########################## -->
+  <import resource="classpath:META-INF/config/aop/spring-aop-b4w.xml"/>
+
+  <!-- ####################### TRANSACTION DEFINITION ###################### -->
+  <import resource="classpath:META-INF/config/transaction/spring-transaction-b4w.xml"/>
+
+  <!-- ####################### PERSISTENCE DEFINITION ###################### -->
+  <import resource="classpath:META-INF/config/persistence/spring-persistence-test-CommonsPersistence.xml"/>
+
+  <!-- ######################## INJECTION DEFINITION ####################### -->
+  <!-- Enable the annotation usage for bean injection -->
+  <context:annotation-config/>
+  <!-- Define bean injection -->
+  <import resource="classpath:META-INF/config/injection/spring-dependencies-manager-test-CommonsManager.xml"/>
+</beans>

@@ -1,0 +1,99 @@
+<class-diagram version="1.0.7" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
+  associations="true" dependencies="true" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.connection.ConnectionAbstract" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/connection/ConnectionAbstract.java" binary="false">    
+    <position height="-1" width="-1" x="265" y="208"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.account.AccountBasedEntityMultipleAutoID" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/account/AccountBasedEntityMultipleAutoID.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="265" y="62"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.commons.persistence.entity.connection.IpAddress" 
+    project="CommonsEntity" file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/connection/IpAddress.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="15" y="208"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.connection.ConnectionRemanenceAbstract" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/connection/ConnectionRemanenceAbstract.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="265" y="377"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.connection.PasswordReinitAbstract" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/connection/PasswordReinitAbstract.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="626" y="377"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.account.AccountBasedKey" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/account/AccountBasedKey.java" binary="false">    
+    <position height="-1" width="-1" x="625" y="208"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.account.AccountBasedEntitySingle" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/account/AccountBasedEntitySingle.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="626" y="62"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <generalization id="8">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="9">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <generalization id="10">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <association id="11">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="12" name="ipAddress"/>      
+      <multiplicity id="13" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="14">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

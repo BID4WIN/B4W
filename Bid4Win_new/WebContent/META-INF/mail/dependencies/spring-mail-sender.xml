@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <!--=====================================================================-->
+    <!--                          Mail sender beans                          -->
+    <!--=====================================================================-->
+    
+    <!-- Gmail parent sender -->
+    <bean   id="gmailSender"
+            class="com.bid4win.commons.mail.MailSender"
+            scope="singleton">
+      <!-- Gmail SMTP server address -->
+      <property name="host" value="smtp.gmail.com" />
+      <!-- TLS Gmail SMTP port -->
+      <property name="port" value="587" />
+      <!-- Bid4Win personal name displayed -->
+      <property name="javaMailProperties">
+        <props>
+          <!-- Use SMTP-AUTH to authenticate to SMTP server -->
+          <prop key="mail.smtp.auth">true</prop>
+          <!-- Use TLS to encrypt communication with SMTP server -->
+          <prop key="mail.smtp.starttls.enable">true</prop>
+          <!-- Set the timeout in milliseconds -->
+          <prop key="mail.smtp.timeout">25000</prop>
+        </props>
+      </property>
+    </bean>
+    
+    <!-- No-reply sender -->
+    <bean   id="noReplySender"
+            class="com.bid4win.commons.mail.MailSender"
+            parent="gmailSender"
+            scope="singleton">
+      <property name="username" value="no-reply@bid4win.com" />
+      <property name="password" value="9f5f5b12" />
+      <property name="fromAddress" value="no-reply@bid4win.com" />
+      <property name="fromName" value="Bid4Win" />
+    </bean>
+
+</beans>

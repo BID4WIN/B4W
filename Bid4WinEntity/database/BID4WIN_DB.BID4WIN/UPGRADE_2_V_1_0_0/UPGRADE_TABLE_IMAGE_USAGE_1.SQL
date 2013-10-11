@@ -1,0 +1,4 @@
+-- Modification de la table IMAGE_USAGE
+ALTER TABLE IMAGE_USAGE
+CHANGE RESOURCE_TYPE IMAGE_TYPE VARCHAR(5) NOT NULL
+       COMMENT 'Type de l image';

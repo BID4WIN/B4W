@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+<provider id="org.tigris.subversion.subclipse.core.svnnature">
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/bid4win,bid4win"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/Bid4WinEntity,Bid4WinEntity"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/Bid4WinMail,Bid4WinMail"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/bid4winManager,bid4winManager"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/Bid4WinManagerProperty,Bid4WinManagerProperty"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/Bid4WinPersistence,Bid4WinPersistence"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/Bid4WinService,Bid4WinService"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/Bid4WinServiceProperty,Bid4WinServiceProperty"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/CommonsCore,CommonsCore"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/CommonsEntity,CommonsEntity"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/CommonsJ2EE,CommonsJ2EE"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/CommonsLib,CommonsLib"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/CommonsLogging,CommonsLogging"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/CommonsMail,CommonsMail"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/CommonsManager,CommonsManager"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/CommonsPersistence,CommonsPersistence"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/CommonsService,CommonsService"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/CommonsTesting,CommonsTesting"/>
+<project reference="0.9.3,https://88.183.69.210/svn/bid4win/trunk/Tools,Tools"/>
+</provider>
+</psf>

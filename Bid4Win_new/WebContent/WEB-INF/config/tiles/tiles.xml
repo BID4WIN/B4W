@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+  <definition name="baseLayout.tile" template="/WEB-INF/jsp/commons/BaseLayout.jsp">
+    <put-attribute name="title" value="" />
+    <put-attribute name="header" value="/WEB-INF/jsp/commons/Header.jsp" />
+    <put-attribute name="snippet" value="/WEB-INF/jsp/commons/Snippet.jsp" />
+    <put-attribute name="body" value="/WEB-INF/jsp/commons/Body.jsp" />
+    <put-attribute name="board" value="/WEB-INF/jsp/commons/Board.jsp" />
+    <put-attribute name="page" value="/WEB-INF/jsp/commons/Page.jsp" />
+    <put-attribute name="popup" value="/WEB-INF/jsp/commons/Popup.jsp" />
+    <put-attribute name="fancyTable" value="/WEB-INF/jsp/commons/FancyTable.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/jsp/commons/Footer.jsp" />
+  </definition>
+
+</tiles-definitions>

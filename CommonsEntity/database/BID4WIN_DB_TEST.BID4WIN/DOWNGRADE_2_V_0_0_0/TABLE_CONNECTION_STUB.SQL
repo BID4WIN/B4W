@@ -1,0 +1,2 @@
+-- Suppression de la table CONNECTION_STUB
+DROP TABLE CONNECTION_STUB;

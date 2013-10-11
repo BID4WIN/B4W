@@ -1,0 +1,4 @@
+login : $account.getCredential().getLogin()
+login : ${account.getCredential().getLogin()}
+login : ${account.credential.login}
+login : $account.credential.login

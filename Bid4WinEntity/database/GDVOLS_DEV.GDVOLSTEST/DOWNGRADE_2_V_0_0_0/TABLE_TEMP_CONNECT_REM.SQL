@@ -1,0 +1,2 @@
+-- Suppression de la table TEMP_CONNECT_REM
+DROP TABLE TEMP_CONNECT_REM;

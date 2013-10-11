@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+  <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
+  <constant name="struts.devMode" value="false"/>
+  <constant name="struts.multipart.saveDir" value=""/>
+  <constant name="struts.multipart.maxSize" value="5242880"/>
+  <constant name="struts.objectFactory" value="org.apache.struts2.spring.StrutsSpringObjectFactory"/>
+  <constant name="struts.objectFactory.spring.autoWire" value="name"/>
+  <constant name="struts.objectFactory.spring.autoWire.alwaysRespect" value="true"/>
+
+  <!-- Internationalization management -->
+
+  <constant name="struts.custom.i18n.resources" value="messages" />
+  <constant name="struts.b4w.configuration" value="configuration" />
+
+  <!-- Actions mapping -->
+
+  <package name="bid4win-package" extends="json-default" namespace="/">
+
+    <result-types>
+      <result-type name="tile" class="org.apache.struts2.views.tiles.TilesResult" />
+    </result-types>
+
+    <interceptors>
+    
+      <interceptor name="accessInterceptor" class="com.bid4win.communication.interceptor.AccessInterceptor" />
+      <interceptor name="jsonInterceptor" class="com.bid4win.communication.interceptor.json.JSONInterceptor" />
+
+      <interceptor-stack name="extendedStack">
+        <interceptor-ref name="defaultStack" />
+        <interceptor-ref name="accessInterceptor" />
+      </interceptor-stack> 
+    
+      <interceptor-stack name="pageInterceptorStack">
+        <interceptor-ref name="servletConfig" />
+        <interceptor-ref name="accessInterceptor" />
+      </interceptor-stack>
+    </interceptors>
+
+    
+  </package>
+
+</struts>

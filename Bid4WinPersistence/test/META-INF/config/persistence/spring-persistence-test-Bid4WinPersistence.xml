@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <!-- ################# ENTITY MANAGER FACTORY DEFINITION ################# -->
+  <bean id="Bid4WinEntityManagerFactory"
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+        depends-on="Bid4WinDataSource">
+    <property name="dataSource"             ref="Bid4WinDataSource"/>
+    <property name="persistenceUnitName"    value="Bid4WinPersistenceUnit"/>
+    <property name="persistenceXmlLocation" value="classpath:/META-INF/config/persistence/persistence-test-Bid4WinPersistence.xml"/>
+    <property name="jpaVendorAdapter">
+      <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+    </property>
+  </bean>
+
+  <!-- ################### PERSISTENCE ANNOTATIONS USAGE ################### -->
+  <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+</beans>
+	

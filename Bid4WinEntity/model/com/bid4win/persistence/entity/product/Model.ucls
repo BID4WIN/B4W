@@ -1,0 +1,199 @@
+<class-diagram version="1.0.7" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
+  associations="true" dependencies="true" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.product.Product" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/product/Product.java" binary="false">    
+    <position height="-1" width="-1" x="202" y="254"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.locale.I18nGroup" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/locale/I18nGroup.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="450" y="218"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.price.Price" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/price/Price.java" binary="false">    
+    <position height="-1" width="-1" x="450" y="298"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.locale.html.HtmlPageUsage" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/locale/html/HtmlPageUsage.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="353" y="422"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.image.ImageUsage" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/image/ImageUsage.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="86" y="422"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.Bid4WinEntityGeneratedID" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/Bid4WinEntityGeneratedID.java" binary="false">    
+    <position height="-1" width="-1" x="203" y="112"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.image.ImageStorage" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/image/ImageStorage.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="85" y="541"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.locale.html.HtmlPageStorage" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/locale/html/HtmlPageStorage.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="352" y="541"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.Bid4WinEmbeddableWithTypeMap" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/Bid4WinEmbeddableWithTypeMap.java" binary="false">    
+    <position height="-1" width="-1" x="749" y="254"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <association id="10">    
+    <bendpoint x="103" y="301"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="11" name="imageUsageList">        
+        <position height="14" width="80" x="6" y="369"/>      
+      </attribute>      
+      <multiplicity id="12" minimum="0" maximum="2147483647">        
+        <position height="14" width="16" x="97" y="369"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="13">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="14" name="price"/>      
+      <multiplicity id="15" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="16">    
+    <bendpoint x="245" y="360"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="17" name="htmlPageUsageList">        
+        <position height="14" width="95" x="186" y="379"/>      
+      </attribute>      
+      <multiplicity id="18" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="19">    
+    <bendpoint x="167" y="348"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="20" name="product">        
+        <position height="14" width="41" x="140" y="289"/>      
+      </attribute>      
+      <multiplicity id="21" minimum="0" maximum="1">        
+        <position height="14" width="18" x="188" y="290"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="22">    
+    <bendpoint x="66" y="486"/>    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <generalization id="23">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <generalization id="24">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <dependency id="25">    
+    <bendpoint x="109" y="487"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <generalization id="26">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <dependency id="27">    
+    <bendpoint x="374" y="486"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="28">    
+    <bendpoint x="329" y="487"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="29">    
+    <bendpoint x="338" y="324"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="30" name="product">        
+        <position height="14" width="41" x="241" y="287"/>      
+      </attribute>      
+      <multiplicity id="31" minimum="0" maximum="1">        
+        <position height="14" width="18" x="262" y="272"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="32">    
+    <bendpoint x="383" y="244"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="33" name="names">        
+        <position height="14" width="36" x="395" y="245"/>      
+      </attribute>      
+      <multiplicity id="34" minimum="0" maximum="1">        
+        <position height="14" width="18" x="366" y="245"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="35">    
+    <bendpoint x="285" y="206"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="36" name="summaries"/>      
+      <multiplicity id="37" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" package="false" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="false" package="false" protected="false" private="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

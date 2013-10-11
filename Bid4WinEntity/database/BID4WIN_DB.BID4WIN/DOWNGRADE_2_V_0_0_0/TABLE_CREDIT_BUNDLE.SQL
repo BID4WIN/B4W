@@ -1,0 +1,2 @@
+-- Suppression de la table CREDIT_BUNDLE
+DROP TABLE CREDIT_BUNDLE;

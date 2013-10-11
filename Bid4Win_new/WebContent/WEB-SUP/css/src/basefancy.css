@@ -1,0 +1,30 @@
+/* ----------------------------- *
+ *         Bid4Win V 1.0         *
+ *       USEFULL BASE STYLES     *
+ * ----------------------------- *
+
+/* Needed for Safari/Chrome */
+q:before,q:after {
+	content: "";
+}
+
+/* Tables */
+table {
+	margin: 0;
+  padding: 0;
+	border: none;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table td,table th {
+	margin: 0;
+	padding: 0;
+	border: none;
+	vertical-align: top;
+}
+
+/* HTML 5 semantic containers */
+article,aside,dialog,figure,footer,header,hgroup,menu,nav,section {
+	display: block;
+}

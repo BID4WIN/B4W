@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+  
+  
+  <!-- ####################### DATA SOURCE DEFINITION ###################### -->
+  <!--<bean id="P6Bid4WinDataSource" class="org.springframework.jndi.JndiObjectFactoryBean" lazy-init="true">
+    <property name="jndiName" value="jdbc/Bid4WinDataSource"/>
+    --><!--  fallback to a local datasource if we are not in the container -->
+    <!--<property name="defaultObject" ref="P6Bid4WinDataSourceLocal"/>
+  </bean>
+  <bean id="P6Bid4WinDataSourceLocal"
+        class="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource">
+    <property name="serverName" value="localhost"/>
+    <property name="databaseName" value="bid4win_db_test"/>
+    <property name="portNumber" value="3306"/>
+    <property name="user" value="bid4win"/>
+    <property name="password" value="bid4win"/>
+    <property name="URL" value="jdbc:mysql://localhost:3306/bid4win_db_test"/>
+    <property name="pinGlobalTxToPhysicalConnection" value="true"/>
+  </bean>
+-->
+  <bean id="Bid4WinDataSource"
+        class="com.atomikos.jdbc.AtomikosDataSourceBean"
+        init-method="init" destroy-method="close">
+    <property name="uniqueResourceName"><value>Bid4WinDataSource</value></property>
+    <!--<property name="xaDataSourceClassName"><value>com.p6spy.engine.spy.P6XADataSource</value></property>
+    --><property name="xaDataSourceClassName"><value>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</value></property>
+    <property name="xaProperties">
+      <props>
+        <prop key="serverName">localhost</prop>
+        <prop key="databaseName">bid4win_db_test</prop>
+        <prop key="portNumber">3306</prop>
+        <prop key="user">bid4win</prop>
+        <prop key="password">bid4win</prop>
+        <prop key="URL">jdbc:mysql://localhost:3306/bid4win_db_test</prop>
+        <!-- As MySQL does not allow for joining an existing XA transaction branch,
+             as mentioned here: http://dev.mysql.com/doc/refman/5.0/en/xa-restrictions.html
+             the consequence is that one transaction accessing the same MySQL multiple
+             times can run into problem, this implies specific atomikos configuration -->
+        <prop key="pinGlobalTxToPhysicalConnection">true</prop>
+       </props>
+    </property>
+    <property name="minPoolSize" value="20"/>
+    <property name="maxPoolSize" value="50"/>
+  </bean>
+</beans>
+	

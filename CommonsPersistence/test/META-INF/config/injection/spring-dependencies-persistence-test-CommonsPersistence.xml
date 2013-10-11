@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+  
+  <!-- Injection de tous les DAO de test -->
+  <context:component-scan base-package="com.bid4win.commons.persistence.dao">
+    <context:include-filter type="regex" expression=".*Stub"/>
+    <context:exclude-filter type="regex" expression=".*Dao"/>
+  </context:component-scan>
+  <context:component-scan base-package="com.bid4win.commons.persistence.dao.account">
+    <context:include-filter type="regex" expression=".*Dao"/>
+  </context:component-scan>
+
+  <bean id="FooStubLocker"
+        class="com.bid4win.commons.persistence.dao.foo.not_cached.FooStubLocker"
+        scope="singleton"/>
+  <bean id="FooStubLockerThread"
+        class="com.bid4win.commons.persistence.dao.foo.not_cached.FooStubLockerThread"
+        scope="prototype"/>
+  <bean id="FooCachedStubLocker"
+        class="com.bid4win.commons.persistence.dao.foo.cached.FooCachedStubLocker"
+        scope="singleton"/>
+  <bean id="FooCachedStubLockerThread"
+        class="com.bid4win.commons.persistence.dao.foo.cached.FooCachedStubLockerThread"
+        scope="prototype"/>
+
+  <!-- Foo DAO -->
+  <bean id="FooStubDao"
+        class="com.bid4win.commons.persistence.dao.foo.not_cached.FooStubDaoSpring"
+        scope="singleton"/>
+  <!-- FooComplex DAO -->
+  <bean id="FooComplexDao"
+        class="com.bid4win.commons.persistence.dao.foo.not_cached.FooComplexDaoSpring"
+        scope="singleton"/>
+  <!-- FooParent1 DAO -->
+  <bean id="FooParent1Dao"
+        class="com.bid4win.commons.persistence.dao.foo.not_cached.FooParent1DaoSpring"
+        scope="singleton"/>
+  <!-- FooParent2 DAO -->
+  <bean id="FooParent2Dao"
+        class="com.bid4win.commons.persistence.dao.foo.not_cached.FooParent2DaoSpring"
+        scope="singleton"/>
+  <!-- FooRecursive DAO -->
+  <bean id="FooRecursiveDao"
+        class="com.bid4win.commons.persistence.dao.foo.not_cached.FooRecursiveDaoSpring"
+        scope="singleton"/>
+
+  <!-- FooCached DAO -->
+  <bean id="FooCachedStubDao"
+        class="com.bid4win.commons.persistence.dao.foo.cached.FooCachedStubDaoSpring"
+        scope="singleton"/>
+  <!-- FooCachedParent1 DAO -->
+  <bean id="FooCachedParent1Dao"
+        class="com.bid4win.commons.persistence.dao.foo.cached.FooCachedParent1DaoSpring"
+        scope="singleton"/>
+  <!-- FooCachedParent2 DAO -->
+  <bean id="FooCachedParent2Dao"
+        class="com.bid4win.commons.persistence.dao.foo.cached.FooCachedParent2DaoSpring"
+        scope="singleton"/>
+  <!-- FooCachedParent3 DAO -->
+  <bean id="FooCachedParent3Dao"
+        class="com.bid4win.commons.persistence.dao.foo.cached.FooCachedParent3DaoSpring"
+        scope="singleton"/>
+  <!-- FooCachedTwin DAO -->
+  <bean id="FooCachedTwinDao"
+        class="com.bid4win.commons.persistence.dao.foo.cached.FooCachedTwinDaoSpring"
+        scope="singleton"/>
+
+  <!-- Injection de la persistence -->
+  <import resource="classpath:META-INF/config/injection/spring-dependencies-entity-test-CommonsEntity.xml"/>
+</beans>

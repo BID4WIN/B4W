@@ -1,0 +1,109 @@
+/* ----------------------------- *
+ *         Bid4Win V 1.0         *
+ *          BASE STYLES          *
+ * ----------------------------- *
+
+/* Page */
+html {
+	font-size: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font: normal .8em "Trebuchet MS", Verdana, "Lucida Grande", Tahoma, Helvetica, Sans-Serif;
+	line-height: 1.4;
+	color: black;
+	background: white;
+}
+
+/* Titles */
+h1,h2,h3,h4,h5,h6 {
+	margin: 1em 0 .5em 0;
+	line-height: 1.2;
+	font-weight: bold;
+	font-style: normal;
+}
+
+h1 {
+	font-size: 1.75em;
+}
+
+h2 {
+	font-size: 1.5em;
+}
+
+h3 {
+	font-size: 1.25em;
+}
+
+h4 {
+	font-size: 1em;
+}
+
+/* Lists */
+ul,ol {
+	margin: 0;
+	padding: 0;
+}
+
+/* Paragraphs */
+p {
+	margin: .75em 0;
+}
+
+address {
+	margin: .75em 0;
+	font-style: normal;
+}
+
+/* Links */
+a {
+	text-decoration: underline;
+}
+
+a:link {
+	color: #11C;
+}
+
+a:visited {
+	color: #339;
+}
+
+a:hover,a:focus,a:active {
+	color: #00F;
+}
+
+/* No surrounding dot line when clicking on a link */
+a,a:active {
+	outline: none;
+}
+
+/* no border around images within links */
+a img {
+	border: none;
+}
+
+a:active img {
+	border: none;
+}
+
+/* Several inline settings */
+em {
+	font-style: italic;
+}
+
+strong {
+	font-weight: bold;
+}
+
+/* Forms */
+form,fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+input,button,select {
+	vertical-align: middle;
+}

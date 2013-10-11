@@ -1,0 +1,2 @@
+-- Suppression de la table TEMP_FOO_EMBEDDED_SET
+DROP TABLE TEMP_FOO_EMBEDDED_SET;

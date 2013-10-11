@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.0"
+                 xmlns="http://java.sun.com/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
+                                     http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+
+  <mapped-superclass class="com.bid4win.commons.persistence.usertype.Bid4WinUserTypeDefinition"/>
+
+  <entity class="com.bid4win.commons.persistence.entity.property.PropertyRootAbstractStub">
+    <table name="PROPERTY_ROOT"/>
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.property.PropertyAbstractStub">
+    <table name="PROPERTY"/>
+  </entity>
+
+  <entity class="com.bid4win.commons.persistence.entity.account.AccountAbstractStub">
+    <table name="ACCOUNT_STUB"/>
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.account.AccountBasedEntityMultipleStub">
+    <table name="ACCOUNT_BASED_MULTIPLE"/>
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.account.AccountBasedEntitySingleStub">
+    <table name="ACCOUNT_BASED_SINGLE"/>
+  </entity>
+
+  <entity class="com.bid4win.commons.persistence.entity.connection.ConnectionAbstractStub">
+    <table name="CONNECTION_STUB"/>
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractStub">
+    <table name="CONNECTION_HISTORY_STUB"/>
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.connection.PasswordReinitAbstractStub">
+    <table name="PASSWORD_REINIT_STUB"/>
+  </entity>
+  
+  <entity class="com.bid4win.commons.persistence.entity.resource.ResourceStorageStub">
+    <table name="RESOURCE_STORAGE_STUB"/>
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.resource.ResourceUsageStub">
+    <table name="RESOURCE_USAGE_STUB"/>
+  </entity>
+
+  <entity class="com.bid4win.commons.persistence.entity.foo.not_cached.Foo">
+    <table name="FOO"/>
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.not_cached.FooStub">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.not_cached.FooChild">
+    <table name="FOO_CHILD"/>
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.not_cached.FooChild1">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.not_cached.FooChild2">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.not_cached.FooComplex">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.not_cached.FooParent">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.not_cached.FooParent1">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.not_cached.FooParent2">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.not_cached.FooRecursive">
+  </entity>
+
+  <entity class="com.bid4win.commons.persistence.entity.foo.cached.FooCached">
+    <table name="FOO"/>
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.cached.FooCachedStub">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.cached.FooCachedChild">
+    <table name="FOO_CHILD"/>
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.cached.FooCachedChild1">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.cached.FooCachedChild2">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.cached.FooCachedChild3">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.cached.FooCachedParent">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.cached.FooCachedParent1">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.cached.FooCachedParent2">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.cached.FooCachedParent3">
+  </entity>
+  <entity class="com.bid4win.commons.persistence.entity.foo.cached.FooCachedTwin">
+  </entity>
+</entity-mappings>

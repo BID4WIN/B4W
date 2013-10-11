@@ -1,0 +1,2 @@
+-- Suppression de la table NORMAL_BID_HISTORY
+DROP TABLE NORMAL_BID_HISTORY;

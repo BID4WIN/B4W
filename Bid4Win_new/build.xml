@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Minimizer">
+
+	<property name="project.dir" value="." />
+	<property name="webcontent.dir" value="${project.dir}/WebContent" />
+	<property name="web-inf.dir" value="${webcontent.dir}/WEB-INF" />
+	<property name="web-sup.dir" value="${webcontent.dir}/WEB-SUP" />
+  
+  <property name="js-file.dir" value="${web-sup.dir}/js" />
+  <property name="js-file.min.dir" value="${js-file.dir}/min" />
+  <property name="js-file.min" value="min.js" />
+
+  <property name="css-file.dir" value="${web-sup.dir}/css" />
+  <property name="css-file.src.dir" value="${css-file.dir}/src" />
+  <property name="css-file.min.dir" value="${css-file.dir}/min" />
+  <property name="css-file.min" value="min.css" />
+
+  <property name="js-file.list" value="
+    lib/jquery-1.4.2.js,
+    lib/jquery.history.js,
+    lib/ajaxfileupload.js,
+
+    ajax/AjaxManager.js,
+    cookie/CookieManager.js,
+
+    model/commons/Core.js,
+    model/commons/Map.js,
+    model/commons/UtilDate.js,
+    model/commons/UtilFloat.js,
+    model/commons/UtilString.js,
+
+    model/shortcut/Shortcut.js,
+    model/shortcut/ShortcutManager.js,
+
+    model/property/Property.js,
+    model/property/PropertyMap.js,
+    model/property/PropertyManager.js,
+
+    model/image/ImageManager.js,
+
+    model/product/Product.js,
+    model/product/ProductManager.js,
+
+    model/property/i18n/i18nManager.js,
+
+    model/auction/Auction.js,
+    model/auction/AuctionManager.js,
+
+    content/Content.js,
+    content/navigation/NavigationManager.js,
+    content/admin/PropertiesManagerContent.js,
+    content/admin/ProductsManagerContent.js,
+    content/admin/ProductManagerContent.js,
+    content/admin/ImagesManagerContent.js,
+    content/admin/AuctionsManagerContent.js,
+    content/CurrentAuctionsContent.js,
+    content/ClosedAuctionsContent.js,
+    content/HowtoContent.js,
+
+    main.js
+  " />
+
+  <property name="css-file.list" value="
+    base.css,
+  	basefancy.css,
+  	main.css
+  " />
+	
+	<target name="concat" description="Concats the js files.">
+		<echo>Concatenation into ${js-file.min} of the js files in the following list :</echo>
+		<echo>${js-file.list}</echo>
+    <concat destfile="${js-file.min.dir}/${js-file.min}" append="false">
+      <filelist dir="${js-file.dir}" files="${js-file.list}" />
+    </concat>
+    <echo>Concatenation into ${css-file.min} of the css files in the following list :</echo>
+    <echo>${css-file.list}</echo>
+    <concat destfile="${css-file.min.dir}/${css-file.min}" append="false">
+      <filelist dir="${css-file.src.dir}" files="${css-file.list}" />
+    </concat>
+	</target>
+
+	<target name="minimize" depends="concat" description="Minifies the concat files">
+		<taskdef name="yuicompress" classname="com.yahoo.platform.yui.compressor.YUICompressTask">
+			<classpath>
+				<pathelement path="${web-inf.dir}/lib/yuicompressor-2.4.2.jar" />
+				<pathelement path="${web-inf.dir}/lib/YUIAnt.jar" />
+			</classpath>
+		</taskdef>
+    <echo>Minimization of ${js-file.min}</echo>
+    <yuicompress linebreak="16000" warn="false" munge="true" preserveallsemicolons="true" outputfolder="${js-file.min.dir}">
+      <fileset dir="${js-file.min.dir}" />
+    </yuicompress>
+    <echo>Minimization of ${css-file.min}</echo>
+    <yuicompress linebreak="16000" warn="false" munge="true" preserveallsemicolons="true" outputfolder="${css-file.min.dir}">
+      <fileset dir="${css-file.min.dir}" />
+    </yuicompress>
+	</target>
+
+</project>

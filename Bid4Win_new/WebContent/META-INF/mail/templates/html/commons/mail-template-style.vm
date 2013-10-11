@@ -1,0 +1,65 @@
+#macro(bodyStyle)
+style="
+    background: none repeat scroll 0 0 #F7F7F7;
+    border: 2px solid #DDDDDD;
+    color: #444444;
+    font: 100% 'Trebuchet MS',Verdana,'Lucida Grande',Tahoma,Helvetica,Sans-Serif;
+    margin: auto;
+    padding: 0;
+    width: 600px;
+    "
+#end
+
+#macro(headerStyle)
+style="
+    padding: 10px;
+    text-align: center;
+    "
+#end
+
+#macro(h1Style)
+style="
+    font-size: 2em;
+    "
+#end
+
+#macro(h2Style)
+style="
+    font-size: 1.5em;
+    "
+#end
+
+#macro(h3Style)
+style="
+    font-size: 1.2em;
+    "
+#end
+
+#macro(aStyle)
+style="
+    color: blue;
+    text-decoration: underline;
+    "
+#end
+
+#macro(contentStyle)
+style="
+    text-align: left;
+    padding: 10px;
+    "
+#end
+
+#macro(centerStyle)
+style="
+    text-align: center;
+    "
+#end
+
+#macro(footerStyle)
+style="
+    text-align: center;
+    font-size: 0.7em;
+    padding: 10px;
+    "
+#end
+        

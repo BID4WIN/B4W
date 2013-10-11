@@ -1,0 +1,1647 @@
+/* ----------------------------- *
+ *         Bid4Win V 1.0         *
+ * ----------------------------- */
+body {
+	color: #444;
+	background: #EFEDE1;
+	font: normal 80% "Trebuchet MS", Verdana, "Lucida Grande", Tahoma,
+		Helvetica, Sans-Serif;
+}
+
+a img {
+	border: 0;
+}
+
+html,body,ol,ul,form,fieldset {
+	margin: 0;
+	padding: 0;
+}
+
+fieldset {
+	border: 0;
+}
+
+textarea {
+	font: inherit;
+}
+
+.clear {
+	clear: both;
+}
+
+.found {
+	color: #444;
+	background-color: lightblue;
+	font-weight: bold;
+}
+
+.separator {
+	border-bottom: 1px solid lightgrey;
+	clear: both;
+	width: 100%;
+	margin-bottom: 5px;
+}
+
+.unselectable {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* ----------------------------- *
+ *            Header             *
+ * ----------------------------- */
+#header {
+	background: black url("../img/header-bg-blue.jpg") 50% 35px no-repeat;
+	text-align: center;
+}
+
+#header-content {
+	text-align: left;
+	position: relative;
+	width: 960px;
+	margin: 0 auto;
+}
+
+#header h1 {
+	margin: 0;
+	padding: 45px 0 0 0;
+	font-size: 15px;
+	line-height: 1;
+}
+
+/* Menu principal */
+ul#menu {
+	position: absolute;
+	top: 0;
+	right: 0;
+	list-style: none;
+	display: none;
+}
+
+ul#menu li {
+	text-align: center;
+	width: 125px;
+	margin-left: 40px;
+	float: left;
+	height: 115px;
+}
+
+ul#menu li:hover,ul#menu li:focus {
+	background: url("../img/halo.png") no-repeat 0px 35px;
+}
+
+ul#menu li a {
+	text-decoration: none;
+	color: #fff;
+	font-size: 1.5em;
+	font-weight: bold;
+	font-variant: small-caps;
+	line-height: 30px;
+}
+
+/* Sous-Menu principal */
+#sous-menu {
+	width: 960px;
+	height: 66px;
+	margin: 0 auto;
+	background: url("../img/menu-bg.png") left top no-repeat;
+	margin-top: -7px;
+}
+
+#sous-menu a#rss {
+	float: right;
+	color: #fff;
+	text-decoration: none;
+	font-size: 1.5em;
+	font-weight: bold;
+	font-variant: small-caps;
+	/*
+     padding-top:21px;
+     margin:0 0.8em;
+     */
+}
+
+#sous-menu form {
+	float: right;
+	margin: 0;
+	padding: 20px 0 0 0;
+}
+
+#sous-menu form #recherche-texte {
+	width: 151px;
+	height: 22px;
+	padding: 5px 0 0 25px;
+	background: url("../img/input-search.png") right top no-repeat;
+	border: none;
+	margin: 0;
+	vertical-align: top;
+	color: #aaa;
+}
+
+#sous-menu form #recherche-submit {
+	width: 36px;
+	height: 27px;
+	border: none;
+	margin: 0;
+	padding: 0;
+	color: white;
+	background: url("../img/btn-ok.png") left top no-repeat;
+	vertical-align: top;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+#sous-menu ul {
+	padding: 21px 0 0 10px;
+	list-style: none;
+}
+
+#sous-menu ul li {
+	margin-right: 15px;
+	display: inline;
+}
+
+#sous-menu li a {
+	text-decoration: none;
+	color: #fff;
+	font-size: 1.5em;
+	font-weight: bold;
+	font-variant: small-caps;
+}
+
+#sous-menu li.homeitem {
+	margin-right: 5px;
+	vertical-align: middle;
+}
+
+#sous-menu li.homeitem a {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#sous-menu li a:hover,#sous-menu li a:focus,#sous-menu li a:active {
+	border-bottom: 8px solid #A1B03B;
+}
+
+#sous-menu li.actif a {
+	border-bottom: 8px solid #fff;
+}
+
+#sous-menu li.homeitem img {
+	width: 20px;
+	height: 20px;
+}
+
+#header-sep {
+	line-height: 4px;
+	font-size: 1px;
+	height: 4px;
+	background-color: #D7D4CB;
+}
+
+#header-sep .inside {
+	background: url("../img/header-sep.png") center top;
+	margin: 0 auto;
+	width: 990px;
+}
+
+#header #admin-menu {
+	color: white;
+	left: 0;
+	position: absolute;
+	top: 7px;
+}
+
+#header #admin-menu a {
+	color: white;
+	margin: 10px;
+	text-decoration: none;
+}
+
+#header #admin-menu a:hover {
+	text-decoration: underline;
+}
+
+#header #admin-menu a:active {
+	color: blue;
+}
+
+#header #connection {
+	position: absolute;
+	top: 7px;
+	right: 7px;
+	color: white;
+}
+
+#header #connection .connection {
+	cursor: pointer;
+}
+
+/* ----------------------------- *
+ *               Body            *
+ * ----------------------------- */
+#body {
+	width: 100%;
+	background: #EFEDE1;
+	margin: 0 auto;
+	text-align: center;
+	height: auto;
+}
+
+#header-shadow {
+	width: 100%;
+	background: transparent url("../img/header-shadow-bg.png") 0 0 repeat-x;
+	position: absolute;
+	z-index: 10;
+}
+
+/* ----------------------------- *
+ *            FancyTable         *
+ * ----------------------------- */
+.fancy-table,.fancy-table>tbody>tr>td {
+	border: 0px;
+}
+
+.fancy-td-top-left {
+	background: transparent url("../img/page-corner-bg.png") 0 0 no-repeat;
+	padding: 0;
+	margin: 0;
+	width: 25px;
+	height: 25px;
+}
+
+.fancy-td-top {
+	background: transparent url("../img/page-x-bg.png") 0 0 repeat-x;
+	padding: 0;
+	margin: 0;
+	height: 25px;
+}
+
+.fancy-td-top-right {
+	background: transparent url("../img/page-corner-bg.png") -25px 0
+		no-repeat;
+	padding: 0;
+	margin: 0;
+	width: 25px;
+	height: 25px;
+}
+
+.fancy-td-left {
+	background: transparent url("../img/page-y-bg.png") 0 0 repeat-y;
+	padding: 0;
+	width: 25px;
+}
+
+.fancy-td {
+	background: #FFFFFF;
+}
+
+.fancy-td-right {
+	background: transparent url("../img/page-y-bg.png") -25px 0 repeat-y;
+	padding: 0;
+	width: 25px;
+}
+
+.fancy-td-bottom-left {
+	background: transparent url("../img/page-corner-bg.png") 0 -25px
+		no-repeat;
+	padding: 0;
+	margin: 0;
+	width: 25px;
+	height: 25px;
+}
+
+.fancy-td-bottom {
+	background: transparent url("../img/page-x-bg.png") 0 -25px repeat-x;
+	padding: 0;
+	margin: 0;
+	height: 25px;
+}
+
+.fancy-td-bottom-right {
+	background: transparent url("../img/page-corner-bg.png") -25px -25px
+		no-repeat;
+	padding: 0;
+	margin: 0;
+	width: 25px;
+	height: 25px;
+}
+
+/* ----------------------------- *
+ *             Content           *
+ * ----------------------------- */
+#content .header {
+	text-align: right;
+}
+
+#content .header .title {
+	float: left;
+	font-size: 1.5em;
+	line-height: 2.7em;
+	text-align: left;
+}
+
+#content .header .search {
+	float: right;
+	height: 20px;
+	width: 150px;
+	margin: 13px;
+}
+
+#content .header .refresh {
+	background: url("../img/tools-bg.png") no-repeat scroll 0 0 transparent;
+	float: right;
+	height: 32px;
+	width: 32px;
+	margin: 10px;
+}
+
+#content .header .refresh:hover {
+	margin-top: 5px;
+}
+
+#content .header .add {
+	background: url("../img/tools-bg.png") no-repeat scroll -32px 0
+		transparent;
+	float: right;
+	height: 32px;
+	width: 32px;
+	margin: 10px;
+}
+
+#content .header .add:hover {
+	margin-top: 5px;
+}
+
+#content .header .addLanguage {
+	background: url("../img/tools-bg.png") no-repeat scroll -384px 0
+		transparent;
+	float: right;
+	height: 32px;
+	width: 32px;
+	margin: 10px;
+}
+
+#content .header .addLanguage:hover {
+	margin-top: 5px;
+}
+
+#content .header .update {
+	background: url("../img/tools-bg.png") no-repeat scroll -64px 0
+		transparent;
+	float: right;
+	height: 32px;
+	width: 32px;
+	margin: 10px;
+}
+
+#content .header .update:hover {
+	margin-top: 5px;
+}
+
+#content .header .remove {
+	background: url("../img/tools-bg.png") no-repeat scroll -96px 0
+		transparent;
+	float: right;
+	height: 32px;
+	width: 32px;
+	margin: 10px;
+}
+
+#content .header .remove:hover {
+	margin-top: 5px;
+}
+
+#content .header .display-list {
+	background: url("../img/tools-bg.png") no-repeat scroll -128px 0
+		transparent;
+	float: right;
+	height: 32px;
+	width: 32px;
+	margin: 10px;
+}
+
+#content .header .display-list:hover {
+	margin-top: 5px;
+}
+
+#content .header .display-table {
+	background: url("../img/tools-bg.png") no-repeat scroll -160px 0
+		transparent;
+	float: right;
+	height: 32px;
+	width: 32px;
+	margin: 10px;
+}
+
+#content .header .display-table:hover {
+	margin-top: 5px;
+}
+
+#content .header .display-sleeping {
+	background: url("../img/tools-bg.png") no-repeat scroll -192px 0
+		transparent;
+	float: right;
+	height: 32px;
+	width: 32px;
+	margin: 10px;
+}
+
+#content .header .display-sleeping:hover {
+	margin-top: 5px;
+}
+
+#content .header .display-sleeping.off {
+	background: url("../img/tools-bg.png") no-repeat scroll -288px 0
+		transparent;
+}
+
+#content .header .display-running {
+	background: url("../img/tools-bg.png") no-repeat scroll -224px 0
+		transparent;
+	float: right;
+	height: 32px;
+	width: 32px;
+	margin: 10px;
+}
+
+#content .header .display-running:hover {
+	margin-top: 5px;
+}
+
+#content .header .display-running.off {
+	background: url("../img/tools-bg.png") no-repeat scroll -320px 0
+		transparent;
+}
+
+#content .header .display-closed {
+	background: url("../img/tools-bg.png") no-repeat scroll -256px 0
+		transparent;
+	float: right;
+	height: 32px;
+	width: 32px;
+	margin: 10px;
+}
+
+#content .header .display-closed:hover {
+	margin-top: 5px;
+}
+
+#content .header .display-closed.off {
+	background: url("../img/tools-bg.png") no-repeat scroll -352px 0
+		transparent;
+}
+
+#content .header .upload-input {
+  float: right;
+  margin: 13px;
+}
+
+#content .header .image-name {
+  float: right;
+}
+
+#content .header .image-separator {
+  float: right;
+}
+
+#content .header .image-path {
+  float: right;
+}
+
+#content .header .image-properties {
+  float: right;
+  margin: 13px;
+}
+
+#content .message {
+	display: block;
+	font-weight: bold;
+	min-height: 20px;
+	vertical-align: middle;
+	clear: both;
+	text-align: center;
+	line-height: 1.5em;
+	margin: 5px;
+}
+
+#content .message .info {
+	color: darkblue;
+}
+
+#content .message .warn {
+	color: red;
+}
+
+#content .loading {
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	background: url("../img/loading.gif") no-repeat scroll 0 0 transparent;
+}
+
+/* ----------------------------- *
+ *             Tree              *
+ * ----------------------------- */
+#content .tree {
+	width: 200px;
+}
+
+#content .tree td {
+	text-align: left;
+}
+
+#content .tree tr .indent {
+  display: inline-block;
+  width: 10px;
+}
+
+#content .tree tr .name {
+  display: inline-block;
+  cursor: pointer;
+  padding: 0px 3px;
+}
+
+#content .tree tr .name:hover {
+  text-decoration: underline;
+}
+
+#content .tree tr .name.selected {
+	background-color: #DDDDDD;
+}
+
+#content .tree tr .node {
+	height: 12px;
+	width: 12px;
+	margin-right: 10px;
+	cursor: pointer;
+  display: inline-block;
+}
+
+#content .tree tr .node.inactive {
+  cursor: default;
+}
+
+#content .tree tr .node.expanded, #content .tree tr .node.inactive {
+  background: transparent url("../img/tree-bg.png") -12px 0px no-repeat;
+}
+
+#content .tree tr .node.reduced {
+	background: transparent url("../img/tree-bg.png") 0px 0px no-repeat;
+}
+
+#content .tree tr .node.expanded:hover {
+	background: transparent url("../img/tree-bg.png") -12px -12px no-repeat;
+}
+
+#content .tree tr .node.reduced:hover {
+	background: transparent url("../img/tree-bg.png") 0px -12px no-repeat;
+}
+
+#content .tree tr .node.expanded:active {
+	background: transparent url("../img/tree-bg.png") -12px -24px no-repeat;
+}
+
+#content .tree tr .node.reduced:active {
+	background: transparent url("../img/tree-bg.png") 0px -24px no-repeat;
+}
+
+/* ----------------------------- *
+ *               Page            *
+ * ----------------------------- */
+#page {
+	padding: 0;
+	display: block;
+	z-index: 500;
+}
+
+#page .fancy-tr-top {
+	display: none;
+}
+
+#page .content {
+	margin-top: 7px;
+}
+
+#page .fancy-table {
+	margin: 0 auto;
+}
+
+/* ----------------------------- *
+ *              Board            *
+ * ----------------------------- */
+#board {
+	padding: 0;
+	margin: 0;
+	position: fixed;
+	z-index: 0;
+}
+
+/* ----------------------------- *
+ *              Popup            *
+ * ----------------------------- */
+#popup .fog {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0.8;
+	filter: alpha(opacity =   80);
+	background-color: #000;
+	z-index: 1000;
+	position: absolute;
+}
+
+#popup .window {
+	position: absolute;
+	z-index: 1001;
+}
+
+/* ----------------------------- *
+ *              Snippet            *
+ * ----------------------------- */
+#snippet {
+	color: white;
+	float: right;
+	text-align: right;
+}
+
+/* ----------------------------- *
+ *         ConnectionForm        *
+ * ----------------------------- */
+#StatusSnippet {
+	
+}
+
+#StatusSnippet .loading {
+	
+}
+
+#StatusSnippet .link {
+	cursor: pointer;
+	float: left;
+	margin: 6px;
+}
+
+#StatusSnippet .link:hover {
+	text-decoration: underline;
+}
+
+#StatusSnippet .vSeparator {
+	float: left;
+	margin-top: 6px;
+}
+
+/* ----------------------------- *
+ *         ConnectionForm        *
+ * ----------------------------- */
+#ConnectionForm {
+	padding: 0 10px;
+	width: 300px;
+}
+
+#ConnectionForm .header .title {
+	float: none;
+	line-height: 1.5em;
+	text-align: center;
+}
+
+#ConnectionForm form {
+	
+}
+
+#ConnectionForm .login .label,#ConnectionForm .password .label {
+	margin: 0 10px 20px 0;
+	text-align: right;
+	padding-top: 2px;
+}
+
+#ConnectionForm .login .input,#ConnectionForm .password .input {
+	background-color: #EEEEEE;
+	border: 1px solid #444;
+	border-radius: 2px;
+	width: 200px;
+}
+
+#ConnectionForm .login .input:focus,#ConnectionForm .login .input:active,#ConnectionForm .password .input:focus,#ConnectionForm .password .input:active
+	{
+	border: 1px solid blue;
+	background-color: #EAEAEE;
+}
+
+#ConnectionForm .rememberMe .input,#ConnectionForm .reconnect .input {
+	float: right;
+	margin: 3px 10px 0 0;
+}
+
+#ConnectionForm .rememberMe .label,#ConnectionForm .reconnect .label {
+	text-align: left;
+}
+
+#ConnectionForm .reconnect .warning {
+	text-align: left;
+	font-size: 0.8em;
+	width: 200px;
+	color: grey;
+}
+
+#ConnectionForm .button {
+	background-color: #EEEEEE;
+	border: 1px solid #444;
+	border-radius: 8px 8px 8px 8px;
+	color: inherit;
+	cursor: pointer;
+	font-weight: bold;
+	height: 32px;
+	margin: 20px auto;
+	width: auto;
+}
+
+#ConnectionForm .button:hover {
+	background-color: #EAEAEE;
+}
+
+#ConnectionForm .noAccount {
+	cursor: pointer;
+}
+
+#ConnectionForm .passwordForgotten {
+	cursor: pointer;
+	font-size: 0.8em;
+}
+
+#ConnectionForm .noAccount:hover,#ConnectionForm .passwordForgotten:hover
+	{
+	text-decoration: underline;
+}
+
+#ConnectionForm .sendPassword {
+	border-top: 1px solid #444;
+	margin-top: 20px;
+	display: none;
+}
+
+#ConnectionForm .sendPassword .title {
+	font-size: 1.5em;
+	margin: 20px 0;
+}
+
+#ConnectionForm .sendPassword .description {
+	font-size: 0.9em;
+	width: 300px;
+}
+
+/* ----------------------------- *
+ *        SubscriptionForm       *
+ * ----------------------------- */
+#SubscriptionForm {
+	padding: 0 10px;
+}
+
+#SubscriptionForm .header .title {
+	float: none;
+	line-height: 1.5em;
+	text-align: center;
+}
+
+#SubscriptionForm .login .label,#SubscriptionForm .email .label,#SubscriptionForm .password .label
+	{
+	margin: 0 10px 20px 0;
+	text-align: right;
+	padding-top: 2px;
+}
+
+#SubscriptionForm .login .input,#SubscriptionForm .email .input,#SubscriptionForm .password .input
+	{
+	background-color: #EEEEEE;
+	border: 1px solid #444;
+	border-radius: 2px;
+	width: 200px;
+}
+
+#SubscriptionForm .login .input:focus,#SubscriptionForm .login .input:active,#SubscriptionForm .email .input:focus,#SubscriptionForm .email .input:active,#SubscriptionForm .password .input:focus,#SubscriptionForm .password .input:active
+	{
+	border: 1px solid blue;
+	background-color: #EAEAEE;
+}
+
+#SubscriptionForm .newsletter .input,#SubscriptionForm .cgu .input {
+	float: right;
+	margin: 3px 10px 0 0;
+}
+
+#SubscriptionForm .newsletter .label,#SubscriptionForm .cgu .label {
+	text-align: left;
+}
+
+#SubscriptionForm .button {
+	background-color: #EEEEEE;
+	border: 1px solid #444;
+	border-radius: 8px 8px 8px 8px;
+	color: inherit;
+	cursor: pointer;
+	font-weight: bold;
+	height: 32px;
+	margin: 20px auto;
+	width: auto;
+}
+
+#SubscriptionForm .button:hover {
+	background-color: #EAEAEE;
+}
+
+#SubscriptionForm .button:focus {
+	outline: 1px dotted lightgrey;
+	outline-radius: 8px 8px 8px 8px;
+}
+
+#SubscriptionForm .button:active {
+	border: inset 1px grey;
+}
+
+#SubscriptionForm .button::-moz-focus-inner {
+	border: 1px dotted lightgrey;
+}
+
+#SubscriptionForm .connect {
+	cursor: pointer;
+	font-size: 0.8em;
+}
+
+#SubscriptionForm .connect:hover {
+	text-decoration: underline;
+}
+
+/* ----------------------------- *
+ *       PasswordReinitForm      *
+ * ----------------------------- */
+#PasswordReinitForm {
+	padding: 0 10px;
+}
+
+#PasswordReinitForm .header .title {
+	float: left;
+	font-size: 1.5em;
+	line-height: 2.7em;
+	text-align: left;
+}
+
+#PasswordReinitForm .password .label {
+	margin: 0 10px 20px 0;
+	text-align: left;
+	padding-top: 2px;
+}
+
+#PasswordReinitForm .password .input {
+	background-color: #EEEEEE;
+	border: 1px solid #444;
+	border-radius: 2px;
+	width: 200px;
+}
+
+#PasswordReinitForm .password .input:focus,#PasswordReinitForm .password .input:active
+	{
+	border: 1px solid blue;
+	background-color: #EAEAEE;
+}
+
+#PasswordReinitForm .button {
+	background-color: #EEEEEE;
+	border: 1px solid #444;
+	border-radius: 8px 8px 8px 8px;
+	color: inherit;
+	cursor: pointer;
+	font-weight: bold;
+	height: 32px;
+	margin: 20px auto;
+	width: auto;
+}
+
+#PasswordReinitForm .button:hover {
+	background-color: #EAEAEE;
+}
+
+#PasswordReinitForm .button:focus {
+	outline: 1px dotted lightgrey;
+	outline-radius: 8px 8px 8px 8px;
+}
+
+#PasswordReinitForm .button:active {
+	border: inset 1px grey;
+}
+
+#PasswordReinitForm .button::-moz-focus-inner {
+	border: 1px dotted lightgrey;
+}
+
+/* ----------------------------- *
+ *        AuctionsManager        *
+ * ----------------------------- */
+#AuctionsManager {
+	min-width: 920px;
+}
+
+#AuctionsManager .auction.sleeping {
+	background-color: #DDDDDD;
+}
+
+#AuctionsManager .auction.running {
+	background-color: #DDFFDD;
+}
+
+#AuctionsManager .auction.closed {
+	background-color: #FFDDDD;
+}
+
+#AuctionsManager table {
+	clear: both;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#AuctionsManager table tr {
+	
+}
+
+#AuctionsManager table td {
+	padding: 5px;
+}
+
+#AuctionsManager table td .auction {
+	border: solid 1px grey;
+	text-align: center;
+	cursor: default;
+	width: 170px;
+	margin: 1px;
+}
+
+#AuctionsManager table td .auction.selected {
+	border-width: 2px;
+	margin: 0;
+}
+
+#AuctionsManager table td .auction .id {
+	padding: 0;
+	margin: 5px;
+}
+
+#AuctionsManager table td .auction .name {
+	padding: 0;
+	margin: 5px;
+}
+
+#AuctionsManager table td .auction .image {
+	
+}
+
+#AuctionsManager table td .auction .image img {
+	margin: auto;
+	display: block;
+	width: 160px;
+	height: 160px;
+}
+
+#AuctionsManager table td .auction .creation-date {
+	padding: 0;
+	margin: 5px;
+}
+
+#AuctionsManager table td .auction .price {
+	padding: 0;
+	margin: 5px;
+}
+
+#AuctionsManager ul {
+	clear: both;
+	list-style-type: none;
+	width: 100%;
+}
+
+#AuctionsManager ul li {
+	text-align: left;
+}
+
+#AuctionsManager ul li .auction {
+	border: none;
+	cursor: default;
+	border: 1px solid white;
+	padding: 1px;
+}
+
+#AuctionsManager ul li .auction.selected {
+	border: 1px solid grey;
+}
+
+#AuctionsManager ul li .auction .id {
+	display: inline-block;
+}
+
+#AuctionsManager ul li .auction .name {
+	display: inline-block;
+	width: 80%;
+}
+
+#AuctionsManager ul li .auction .image {
+	display: none;
+}
+
+#AuctionsManager ul li .auction .creation-date {
+	display: inline-block;
+	text-align: right;
+	width: 10%;
+}
+
+#AuctionsManager ul li .auction .price {
+	display: inline-block;
+	text-align: right;
+	width: 10%;
+}
+
+/* ----------------------------- *
+ *         AuctionManager        *
+ * ----------------------------- */
+#AuctionManager {
+	
+}
+
+#AuctionManager .name {
+	font-size: 200%;
+	font-variant: small-caps;
+	font-weight: bold;
+	text-align: left;
+	border-bottom: solid 1px lightgrey;
+}
+
+#AuctionManager .products-manager {
+	display: inline;
+	float: right;
+	font-size: 60%;
+	cursor: pointer;
+}
+
+#AuctionManager .products-manager:hover {
+	color: grey;
+}
+
+#AuctionManager .image {
+	padding-top: 0;
+	float: left;
+}
+
+#AuctionManager .img {
+	width: 320px;
+	height: 320px;
+	border: 1px solid lightgrey;
+	display: block;
+	color: grey;
+	font-style: italic;
+}
+
+#AuctionManager .infos {
+	padding: 10px;
+	padding-top: 0;
+	width: 320px;
+	float: right;
+}
+
+#AuctionManager .start-date-label {
+	margin-bottom: 10px;
+	text-align: left;
+	float: left;
+	clear: left;
+}
+
+#AuctionManager .start-date {
+	margin-bottom: 10px;
+	text-align: right;
+	float: right;
+	clear: right;
+}
+
+#AuctionManager .public-price-label {
+	margin-bottom: 10px;
+	float: left;
+	clear: left;
+	float: left;
+}
+
+#AuctionManager .public-price {
+	margin-bottom: 10px;
+	text-align: right;
+	float: right;
+	clear: right;
+}
+
+#AuctionManager .price {
+	clear: both;
+	float: left;
+	font-size: 120%;
+	margin: 20px;
+	width: 280px;
+}
+
+#AuctionManager .countDown {
+	clear: both;
+	float: left;
+	font-size: 120%;
+	margin: 20px;
+	width: 280px;
+}
+
+#AuctionManager .save {
+	background-color: #DDDDDD;
+	border: 1px solid grey;
+	cursor: pointer;
+	padding: 3px 20px;
+	clear: both;
+}
+
+#AuctionManager .save:hover {
+	background-color: #EEEEEE;
+}
+
+/* ----------------------------- *
+ *       PropertiesManager       *
+ * ----------------------------- */
+#PropertiesManager,#I18nManager {
+	width: 920px;
+}
+
+#PropertiesManager tr,#I18nManager tr {
+	border-top: solid 1px #DDDDDD;
+	border-bottom: solid 1px #DDDDDD;
+	height: 27px;
+	cursor: default;
+}
+
+#PropertiesManager tr.selected,#I18nManager tr.selected {
+	background-color: #DDDDDD;
+}
+
+#PropertiesManager tr .indent,#I18nManager tr .indent {
+  width: 12px;
+  height: 28px;
+  float: left;
+}
+
+#PropertiesManager tr .node,#I18nManager tr .node {
+	height: 12px;
+	width: 12px;
+  margin-right: 6px;
+  margin-top: 9px;
+	cursor: pointer;
+  float: left;
+}
+
+#PropertiesManager tr .node.leaf,#I18nManager tr .node.leaf {
+	cursor: default;
+}
+
+#PropertiesManager tr .node.expanded,#I18nManager tr .node.expanded {
+	background: transparent url("../img/tree-bg.png") -12px 0px no-repeat;
+}
+
+#PropertiesManager tr .node.reduced,#I18nManager tr .node.reduced {
+	background: transparent url("../img/tree-bg.png") 0px 0px no-repeat;
+}
+
+#PropertiesManager tr .node.expanded:hover,#I18nManager tr .node.expanded:hover {
+	background: transparent url("../img/tree-bg.png") -12px -12px no-repeat;
+}
+
+#PropertiesManager tr .node.reduced:hover,#I18nManager tr .node.reduced:hover {
+	background: transparent url("../img/tree-bg.png") 0px -12px no-repeat;
+}
+
+#PropertiesManager tr .node.expanded:active,#I18nManager tr .node.expanded:active {
+	background: transparent url("../img/tree-bg.png") -12px -24px no-repeat;
+}
+
+#PropertiesManager tr .node.reduced:active,#I18nManager tr .node.reduced:active {
+	background: transparent url("../img/tree-bg.png") 0px -24px no-repeat;
+}
+
+#PropertiesManager tr .key,#I18nManager tr .key {
+  text-align: left;
+  overflow: hidden;
+  padding: 5px 0 5px 3px;
+}
+
+#PropertiesManager tr .path,#I18nManager tr .path {
+  vertical-align: middle;
+  width: 700px;
+  text-align: left;
+}
+
+#PropertiesManager tr .key .parent-key,#I18nManager tr .key .parent-key {
+	display: none;
+}
+
+#PropertiesManager tr .value,#I18nManager tr .value {
+	vertical-align: middle;
+	width: 30%;
+	text-align: right;
+	border-left: solid 1px #DDDDDD;
+}
+
+#PropertiesManager tr .key input,#I18nManager tr .key input {
+	width: 99%;
+	font-family: inherit;
+}
+
+#PropertiesManager tr .value input,#I18nManager tr .value input {
+	width: 99%;
+  font-family: inherit;
+}
+
+/* ----------------------------- *
+ *         LabelsManager         *
+ * ----------------------------- */
+#LabelsManager {
+	width: 920px;
+}
+
+#LabelsManager table {
+	width: 100%;
+}
+
+#LabelsManager tr {
+	border-top: solid 1px #DDDDDD;
+	border-bottom: solid 1px #DDDDDD;
+	height: 25px;
+	cursor: default;
+}
+
+#LabelsManager tr.selected {
+	background-color: #DDDDDD;
+}
+
+#LabelsManager tr td.name {
+	vertical-align: middle;
+	width: 20%;
+	text-align: left;
+}
+
+#LabelsManager tr td.description {
+	vertical-align: middle;
+	width: 80%;
+	text-align: right;
+	border-left: solid 1px #DDDDDD;
+}
+
+#LabelsManager tr td.name input {
+	width: 96%;
+}
+
+#LabelsManager tr td.description input {
+	width: 99%;
+}
+
+/* ----------------------------- *
+ *        ProductsManager        *
+ * ----------------------------- */
+#ProductsManager {
+	min-width: 920px;
+}
+
+#ProductsManager ul {
+	clear: both;
+	list-style-type: none;
+	width: 100%;
+}
+
+#ProductsManager ul li {
+	text-align: left;
+}
+
+#ProductsManager ul li .product {
+	border: none;
+	cursor: default;
+	border: 1px solid white;
+	padding: 1px;
+}
+
+#ProductsManager ul li .product.selected {
+	border: 1px solid grey;
+}
+
+#ProductsManager ul li .product:hover {
+	background-color: #EEEEEE;
+}
+
+#ProductsManager ul li .product .name {
+  display: inline-block;
+  width: 80%;
+}
+
+#ProductsManager ul li .product .reference {
+  display: inline-block;
+  width: 20%;
+}
+
+/* ----------------------------- *
+ *         ProductManager        *
+ * ----------------------------- */
+#ProductManager {
+	
+}
+
+#ProductManager #title {
+	font-size: 200%;
+	font-variant: small-caps;
+	font-weight: bold;
+	text-align: left;
+	border-bottom: solid 1px lightgrey;
+}
+
+#ProductManager #infos {
+  margin: 10px;
+  width: 580px;
+  float: right;
+}
+
+#ProductManager #infos #reference {
+  text-align: left;
+  font-style: italic;
+}
+
+#ProductManager #infos .section {
+  text-align: left;
+  margin: 15px 0;
+}
+
+#ProductManager #infos .section .title {
+	margin: 5px 0;
+}
+
+#ProductManager #infos .section .title .switch {
+  width: 12px;
+  height: 12px;
+  cursor: default;
+  display: inline-block;
+}
+
+#ProductManager #infos .section.reduced .title .switch {
+  background: transparent url("../img/tree-bg.png") 0px 0px no-repeat;
+}
+
+#ProductManager #infos .section.reduced .title .switch:hover {
+  background: transparent url("../img/tree-bg.png") 0px -12px no-repeat;
+}
+
+#ProductManager #infos .section.reduced .title .switch:active {
+  background: transparent url("../img/tree-bg.png") 0px -24px no-repeat;
+}
+
+#ProductManager #infos .section.expanded .title .switch {
+  background: transparent url("../img/tree-bg.png") -12px 0px no-repeat;
+}
+
+#ProductManager #infos .section.expanded .title .switch:hover {
+  background: transparent url("../img/tree-bg.png") -12px -12px no-repeat;
+}
+
+#ProductManager #infos .section.expanded .title .switch:active {
+  background: transparent url("../img/tree-bg.png") -12px -24px no-repeat;
+}
+
+#ProductManager #infos .section .title .label {
+  margin-left: 10px;
+  display: inline-block;
+}
+
+#ProductManager #infos .section .content {
+  padding: 0 10px;
+  border-left: solid 1px grey;
+  margin: 0 6px;
+}
+
+#ProductManager #infos .section .content .name .value, #ProductManager #infos .section .content .amount .value {
+  height: 26px;
+}
+
+#ProductManager #infos .section .content .type {
+  width: 150px;
+}
+
+#ProductManager #infos .section .content .value {
+  display:  inline-block;
+  margin-left: 10px;
+  width: 350px;
+}
+
+#ProductManager #infos .section.summaries .content .value {
+  background-color: #E3E3E3;
+  padding: 5px;
+  width: 100%;
+}
+
+#ProductManager #infos .section.names .content .value .name-input {
+  width: 99%;
+}
+
+#ProductManager #infos .section.summaries .content .value .summary-input {
+	width: 99%;
+  height: 100px;
+}
+
+#ProductManager #infos .section.amounts .content .value .amount-input {
+  width: 99%;
+}
+
+#ProductManager #infos .section.names .content .name, #ProductManager #infos .section.names .content .summary, #ProductManager #infos .section.names .amount .name {
+  margin: 2px 0;
+}
+
+#ProductManager #infos .section .content .delete {
+  display:  inline-block;
+  margin-right: 10px;
+  cursor: default;
+  width: 12px;
+  height: 12px;
+}
+
+#ProductManager #infos .section .content .delete {
+  background: transparent url("../img/tree-bg.png") -12px 0px no-repeat;
+}
+
+#ProductManager #infos .section .content .delete:hover {
+  background: transparent url("../img/tree-bg.png") -12px -12px no-repeat;
+}
+
+#ProductManager #infos .section .content .delete:active {
+  background: transparent url("../img/tree-bg.png") -12px -24px no-repeat;
+}
+
+#ProductManager #infos .section .content .addNew {
+  cursor: pointer;
+  color: blue;
+  width: 0;
+  white-space: nowrap;
+}
+
+#ProductManager #infos .section .content .addNew:hover {
+  text-decoration: underline;
+}
+
+#ProductManager #infos .section.images .content .image {
+	display: inline-block;
+	width: 160px;
+	height: 160px;
+	text-align: center;
+	padding: 5px;
+	border: solid 1px grey;
+	background-color: lightGrey;
+	margin: 5px 10px 10px 0;
+}
+
+#ProductManager #infos .section.images .content .image .img {
+}
+
+#ProductManager #infos .section.images .content .image .delete {
+	display: block;
+	position: absolute;
+	z-index: 100;
+}
+
+/* ----------------------------- *
+ *          ImageManager         *
+ * ----------------------------- */
+#ImagesManager {
+	
+}
+
+#ImagesManager .subContent table {
+	clear: both;
+}
+
+#ImagesManager .subContent table tr {
+	
+}
+
+#ImagesManager .subContent table td {
+	padding: 10px;
+}
+
+#ImagesManager .subContent table .image-table-div {
+	border: 2px solid #ccc;
+	padding: 5px;
+}
+
+#ImagesManager .subContent table .image-table-div.selected {
+	border: 2px solid grey;
+}
+
+#ImagesManager .subContent table .image-table-img {
+  width: 160px;
+  height: 160px;
+}
+
+#ImagesManager .subContent table .image-table-img-bck {
+  width: 160px;
+  height: 160px;
+  position: absolute;
+}
+
+#ImagesManager .subContent table .image-table-img-img {
+}
+
+#ImagesManager .subContent table .image-table-label {
+	cursor: default;
+}
+
+#ImagesManager .subContent table .image-table-label-input {
+	width: 150px;
+}
+
+/* ----------------------------- *
+ *        AccountsManager        *
+ * ----------------------------- */
+#AccountsManager {
+	width: 920px;
+}
+
+#AccountsManager table {
+	width: 100%;
+}
+
+#AccountsManager tr.account {
+	border-top: solid 1px #DDDDDD;
+	border-bottom: solid 1px #DDDDDD;
+	height: 25px;
+	cursor: default;
+}
+
+#AccountsManager tr.account.selected {
+	background-color: #DDDDDD;
+}
+
+#AccountsManager tr.account td {
+	vertical-align: middle;
+	cursor: default;
+}
+
+#AccountsManager tr.account td.status {
+	width: 2%;
+	vertical-align: middle;
+}
+
+#AccountsManager tr.account td.status div {
+	width: 16px;
+	height: 16px;
+}
+
+#AccountsManager tr.account td.status div.VERIFIED {
+	background: url("../img/status.png") no-repeat scroll 0 0 transparent;
+}
+
+#AccountsManager tr.account td.status div.UNVERIFIED {
+	background: url("../img/status.png") no-repeat scroll -32px 0
+		transparent;
+}
+
+#AccountsManager tr.account td.status div.DELETED {
+	background: url("../img/status.png") no-repeat scroll -16px 0
+		transparent;
+}
+
+#AccountsManager tr.account td.name {
+	width: 40%;
+	border-left: solid 1px #DDDDDD;
+	text-align: left;
+	padding-left: 3px;
+}
+
+#AccountsManager tr.account td.login {
+	width: 15%;
+	border-left: solid 1px #DDDDDD;
+	text-align: left;
+	padding-left: 3px;
+}
+
+#AccountsManager tr.account td.email {
+	width: 35%;
+	border-left: solid 1px #DDDDDD;
+}
+
+#AccountsManager tr.account td.bidRightsNb {
+	width: 4%;
+	border-left: solid 1px #DDDDDD;
+	text-align: right;
+}
+
+/* ----------------------------- *
+ *            Footer             *
+ * ----------------------------- */
+#footer {
+	background: none repeat scroll 0 0 black;
+	color: #EFEDE1;
+	font-size: 0.9em;
+	padding: 0;
+	text-align: center;
+	line-height: 35px;
+}

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.0"
+                 xmlns="http://java.sun.com/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
+                                     http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+
+  <mapped-superclass class="com.bid4win.persistence.usertype.Bid4WinUserTypeDefinition"/>
+
+  <entity class="com.bid4win.persistence.entity.property.PropertyRoot">
+    <table name="PROPERTY_ROOT"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.property.Property">
+    <table name="PROPERTY"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.locale.I18nRoot">
+    <table name="PROPERTY_ROOT"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.locale.I18n">
+    <table name="PROPERTY"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.account.Account">
+    <table name="ACCOUNT"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.account.credit.CreditBundle">
+    <table name="CREDIT_BUNDLE"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.account.credit.CreditBundleHistory">
+    <table name="CREDIT_BUNDLE_HISTORY"/>
+  </entity>
+  
+  <entity class="com.bid4win.persistence.entity.image.ImageStorage">
+    <table name="IMAGE_STORAGE"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.image.ImageUsage">
+    <table name="IMAGE_USAGE"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.locale.inner.InnerContentStorage">
+    <table name="INNER_CONTENT_STORAGE"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.locale.inner.InnerContentUsage">
+    <table name="INNER_CONTENT_USAGE"/>
+  </entity>
+
+  <entity class="com.bid4win.persistence.entity.product.Product">
+    <table name="PRODUCT"/>
+  </entity>
+
+  <entity class="com.bid4win.persistence.entity.auction.normal.NormalAuction">
+    <table name="NORMAL_AUCTION"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.auction.normal.NormalBid">
+    <table name="NORMAL_BID"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.auction.normal.NormalBidHistory">
+    <table name="NORMAL_BID_HISTORY"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.auction.normal.NormalBot">
+    <table name="NORMAL_BOT"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.account.credit.auction.CreditInvolvementNormal">
+    <table name="NORMAL_INVOLVEMENT"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.account.credit.auction.CreditInvolvementNormalHistory">
+    <table name="NORMAL_INVOLVEMENT_HISTORY"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.account.credit.auction.CreditUsageNormal">
+    <table name="NORMAL_USAGE"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.account.credit.auction.CreditUsageNormalHistory">
+    <table name="NORMAL_USAGE_HISTORY"/>
+  </entity>
+  
+  <entity class="com.bid4win.persistence.entity.auction.prebooked.PrebookedAuction">
+    <table name="PREBOOKED_AUCTION"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.auction.prebooked.PrebookedBid">
+    <table name="PREBOOKED_BID"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.auction.prebooked.PrebookedBidHistory">
+    <table name="PREBOOKED_BID_HISTORY"/>
+  </entity>
+
+  <entity class="com.bid4win.persistence.entity.connection.Connection">
+    <table name="CONNECTION"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.connection.ConnectionHistory">
+    <table name="CONNECTION_HISTORY"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.connection.PasswordReinit">
+    <table name="PASSWORD_REINIT"/>
+  </entity>
+  <entity class="com.bid4win.persistence.entity.connection.Subscription">
+    <table name="SUBSCRIPTION"/>
+  </entity>
+</entity-mappings>

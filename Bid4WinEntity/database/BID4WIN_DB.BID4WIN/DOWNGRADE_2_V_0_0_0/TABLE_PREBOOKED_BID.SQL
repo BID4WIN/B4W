@@ -1,0 +1,2 @@
+-- Suppression de la table PREBOOKED_BID
+DROP TABLE PREBOOKED_BID;

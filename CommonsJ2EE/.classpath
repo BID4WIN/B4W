@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/BID4WIN_JRE"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonsLogging"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/aop/aopalliance-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/bytecode/asm-3.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/aop/aspectjrt-1.6.11.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/aop/aspectjtools-1.6.11.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/bytecode/cglib-2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.aop-3.1.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.asm-3.1.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.beans-3.1.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.context-3.1.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.context.support-3.1.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.core-3.1.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.expression-3.1.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.jdbc-3.1.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.orm-3.1.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.transaction-3.1.2.RELEASE.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CommonsTesting"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

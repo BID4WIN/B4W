@@ -1,0 +1,63 @@
+<class-diagram version="1.0.7" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
+  associations="true" dependencies="true" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.property.PropertyAbstract" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/property/PropertyAbstract.java" binary="false">    
+    <position height="-1" width="-1" x="122" y="341"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.property.PropertyBase" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/property/PropertyBase.java" binary="false">    
+    <position height="-1" width="-1" x="283" y="130"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.property.PropertyRootAbstract" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/property/PropertyRootAbstract.java" binary="false">    
+    <position height="-1" width="-1" x="459" y="341"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.commons.core.collection.Bid4WinMap" 
+    project="CommonsCore" file="/CommonsCore/src/com/bid4win/commons/core/collection/Bid4WinMap.java" binary="false">    
+    <position height="-1" width="-1" x="672" y="130"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <generalization id="5">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="6">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="7" name="propertyMap"/>      
+      <multiplicity id="8" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="9">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <generalization id="10">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

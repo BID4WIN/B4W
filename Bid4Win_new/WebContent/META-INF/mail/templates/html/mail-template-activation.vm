@@ -1,0 +1,19 @@
+#parse("mail/templates/html/commons/mail-template.vm")
+
+#if(!${subject})
+#set($subject = "Activation du compte")
+#end
+
+#header()
+
+Bonjour $!{account.credential.login.value},<br>
+<br>
+F&eacute;licitations ! Vous venez de cr&eacute;er un compte #a("" "Bid4Win").<br>
+<br>
+Afin de pouvoir utiliser l'ensemble des fonctionnalit&eacute;s du site merci d'activer votre compte :<br>
+<br>
+<div #centerStyle()>#a("" "Activation")</div>
+<br>
+A tr&egrave;s vite sur #a("" "www.Bid4Win.com") !<br>
+
+#footer()

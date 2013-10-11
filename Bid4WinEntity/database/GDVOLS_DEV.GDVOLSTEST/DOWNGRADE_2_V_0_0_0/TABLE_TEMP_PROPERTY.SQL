@@ -1,0 +1,2 @@
+-- Suppression de la table TEMP_PROPERTY
+DROP TABLE TEMP_PROPERTY;

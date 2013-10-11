@@ -1,0 +1,2 @@
+-- Suppression de la table SUBSCRIPTION
+DROP TABLE SUBSCRIPTION;

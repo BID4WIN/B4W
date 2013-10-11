@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/BID4WIN_JRE"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CommonsTesting"/>
+	<classpathentry kind="lib" path="/CommonsLib/lib/jars/persistence/p6spy.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonsCore"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonsEntity"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonsJ2EE"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonsLogging"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/parsing/antlr-2.7.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/transaction/atomikos-transactions-3.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/transaction/atomikos-transactions-api-3.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/transaction/atomikos-transactions-hibernate3-3.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/transaction/atomikos-transactions-jdbc-3.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/transaction/atomikos-transactions-jta-3.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/transaction/atomikos-util-3.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/pooling/c3p0-0.9.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/commons/commons-collections-3.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/xml/dom4j-1.6.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/hibernate-3.6.0.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/hibernate-validator-4.1.0.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/caching/infinispan-core-4.2.1.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/bytecode/javassist-3.12.0.GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/communication/jgroups-2.12.1.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/transaction/jta-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/communication/marshalling-api-1.2.3.GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/mysql-connector-java-5.1.12-bin.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/communication/river-1.2.3.GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/validation-api-1.0.0.GA.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,38 @@
+#parse("mail/templates/html/commons/mail-template-style.vm")
+
+#macro(a $href $text)
+    #if(${href})
+        #if(!${text})
+            #set($text=${href})
+        #end
+<a href="${href}" #aStyle()>${text}</a>
+#end
+#end
+
+#macro(header)
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="./test.css" type="text/css" charset="utf-8">
+    </head>
+    <body>
+        <div #bodyStyle()>
+            <div #headerStyle()>
+                <div #h1Style()>BID4WIN</div>
+                <div #h2Style()>$!{subject}</div>
+            </div>
+            <div #contentStyle()>
+#end
+
+#macro(footer)
+            </div>
+            <div #footerStyle()>
+                Bid4Win au capital de au moins 10 000 000 000 &euro;<br>
+                Route des Gencianes - Tourcoing 5546 3554 - Code APE 66412A - N&deg;TVA: FR 65 546552<br>
+                Si&egrave;ge social: 2 rue des Beaux jours, 59100 Roubaix Cedex, FRANCE.
+            </div>
+        </div>
+    </body>
+</html>
+#end
+        

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <!-- Foo DAO -->
+  <bean id="FooDao"
+        class="com.bid4win.commons.persistence.dao.foo.FooDaoSpring"
+        scope="singleton"/>
+  <!-- FooComplex DAO -->
+  <bean id="FooComplexDao"
+        class="com.bid4win.commons.persistence.dao.foo.FooComplexDaoSpring"
+        scope="singleton"/>
+  <!-- FooParent1 DAO -->
+  <bean id="FooParent1Dao"
+        class="com.bid4win.commons.persistence.dao.foo.FooParent1DaoSpring"
+        scope="singleton"/>
+  <!-- FooParent2 DAO -->
+  <bean id="FooParent2Dao"
+        class="com.bid4win.commons.persistence.dao.foo.FooParent2DaoSpring"
+        scope="singleton"/>
+  <!-- FooRecursive DAO -->
+  <bean id="FooRecursiveDao"
+        class="com.bid4win.commons.persistence.dao.foo.FooRecursiveDaoSpring"
+        scope="singleton"/>
+</beans>

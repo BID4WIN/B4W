@@ -1,0 +1,260 @@
+<class-diagram version="1.0.7" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
+  associations="true" dependencies="true" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.resource.FileResource" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/resource/FileResource.java" binary="false">    
+    <position height="-1" width="-1" x="171" y="40"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.resource.FileResourceStorage" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/resource/FileResourceStorage.java" binary="false">    
+    <position height="-1" width="-1" x="45" y="159"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.resource.FileResourceStorageMultiPart" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/resource/FileResourceStorageMultiPart.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="286" y="513"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.resource.FileResourceUsage" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/resource/FileResourceUsage.java" binary="false">    
+    <position height="-1" width="-1" x="920" y="159"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.resource.FileResourceUsageMultiPart" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/resource/FileResourceUsageMultiPart.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="741" y="513"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.commons.persistence.entity.resource.Resource" 
+    project="CommonsEntity" file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/resource/Resource.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="509" y="-93"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.resource.ResourceStorage" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/resource/ResourceStorage.java" binary="false">    
+    <position height="-1" width="-1" x="110" y="255"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.resource.ResourceStorageMultiPart" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/resource/ResourceStorageMultiPart.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="286" y="397"/>    
+    <display autosize="true" package="false" initial-value="false" signature="false" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.resource.ResourceUsage" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/resource/ResourceUsage.java" binary="false">    
+    <position height="-1" width="-1" x="851" y="255"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="10" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.resource.ResourceUsageMultiPart" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/resource/ResourceUsageMultiPart.java" binary="false">    
+    <position height="-1" width="-1" x="741" y="397"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="11" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.commons.persistence.entity.Bid4WinEntityAutoID" 
+    project="CommonsEntity" file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/Bid4WinEntityAutoID.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="509" y="-204"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="12" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.commons.core.io.resource.Bid4WinResource" 
+    project="CommonsCore" file="/CommonsCore/src/com/bid4win/commons/core/io/resource/Bid4WinResource.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="509" y="40"/>    
+    <display autosize="true" package="false" initial-value="false" signature="false" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <interface id="13" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.core.io.resource.Bid4WinResourceMultiPart" project="CommonsCore" 
+    file="/CommonsCore/src/com/bid4win/commons/core/io/resource/Bid4WinResourceMultiPart.java" binary="false">    
+    <position height="-1" width="-1" x="509" y="310"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <interface id="14" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.core.io.resource.Bid4WinFileResource" project="CommonsCore" 
+    file="/CommonsCore/src/com/bid4win/commons/core/io/resource/Bid4WinFileResource.java" binary="false">    
+    <position height="-1" width="-1" x="389" y="159"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <interface id="15" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.core.io.resource.Bid4WinFileResourceMultiPart" project="CommonsCore" 
+    file="/CommonsCore/src/com/bid4win/commons/core/io/resource/Bid4WinFileResourceMultiPart.java" binary="false">    
+    <position height="-1" width="-1" x="-41" y="310"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <generalization id="16">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <realization id="17">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="13"/>  
+  </realization>  
+  <dependency id="18">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <generalization id="19">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <realization id="20">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="12"/>  
+  </realization>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <generalization id="22">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <generalization id="23">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <generalization id="24">    
+    <bendpoint x="-102" y="243"/>    
+    <bendpoint x="-102" y="91"/>    
+    <bendpoint x="113" y="91"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="14"/>  
+  </generalization>  
+  <dependency id="25">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <generalization id="26">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <realization id="27">    
+    <bendpoint x="74" y="455"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="15"/>  
+  </realization>  
+  <generalization id="28">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="13"/>  
+  </generalization>  
+  <generalization id="29">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <generalization id="30">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <generalization id="31">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <realization id="32">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="14"/>  
+  </realization>  
+  <realization id="33">    
+    <bendpoint x="398" y="554"/>    
+    <bendpoint x="-41" y="554"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="15"/>  
+  </realization>  
+  <realization id="34">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="14"/>  
+  </realization>  
+  <generalization id="35">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <generalization id="36">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <realization id="37">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="13"/>  
+  </realization>  
+  <association id="38">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="39" name="usageSet"/>      
+      <multiplicity id="40" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="41">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="14"/>  
+  </realization>  
+  <generalization id="42">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <generalization id="43">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

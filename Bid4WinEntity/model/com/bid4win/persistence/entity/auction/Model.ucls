@@ -1,0 +1,188 @@
+<class-diagram version="1.0.7" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
+  associations="true" dependencies="true" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.auction.AuctionAbstract" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/auction/AuctionAbstract.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="199" y="195"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.Bid4WinEntityGeneratedID" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/Bid4WinEntityGeneratedID.java" binary="false">    
+    <position height="-1" width="-1" x="200" y="67"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.product.Product" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/product/Product.java" binary="false">    
+    <position height="-1" width="-1" x="575" y="66"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.auction.Auction" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/auction/Auction.java" binary="false">    
+    <position height="-1" width="-1" x="199" y="334"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.auction.Bid" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/auction/Bid.java" binary="false">    
+    <position height="-1" width="-1" x="575" y="334"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.auction.BidAbstract" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/auction/BidAbstract.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="574" y="195"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.commons.persistence.entity.account.AccountBasedEntityMultipleAutoID" project="CommonsEntity" 
+    file="/CommonsEntity/src/com/bid4win/commons/persistence/entity/account/AccountBasedEntityMultipleAutoID.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="907" y="334"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.auction.InvolvedCredit" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/auction/InvolvedCredit.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="200" y="593"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" 
+    name="com.bid4win.persistence.entity.auction.InvolvedCreditAbstract" project="Bid4WinEntity" 
+    file="/Bid4WinEntity/src/com/bid4win/persistence/entity/auction/InvolvedCreditAbstract.java" binary="false">    
+    <position height="-1" width="-1" x="200" y="460"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="10" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.account.CreditUsage" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/account/CreditUsage.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="575" y="460"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="11" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.auction.InvolvedBundle" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/auction/InvolvedBundle.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="575" y="593"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="12" corner="BOTTOM_RIGHT" language="java" name="com.bid4win.persistence.entity.account.CreditBundleUsage" 
+    project="Bid4WinEntity" file="/Bid4WinEntity/src/com/bid4win/persistence/entity/account/CreditBundleUsage.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="907" y="593"/>    
+    <display autosize="true" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <generalization id="13">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <generalization id="14">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="15">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <generalization id="16">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <association id="17">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="18" name="product">        
+        <position height="14" width="41" x="519" y="89"/>      
+      </attribute>      
+      <multiplicity id="19" minimum="0" maximum="1">        
+        <position height="14" width="18" x="501" y="75"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="20">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <generalization id="22">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <dependency id="23">    
+    <bendpoint x="7" y="506"/>    
+    <bendpoint x="7" y="317"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <generalization id="24">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="25">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <dependency id="26">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="27">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="28">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <generalization id="29">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <dependency id="30">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <classifier-display autosize="true" package="false" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="false" package="false" protected="false" private="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

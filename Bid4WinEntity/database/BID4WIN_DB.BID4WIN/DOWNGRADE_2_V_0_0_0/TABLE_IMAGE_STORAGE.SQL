@@ -1,0 +1,2 @@
+-- Suppression de la table IMAGE_STORAGE
+DROP TABLE IMAGE_STORAGE;

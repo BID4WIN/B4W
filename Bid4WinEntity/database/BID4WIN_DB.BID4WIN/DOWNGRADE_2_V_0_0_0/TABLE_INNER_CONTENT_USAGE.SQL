@@ -1,0 +1,2 @@
+-- Suppression de la table INNER_CONTENT_USAGE
+DROP TABLE INNER_CONTENT_USAGE;

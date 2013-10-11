@@ -1,0 +1,2 @@
+-- Suppression de la table PROPERTY_ROOT
+DROP TABLE PROPERTY_ROOT;

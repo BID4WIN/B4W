@@ -1,0 +1,2 @@
+-- Suppression de la table FOO_EMBEDDED_LIST
+DROP TABLE FOO_EMBEDDED_LIST;

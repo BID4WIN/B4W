@@ -1,0 +1,2 @@
+-- Suppression de la table PASSWORD_REINIT
+DROP TABLE PASSWORD_REINIT;
