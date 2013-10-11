@@ -7,10 +7,8 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Bid4WinEntity"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Bid4WinManager"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Bid4WinServiceProperty"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonsCore"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonsEntity"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonsJ2EE"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonsService"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
