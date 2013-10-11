@@ -31,9 +31,9 @@
 	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/web/taglibs/jstl-api-1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/web/taglibs/jstl.jar"/>
 	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/web/struts2/ognl-3.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.web-3.0.3.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.web.servlet-3.0.3.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.web.struts-3.0.3.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.web-3.1.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.web.servlet-3.1.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/j2ee/org.springframework.web.struts-3.1.2.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/web/taglibs/standard.jar"/>
 	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/web/struts2/struts2-convention-plugin-2.2.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/web/struts2/struts2-core-2.2.1.1.jar"/>
