@@ -3,6 +3,7 @@ package com.bid4win.commons.core.security;
 import java.util.Random;
 
 import com.bid4win.commons.core.Bid4WinDate;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.security.IdPattern.Type;
 
@@ -24,7 +25,7 @@ public class IdGenerator
    */
   public static String generateId(int size)
   {
-    String id = "";
+    String id = UtilString.EMPTY;
     while(id.length() < size)
     {
       id += IdGenerator.generateId();
@@ -62,8 +63,8 @@ public class IdGenerator
    */
   public static String generateId(IdPattern pattern)
   {
-    StringBuffer id = new StringBuffer("");
-    StringBuffer generated = new StringBuffer("");
+    StringBuffer id = new StringBuffer(UtilString.EMPTY);
+    StringBuffer generated = new StringBuffer(UtilString.EMPTY);
     for(int i = 0 ; i < pattern.getTypeNb() ; i++)
     {
       Type type = pattern.getType(i);

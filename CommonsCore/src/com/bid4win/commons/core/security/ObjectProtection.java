@@ -1,31 +1,25 @@
 package com.bid4win.commons.core.security;
 
-import com.bid4win.commons.core.security.exception.ProtectionException;
+import com.bid4win.commons.core.comparator.Bid4WinComparator;
 
 /**
  * Cette classe défini la protection d'un objet<BR>
  * <BR>
- * @param <OBJECT> Définition de l'objet protégé<BR>
- * <BR>
  * @author Emeric Fillâtre
  */
-public class ObjectProtection<OBJECT>
+public class ObjectProtection
 {
   /** Identifiant de protection */
   private String id = null;
-  /** Objet protégé */
-  private OBJECT object = null;
-  
+
   /**
-   * Constructeur
-   * @param object Objet protégé
+   * Constructeur utilisant l'identifiant de protection donné
    */
-  public ObjectProtection(OBJECT object)
+  protected ObjectProtection(String protectionId)
   {
-    this.setId(ObjectProtector.getProtectionId());
-    this.setObject(object);
+    this.setId(protectionId);
   }
-  
+
   /**
    * Cette méthode permet de vérifier si la protection est active
    * @return True si la protection est active, false sinon
@@ -36,32 +30,65 @@ public class ObjectProtection<OBJECT>
   }
   /**
    * Cette méthode permet de vérifier la protection de l'objet
-   * @throws ProtectionException Si la protection n'est pas vérifiée
+   * @return True si la protection est vérifiée, false sinon
    */
-  public void check() throws ProtectionException
+  public boolean check()
   {
-    this.check(1);
+    // Vérifie si l'objet est protégé et la protection vérifiée
+    return !this.isEnabled() || ObjectProtector.hasProtectionId(this.getId());
+  }
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @param toBeCompared {@inheritDoc}
+   * @return {@inheritDoc}
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object toBeCompared)
+  {
+    // Pour comparer plus rapidement
+    if(this == toBeCompared)
+    {
+      return true;
+    }
+    // Prend en compte les valeurs nulles
+    if(toBeCompared == null)
+    {
+      return false;
+    }
+    // Les objets à comparer ne sont pas de la même classe
+    if(!(this.getClass().equals(toBeCompared.getClass())))
+    {
+      return false;
+    }
+    return Bid4WinComparator.getInstance().equals(this.getId(),
+                                                  ((ObjectProtection)toBeCompared).getId());
   }
   /**
-   * Cette méthode permet de vérifier la protection de l'objet
-   * @param stackLevel Niveau de la fonction appelante dans la trace par rapport
-   * au niveau de la fonction en échec que l'on souhaite tracer
-   * @throws ProtectionException Si la protection n'est pas vérifiée
+   *
+   * TODO A COMMENTER
+   * @return {@inheritDoc}
+   * @see java.lang.Object#hashCode()
    */
-  public void check(int stackLevel) throws ProtectionException
+  @Override
+  public int hashCode()
   {
-    // L'objet est protégé
-    if(this.isEnabled())
-    {
-      // La protection n'est pas vérifiée
-      if(!ObjectProtector.hasProtectionId(this.getId()))
-      {
-        ProtectionException.protectedObject(this.getObject().getClass(),
-                                            1 + stackLevel);
-      }
-    }
+    return (this.getId() == null ? 0 : this.getId().hashCode());
   }
-  
+  /**
+   *
+   * TODO A COMMENTER
+   * @return {@inheritDoc}
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString()
+  {
+    return "PROTECTION ID=" + this.getId();
+  }
+
   /**
    * Getter de l'identifiant de protection
    * @return L'identifiant de protection
@@ -71,27 +98,11 @@ public class ObjectProtection<OBJECT>
     return this.id;
   }
   /**
-   * Getter de l'objet protégé
-   * @return L'objet protégé
-   */
-  private OBJECT getObject()
-  {
-    return this.object;
-  }
-  /**
    * Setter de l'identifiant de protection
    * @param id Identifiant de protection à positionner
    */
   private void setId(String id)
   {
     this.id = id;
-  }
-  /**
-   * Setter de l'objet protégé
-   * @param object Objet protégé à positionner
-   */
-  private void setObject(OBJECT object)
-  {
-    this.object = object;
   }
 }

@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import com.bid4win.commons.core.Bid4WinCoreTester;
 import com.bid4win.commons.core.UtilBoolean;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.collection.Bid4WinStringRecursiveMap;
 import com.bid4win.commons.core.exception.UserException;
@@ -33,11 +34,11 @@ public class UtilFileTest extends Bid4WinCoreTester
   public void testCleanRelativePath_String()
   {
     String s = UtilFile.PATH_SEPARATOR;
-    assertEquals("Wrong result", "", UtilFile.cleanRelativePath(null));
-    assertEquals("Wrong result", "", UtilFile.cleanRelativePath("   "));
-    assertEquals("Wrong result", "", UtilFile.cleanRelativePath(s));
-    assertEquals("Wrong result", "", UtilFile.cleanRelativePath(s+s));
-    assertEquals("Wrong result", "", UtilFile.cleanRelativePath(s+s+s));
+    assertEquals("Wrong result", UtilString.EMPTY, UtilFile.cleanRelativePath(null));
+    assertEquals("Wrong result", UtilString.EMPTY, UtilFile.cleanRelativePath("   "));
+    assertEquals("Wrong result", UtilString.EMPTY, UtilFile.cleanRelativePath(s));
+    assertEquals("Wrong result", UtilString.EMPTY, UtilFile.cleanRelativePath(s+s));
+    assertEquals("Wrong result", UtilString.EMPTY, UtilFile.cleanRelativePath(s+s+s));
     assertEquals("Wrong result", "a"+s+"b", UtilFile.cleanRelativePath(s+s+s+"a"+s+s+s+"b"+s+s+s));
   }
   /**
@@ -47,8 +48,8 @@ public class UtilFileTest extends Bid4WinCoreTester
   public void testCleanAbsolutePath_String()
   {
     String s = UtilFile.PATH_SEPARATOR;
-    assertEquals("Wrong result", "", UtilFile.cleanAbsolutePath(null));
-    assertEquals("Wrong result", "", UtilFile.cleanAbsolutePath("   "));
+    assertEquals("Wrong result", UtilString.EMPTY, UtilFile.cleanAbsolutePath(null));
+    assertEquals("Wrong result", UtilString.EMPTY, UtilFile.cleanAbsolutePath("   "));
     assertEquals("Wrong result", s, UtilFile.cleanAbsolutePath(s));
     assertEquals("Wrong result", s+s, UtilFile.cleanAbsolutePath(s+s));
     assertEquals("Wrong result", s+s, UtilFile.cleanAbsolutePath(s+s+s));
@@ -146,15 +147,15 @@ public class UtilFileTest extends Bid4WinCoreTester
     }
     try
     {
-      assertEquals("Wrong result", "", UtilFile.checkRelativePath(null, ResourceRef.RESOURCE));
-      assertEquals("Wrong result", "", UtilFile.checkRelativePath("   ", ResourceRef.RESOURCE));
+      assertEquals("Wrong result", UtilString.EMPTY, UtilFile.checkRelativePath(null, ResourceRef.RESOURCE));
+      assertEquals("Wrong result", UtilString.EMPTY, UtilFile.checkRelativePath("   ", ResourceRef.RESOURCE));
       assertEquals("Wrong result", "abc123-_DEF", UtilFile.checkRelativePath("  abc123-_DEF  ", ResourceRef.RESOURCE));
       assertEquals("Wrong result", "abc123-_DEF.com", UtilFile.checkRelativePath("  abc123-_DEF.com  ", ResourceRef.RESOURCE));
       assertEquals("Wrong result", "abc123-_DEF.com.fr", UtilFile.checkRelativePath("  abc123-_DEF.com.fr  ", ResourceRef.RESOURCE));
       assertEquals("Wrong result", ".abc123-_DEF.com.fr", UtilFile.checkRelativePath("  .abc123-_DEF.com.fr  ", ResourceRef.RESOURCE));
-      assertEquals("Wrong result", "", UtilFile.checkRelativePath(s, ResourceRef.RESOURCE));
-      assertEquals("Wrong result", "", UtilFile.checkRelativePath(s+s, ResourceRef.RESOURCE));
-      assertEquals("Wrong result", "", UtilFile.checkRelativePath(s+s+s, ResourceRef.RESOURCE));
+      assertEquals("Wrong result", UtilString.EMPTY, UtilFile.checkRelativePath(s, ResourceRef.RESOURCE));
+      assertEquals("Wrong result", UtilString.EMPTY, UtilFile.checkRelativePath(s+s, ResourceRef.RESOURCE));
+      assertEquals("Wrong result", UtilString.EMPTY, UtilFile.checkRelativePath(s+s+s, ResourceRef.RESOURCE));
       assertEquals("Wrong result", "a", UtilFile.checkRelativePath(s+s+s+"a"+s+s, ResourceRef.RESOURCE));
       assertEquals("Wrong result", ".", UtilFile.checkRelativePath(s+s+s+"."+s+s, ResourceRef.RESOURCE));
       assertEquals("Wrong result", "a.b", UtilFile.checkRelativePath("a.b", ResourceRef.RESOURCE));
@@ -206,8 +207,8 @@ public class UtilFileTest extends Bid4WinCoreTester
     }
     try
     {
-      assertEquals("Wrong result", "", UtilFile.checkAbsolutePath(null, ResourceRef.RESOURCE));
-      assertEquals("Wrong result", "", UtilFile.checkAbsolutePath("   ", ResourceRef.RESOURCE));
+      assertEquals("Wrong result", UtilString.EMPTY, UtilFile.checkAbsolutePath(null, ResourceRef.RESOURCE));
+      assertEquals("Wrong result", UtilString.EMPTY, UtilFile.checkAbsolutePath("   ", ResourceRef.RESOURCE));
       assertEquals("Wrong result", "abc123-_DEF", UtilFile.checkAbsolutePath("  abc123-_DEF  ", ResourceRef.RESOURCE));
       assertEquals("Wrong result", "abc123-_DEF.com", UtilFile.checkAbsolutePath("  abc123-_DEF.com  ", ResourceRef.RESOURCE));
       assertEquals("Wrong result", "abc123-_DEF.com.fr", UtilFile.checkAbsolutePath("  abc123-_DEF.com.fr  ", ResourceRef.RESOURCE));
@@ -240,7 +241,7 @@ public class UtilFileTest extends Bid4WinCoreTester
     try
     {
       Bid4WinStringRecursiveMap subdirectories = new Bid4WinStringRecursiveMap();
-      Bid4WinStringRecursiveMap result = UtilFile.computeSubdirectories(subdirectories, "");
+      Bid4WinStringRecursiveMap result = UtilFile.computeSubdirectories(subdirectories, UtilString.EMPTY);
       assertEquals(new Bid4WinStringRecursiveMap(), result);
       assertEquals(new Bid4WinStringRecursiveMap(), subdirectories);
 
@@ -275,11 +276,11 @@ public class UtilFileTest extends Bid4WinCoreTester
           UtilFile.computeSubdirectories(new Bid4WinList<String>());
       assertEquals(new Bid4WinStringRecursiveMap(), result);
 
-      result = UtilFile.computeSubdirectories(new Bid4WinList<String>(""));
+      result = UtilFile.computeSubdirectories(new Bid4WinList<String>(UtilString.EMPTY));
       assertEquals(new Bid4WinStringRecursiveMap(), result);
 
       result = UtilFile.computeSubdirectories(
-          new Bid4WinList<String>("1/1_1/1_1_1", "1/1_1/1_1_2/1_1_2_1", "2", ""));
+          new Bid4WinList<String>("1/1_1/1_1_1", "1/1_1/1_1_2/1_1_2_1", "2", UtilString.EMPTY));
       Bid4WinStringRecursiveMap expected = new Bid4WinStringRecursiveMap();
       Bid4WinStringRecursiveMap expected_1 = new Bid4WinStringRecursiveMap();
       expected.put("1", expected_1);
@@ -313,11 +314,11 @@ public class UtilFileTest extends Bid4WinCoreTester
           UtilFile.computeSubdirectories(new Bid4WinList<String>());
       assertEquals(new Bid4WinStringRecursiveMap(), result);
 
-      result = UtilFile.computeSubdirectories(new Bid4WinList<String>(""));
+      result = UtilFile.computeSubdirectories(new Bid4WinList<String>(UtilString.EMPTY));
       assertEquals(new Bid4WinStringRecursiveMap(), result);
 
       result = UtilFile.computeSubdirectories(
-          new Bid4WinList<String>("1/1_1/1_1_1", "1/1_1/1_1_2/1_1_2_1"), "");
+          new Bid4WinList<String>("1/1_1/1_1_1", "1/1_1/1_1_2/1_1_2_1"), UtilString.EMPTY);
       Bid4WinStringRecursiveMap expected = new Bid4WinStringRecursiveMap();
       Bid4WinStringRecursiveMap expected_1 = new Bid4WinStringRecursiveMap();
       expected.put("1", expected_1);
@@ -353,7 +354,7 @@ public class UtilFileTest extends Bid4WinCoreTester
     try
     {
       UtilFile.computeSubdirectories(
-        new Bid4WinList<String>("1/1_1/1_1_1", "1/1_1/1_1_2/1_1_2_1", ""), "1/1_1");
+        new Bid4WinList<String>("1/1_1/1_1_1", "1/1_1/1_1_2/1_1_2_1", UtilString.EMPTY), "1/1_1");
       fail("Should fail");
     }
     catch(UserException ex)
@@ -371,7 +372,7 @@ public class UtilFileTest extends Bid4WinCoreTester
    */
   public static String getProjectPath(String projectName) throws UserException
   {
-    String path = new java.io.File("").getAbsoluteFile().getParent();
+    String path = new java.io.File(UtilString.EMPTY).getAbsoluteFile().getParent();
     path = UtilFile.concatAbsolutePath(ResourceRef.RESOURCE, path, projectName);
     File file = new File(path);
     UtilBoolean.checkTrue("path", file.exists(), ResourceRef.RESOURCE_UNKNOWN_ERROR);

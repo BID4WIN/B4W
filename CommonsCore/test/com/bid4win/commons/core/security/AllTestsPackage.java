@@ -13,7 +13,8 @@ import com.bid4win.commons.core.Bid4WinCoreTester;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({com.bid4win.commons.core.security.IdGeneratorTest.class,
                      com.bid4win.commons.core.security.ObjectProtectionTest.class,
-                     com.bid4win.commons.core.security.ObjectProtectorTest.class})
+                     com.bid4win.commons.core.security.ObjectProtectorTest.class,
+                     com.bid4win.commons.core.security.ProtectableObjectTest.class})
 public class AllTestsPackage extends Bid4WinCoreTester
 {
   // Pas de test spécifique

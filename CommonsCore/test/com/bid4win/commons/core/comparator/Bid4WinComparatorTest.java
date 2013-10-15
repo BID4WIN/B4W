@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.bid4win.commons.core.Bid4WinCoreTester;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
 /**
@@ -42,8 +43,8 @@ public class Bid4WinComparatorTest extends Bid4WinCoreTester
   public void testCompare_Object_Object()
   {
     assertEquals(0, Bid4WinComparator.getInstance().compare(null, null));
-    assertEquals(-1, Bid4WinComparator.getInstance().compare(null, ""));
-    assertEquals(1, Bid4WinComparator.getInstance().compare("", null));
+    assertEquals(-1, Bid4WinComparator.getInstance().compare(null, UtilString.EMPTY));
+    assertEquals(1, Bid4WinComparator.getInstance().compare(UtilString.EMPTY, null));
     StringBuffer buffer1 = new StringBuffer("a");
     StringBuffer buffer2 = new StringBuffer(buffer1);
     assertEquals(buffer1.hashCode() - buffer2.hashCode(),

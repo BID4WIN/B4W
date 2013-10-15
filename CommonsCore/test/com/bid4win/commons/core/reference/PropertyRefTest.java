@@ -22,7 +22,7 @@ public class PropertyRefTest
   public void test()
   {
     Bid4WinList<PropertyRef> list = new Bid4WinList<PropertyRef>(
-        Bid4WinObjectType.getTypeSet(PropertyRef.class));
+        Bid4WinObjectType.getTypes(PropertyRef.class));
     TestComparator comparator = new TestComparator();
     list.sort(comparator);
     for(PropertyRef ref : list)
@@ -41,7 +41,7 @@ public class PropertyRefTest
   public void printRef(PropertyRef ref)
   {
     System.out.println(ref.getCode());
-    Bid4WinList<PropertyRef> list = new Bid4WinList<PropertyRef>(ref.getSubtypeSet());
+    Bid4WinList<PropertyRef> list = new Bid4WinList<PropertyRef>(ref.getSubtypes());
     TestComparator comparator = new TestComparator();
     list.sort(comparator);
     for(PropertyRef subref : list)

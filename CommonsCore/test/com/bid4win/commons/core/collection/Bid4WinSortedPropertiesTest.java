@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.bid4win.commons.core.Bid4WinCoreTester;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.io.Bid4WinFileReader;
 import com.bid4win.commons.core.security.IdGenerator;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
@@ -35,12 +36,12 @@ public class Bid4WinSortedPropertiesTest extends Bid4WinCoreTester
   public void testkeys_0args()
   {
     Bid4WinSortedProperties properties = new Bid4WinSortedProperties();
-    properties.put("2", "");
-    properties.put("1", "");
-    properties.put("8", "");
-    properties.put("5", "");
-    properties.put("9", "");
-    properties.put("7", "");
+    properties.put("2", UtilString.EMPTY);
+    properties.put("1", UtilString.EMPTY);
+    properties.put("8", UtilString.EMPTY);
+    properties.put("5", UtilString.EMPTY);
+    properties.put("9", UtilString.EMPTY);
+    properties.put("7", UtilString.EMPTY);
     Enumeration<?> enumeration = properties.keys();
     String lastKey = null;
     while(enumeration.hasMoreElements())
@@ -61,14 +62,14 @@ public class Bid4WinSortedPropertiesTest extends Bid4WinCoreTester
   public void testStore_OutputStream_String() throws Exception
   {
     Bid4WinSortedProperties properties = new Bid4WinSortedProperties();
-    properties.put("2", "");
-    properties.put("1", "");
-    properties.put("8", "");
-    properties.put("5", "");
-    properties.put("9", "");
-    properties.put("7", "");
+    properties.put("2", UtilString.EMPTY);
+    properties.put("1", UtilString.EMPTY);
+    properties.put("8", UtilString.EMPTY);
+    properties.put("5", UtilString.EMPTY);
+    properties.put("9", UtilString.EMPTY);
+    properties.put("7", UtilString.EMPTY);
     File file = this.addFile("d:/" + IdGenerator.generateId() + ".properties");
-    properties.store(new FileOutputStream(file), "");
+    properties.store(new FileOutputStream(file), UtilString.EMPTY);
     Bid4WinFileReader reader = new Bid4WinFileReader(file);
     try
     {

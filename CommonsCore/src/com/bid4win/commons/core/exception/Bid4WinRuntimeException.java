@@ -29,7 +29,7 @@ public class Bid4WinRuntimeException extends RuntimeException
    */
   public Bid4WinRuntimeException(String message)
   {
-    super((UtilString.trimNotNull(message).equals("") ? "NO MESSAGE" : message.trim()));
+    super((UtilString.trimNotNull(message).equals(UtilString.EMPTY) ? "NO MESSAGE" : message.trim()));
   }
 
   /**
@@ -38,7 +38,7 @@ public class Bid4WinRuntimeException extends RuntimeException
    */
   public Bid4WinRuntimeException(Throwable throwable)
   {
-    super("", throwable);
+    super(UtilString.EMPTY, throwable);
   }
 
   /**
@@ -48,9 +48,9 @@ public class Bid4WinRuntimeException extends RuntimeException
    */
   public Bid4WinRuntimeException(String message, Throwable throwable)
   {
-    super((UtilString.trimNotNull(message).equals("") ? "" : message.trim()), throwable);
+    super((UtilString.trimNotNull(message).equals(UtilString.EMPTY) ? "" : message.trim()), throwable);
   }
-  
+
   /**
    * Redéfini la méthode de la classe mère afin de récupérer le message de l'exception
    * et de sa cause
@@ -71,7 +71,7 @@ public class Bid4WinRuntimeException extends RuntimeException
     }
     return message;
   }
-  
+
   /**
    * Cette méthode défini la récupération du message de base de l'exception avec
    * la possibilité de ne pas retourner de message vide mais au moins la classe
@@ -86,7 +86,7 @@ public class Bid4WinRuntimeException extends RuntimeException
     // Si celui-ci est vide, on indique l'exception si demandé
     if(!empty)
     {
-      if(message.equals(""))
+      if(message.equals(UtilString.EMPTY))
       {
         message = "Exception " + UtilSystem.getCanonicalClassName(this);
       }

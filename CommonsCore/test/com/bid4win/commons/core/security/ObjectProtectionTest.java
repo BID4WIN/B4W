@@ -2,16 +2,13 @@ package com.bid4win.commons.core.security;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.bid4win.commons.core.Bid4WinCoreTester;
-import com.bid4win.commons.core.security.exception.ProtectionException;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
 /**
@@ -25,40 +22,15 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 public class ObjectProtectionTest extends Bid4WinCoreTester
 {
   /**
-   * Test of ObjectProtection(OBJECT), of class ObjectProtection.
+   * Test of ObjectProtection(String), of class ObjectProtection.
    */
   @Test
-  public void testObjectProtection_OBJECT()
+  public void testObjectProtection_String()
   {
-
-    ObjectProtection<String> protection1 = new ObjectProtection<String>("");
+    ObjectProtection protection1 = new ObjectProtection(null);
     assertFalse("Protection should not be enabled", protection1.isEnabled());
-
-    ObjectProtector.startProtection();
-    ObjectProtection<String> protection2 = new ObjectProtection<String>("");
-    assertFalse("Protection should not be enabled", protection1.isEnabled());
-    assertTrue("Protection be enabled", protection2.isEnabled());
-
-    ObjectProtector.startProtection();
-    ObjectProtection<String> protection3 = new ObjectProtection<String>("");
-    assertFalse("Protection should not be enabled", protection1.isEnabled());
-    assertTrue("Protection be enabled", protection2.isEnabled());
-    assertTrue("Protection be enabled", protection3.isEnabled());
-
-    ObjectProtector.stopProtection(ObjectProtector.getProtectionId());
-    ObjectProtection<String> protection4 = new ObjectProtection<String>("");
-    assertFalse("Protection should not be enabled", protection1.isEnabled());
-    assertTrue("Protection be enabled", protection2.isEnabled());
-    assertTrue("Protection be enabled", protection3.isEnabled());
-    assertTrue("Protection be enabled", protection4.isEnabled());
-
-    ObjectProtector.stopProtection(ObjectProtector.getProtectionId());
-    ObjectProtection<String> protection5 = new ObjectProtection<String>("");
-    assertFalse("Protection should not be enabled", protection1.isEnabled());
-    assertTrue("Protection be enabled", protection2.isEnabled());
-    assertTrue("Protection be enabled", protection3.isEnabled());
-    assertTrue("Protection be enabled", protection4.isEnabled());
-    assertFalse("Protection should not be enabled", protection5.isEnabled());
+    protection1 = new ObjectProtection(UtilString.EMPTY);
+    assertTrue("Protection should be enabled", protection1.isEnabled());
   }
 
   /**
@@ -67,133 +39,31 @@ public class ObjectProtectionTest extends Bid4WinCoreTester
   @Test
   public void testCheck_0args()
   {
-    ObjectProtection<String> protection1 = new ObjectProtection<String>("");
-    try
-    {
-      protection1.check();
-    }
-    catch(ProtectionException ex)
-    {
-      ex.printStackTrace();
-      fail("Should not fail: " + ex.getMessage());
-    }
-    ObjectProtector.startProtection();
-    ObjectProtection<String> protection2 = new ObjectProtection<String>("");
-    try
-    {
-      protection1.check();
-      protection2.check();
-    }
-    catch(ProtectionException ex)
-    {
-      ex.printStackTrace();
-      fail("Should not fail: " + ex.getMessage());
-    }
+    ObjectProtection protection1 = new ObjectProtection (null);
+    assertTrue("Should not fail", protection1.check());
 
-    ObjectProtector.startProtection();
-    ObjectProtection<String> protection3 = new ObjectProtection<String>("");
-    try
-    {
-      protection1.check();
-      protection2.check();
-      protection3.check();
-    }
-    catch(ProtectionException ex)
-    {
-      ex.printStackTrace();
-      fail("Should not fail: " + ex.getMessage());
-    }
+    this.startProtection();
+    ObjectProtection protection2 = ObjectProtector.getProtection();
+    assertTrue("Should not fail", protection1.check());
+    assertTrue("Should not fail", protection2.check());
 
-    ObjectProtector.stopProtection(ObjectProtector.getProtectionId());
-    ObjectProtection<String> protection4 = new ObjectProtection<String>("");
-    try
-    {
-      protection1.check();
-      protection2.check();
-      protection4.check();
-    }
-    catch(ProtectionException ex)
-    {
-      ex.printStackTrace();
-      fail("Should not fail: " + ex.getMessage());
-    }
-    try
-    {
-      protection3.check();
-      fail("Should fail");
-    }
-    catch(ProtectionException ex)
-    {
-      System.out.println(ex.getMessage());
-    }
+    this.startProtection();
+    ObjectProtection protection3 = ObjectProtector.getProtection();
+    assertTrue("Should not fail", protection1.check());
+    assertTrue("Should not fail", protection2.check());
+    assertTrue("Should not fail", protection3.check());
 
-    ObjectProtector.stopProtection(ObjectProtector.getProtectionId());
-    ObjectProtection<String> protection5 = new ObjectProtection<String>("");
-    try
-    {
-      protection1.check();
-      protection5.check();
-    }
-    catch(ProtectionException ex)
-    {
-      ex.printStackTrace();
-      fail("Should not fail: " + ex.getMessage());
-    }
-    try
-    {
-      protection2.check();
-      fail("Should fail");
-    }
-    catch(ProtectionException ex)
-    {
-      System.out.println(ex.getMessage());
-    }
-    try
-    {
-      protection3.check();
-      fail("Should fail");
-    }
-    catch(ProtectionException ex)
-    {
-      System.out.println(ex.getMessage());
-    }
-    try
-    {
-      protection4.check();
-      fail("Should fail");
-    }
-    catch(ProtectionException ex)
-    {
-      System.out.println(ex.getMessage());
-    }
-  }
+    this.stopProtection();
+    ObjectProtection protection4 = ObjectProtector.getProtection();
+    assertTrue("Should not fail", protection1.check());
+    assertTrue("Should not fail", protection2.check());
+    assertFalse("Should fail", protection3.check());
+    assertTrue("Should not fail", protection4.check());
 
-  /**
-   * Test setup method
-   * @throws Exception {@inheritDoc}
-   * @see com.bid4win.commons.testing.Bid4WinTester#setUp()
-   */
-  @Override
-  @Before
-  public void setUp() throws Exception
-  {
-    while(ObjectProtector.isProtectionStarted())
-    {
-      ObjectProtector.stopProtection(ObjectProtector.getProtectionId());
-    }
-  }
-  /**
-   * Test teardown method
-   * @throws Exception {@inheritDoc}
-   * @see com.bid4win.commons.testing.Bid4WinTester#tearDown()
-   */
-  @Override
-  @After
-  public void tearDown() throws Exception
-  {
-    while(ObjectProtector.isProtectionStarted())
-    {
-      ObjectProtector.stopProtection(ObjectProtector.getProtectionId());
-    }
+    this.stopProtection();
+    assertTrue("Should not fail", protection1.check());
+    assertFalse("Should fail", protection2.check());
+    assertFalse("Should fail", protection3.check());
+    assertFalse("Should fail", protection4.check());
   }
 }

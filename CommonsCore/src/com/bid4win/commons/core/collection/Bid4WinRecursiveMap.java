@@ -2,6 +2,8 @@ package com.bid4win.commons.core.collection;
 
 import java.util.Map;
 
+import com.bid4win.commons.core.security.exception.ProtectionException;
+
 /**
  * Cette classe défini une map contenant récursivement des maps de même type<BR>
  * <BR>
@@ -115,8 +117,10 @@ public class Bid4WinRecursiveMap<MAP extends Bid4WinRecursiveMap<MAP, KEY>, KEY>
    * ajouté
    * @param toBeAdded Map dont le contenu doit être ajouté récursivement à celui
    * de la map en paramètre
+   * @throws ProtectionException Si la map courante ou celle à laquelle ajouter
+   * les valeurs de celle en argument sont protégées contre les modifications
    */
-  public void add(MAP toBeAdded)
+  public void add(MAP toBeAdded) throws ProtectionException
   {
     for(Entry<KEY, MAP> entry : toBeAdded.entrySet())
     {
@@ -131,12 +135,17 @@ public class Bid4WinRecursiveMap<MAP extends Bid4WinRecursiveMap<MAP, KEY>, KEY>
    * @param value Map à ajouter
    * @return La map ajoutée si aucune n'était référencée ou celle déjà présente
    * complétée du contenu de celle en paramètre ajouté récursivement
+   * @throws ProtectionException Si la map courante ou celle à laquelle ajouter
+   * les valeurs de celle en argument sont protégées contre les modifications
    */
-  public MAP add(KEY key, MAP value)
+  @SuppressWarnings({"unchecked", "null"})
+  public MAP add(KEY key, MAP value) throws ProtectionException
   {
     MAP existing = this.get(key);
-    if(existing == null)
+    if(existing == null && value != null)
     {
+      existing = (MAP)value.clone();
+      existing.protect(this.getProtection());
       this.put(key, value);
       return value;
     }

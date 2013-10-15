@@ -58,7 +58,7 @@ public abstract class BufferedParser
   {
     try
     {
-      String result = "";
+      String result = UtilString.EMPTY;
       // Lit caractère par caractère jusqu'a atteindre la longueur choisie
       for(int i = 0 ; i < length ; i++)
       {
@@ -69,7 +69,7 @@ public abstract class BufferedParser
         {
           return null;
         }
-        String read = "" + (char)ascii;
+        String read = UtilString.EMPTY + (char)ascii;
         // En mode windows, une ligne se termine d'abord par un retour chariot
         if(read.equals(UtilString.SEPARATOR_CARRIAGE_RETURN))
         {

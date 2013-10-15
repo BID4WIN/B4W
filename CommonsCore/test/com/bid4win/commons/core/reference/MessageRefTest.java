@@ -22,7 +22,7 @@ public class MessageRefTest
   public void test()
   {
     Bid4WinList<MessageRef> list = new Bid4WinList<MessageRef>(
-        Bid4WinObjectType.getTypeSet(MessageRef.class));
+        Bid4WinObjectType.getTypes(MessageRef.class));
     TestComparator comparator = new TestComparator();
     list.sort(comparator);
     for(MessageRef ref : list)
@@ -41,7 +41,7 @@ public class MessageRefTest
   public void printRef(MessageRef ref)
   {
     System.out.println(ref.getCode());
-    Bid4WinList<MessageRef> list = new Bid4WinList<MessageRef>(ref.getSubtypeSet());
+    Bid4WinList<MessageRef> list = new Bid4WinList<MessageRef>(ref.getSubtypes());
     TestComparator comparator = new TestComparator();
     list.sort(comparator);
     for(MessageRef subref : list)

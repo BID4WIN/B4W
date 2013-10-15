@@ -98,7 +98,7 @@ public class UtilFile
     // Formate l'emplacement de fichier pour utiliser les bon séparateurs
     path = UtilString.trimNotNull(path).replaceAll("[\\Q\\\\E]{1}", UtilFile.PATH_SEPARATOR);
     String douleSeparator = UtilFile.PATH_SEPARATOR + UtilFile.PATH_SEPARATOR;
-    String start = "";
+    String start = UtilString.EMPTY;
     // Conserve les séparateurs qui se trouvent en première position de la définition
     // d'emplacement absolu
     if(path.startsWith(douleSeparator))
@@ -123,7 +123,7 @@ public class UtilFile
    */
   public static String concatRelativePath(MessageRef base, String ... paths) throws UserException
   {
-    String result = "";
+    String result = UtilString.EMPTY;
     for(String path : paths)
     {
       if(result.length() != 0)
@@ -160,7 +160,7 @@ public class UtilFile
    */
   public static String concatAbsolutePath(MessageRef base, String ... paths) throws UserException
   {
-    String result = "";
+    String result = UtilString.EMPTY;
     for(String path : paths)
     {
       if(result.length() != 0)
@@ -207,7 +207,7 @@ public class UtilFile
     }
     else if(index == 0)
     {
-      filename = "";
+      filename = UtilString.EMPTY;
     }
     return filename;
   }
@@ -224,7 +224,7 @@ public class UtilFile
   {
     filename = UtilFile.getFilename(filename, base);
     extension = UtilString.trimNotNull(extension);
-    if(!extension.equals(""))
+    if(!extension.equals(UtilString.EMPTY))
     {
       filename += UtilFile.FILENAME_SEPARATOR + extension;
     }
@@ -244,7 +244,7 @@ public class UtilFile
     int index = filename.lastIndexOf(UtilFile.FILENAME_SEPARATOR);
     if(index < 0 || index == filename.length() - UtilFile.FILENAME_SEPARATOR.length())
     {
-      return "";
+      return UtilString.EMPTY;
     }
     return filename.substring(index + UtilFile.FILENAME_SEPARATOR.length());
   }
@@ -595,7 +595,7 @@ public class UtilFile
   public static Bid4WinStringRecursiveMap computeSubdirectories(Bid4WinList<String> relativePathList)
          throws UserException
   {
-    return UtilFile.computeSubdirectories(relativePathList, "");
+    return UtilFile.computeSubdirectories(relativePathList, UtilString.EMPTY);
   }
   /**
    * Cette méthode permet de construire la hiérarchie correspondant aux sous-répertoires
@@ -636,7 +636,7 @@ public class UtilFile
          throws UserException
   {
     File file = UtilFile.checkRelativePathToFile(relativePath, ResourceRef.RESOURCE);
-    if(file.getName().equals(""))
+    if(file.getName().equals(UtilString.EMPTY))
     {
       return new Bid4WinStringRecursiveMap(0);
     }

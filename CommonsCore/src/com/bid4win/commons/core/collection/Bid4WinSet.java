@@ -4,17 +4,20 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.bid4win.commons.core.security.ObjectProtection;
+
 /**
  * Cette classe est la classe de base de tout set du projet. Elle se base sur un
  * set interne dont elle utilise les mécanismes tout en redéfinissant certains
- * comportements<BR>
+ * comportements. Elle pourra aussi être protégée contre toute modification même
+ * si elle ne le sera pas par défaut<BR>
  * <BR>
  * @param <OBJECT> Définition du type des objets contenus dans le set<BR>
  * <BR>
  * @author Emeric Fillâtre
  */
 public class Bid4WinSet<OBJECT>
-       extends Bid4WinCollection<OBJECT, Set<OBJECT>, Bid4WinSet<OBJECT>>
+       extends Bid4WinCollectionAbstract<OBJECT, Set<OBJECT>, Bid4WinSet<OBJECT>>
        implements Set<OBJECT>
 {
   /** Determine si un objet dé-sérialisé est compatible avec cette classe. La
@@ -28,6 +31,15 @@ public class Bid4WinSet<OBJECT>
   public Bid4WinSet()
   {
     super();
+  }
+  /**
+   * Constructeur utilisant la capacité initiale par défaut et la protection en
+   * argument
+   * @param protection Protection à utiliser pour le set
+   */
+  public Bid4WinSet(ObjectProtection protection)
+  {
+    super(protection);
   }
   /**
    * Constructeur avec précision de la capacité initiale. Si la capacité initiale
@@ -140,14 +152,26 @@ public class Bid4WinSet<OBJECT>
   }
 
   /**
+   *
+   * TODO A COMMENTER
+   * @return {@inheritDoc}
+   * @see com.bid4win.commons.core.collection.Bid4WinCollectionAbstract#getInternalCollectionClass()
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  @Override
+  public Class getInternalCollectionClass()
+  {
+    return Set.class;
+  }
+  /**
    * Cette méthode permet de créer un set pouvant être utilisé comme collection
    * interne par la collection courante
    * @param initialCapacity {@inheritDoc}
    * @return {@inheritDoc}
-   * @see com.bid4win.commons.core.collection.Bid4WinCollection#createInternal(int)
+   * @see com.bid4win.commons.core.collection.Bid4WinCollectionAbstract#createInternalCollection(int)
    */
   @Override
-  protected Set<OBJECT> createInternal(int initialCapacity)
+  protected Set<OBJECT> createInternalCollection(int initialCapacity)
   {
     return new HashSet<OBJECT>(initialCapacity);
   }

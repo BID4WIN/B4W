@@ -20,7 +20,7 @@ public class Bid4WinException extends Exception
    */
   public Bid4WinException()
   {
-    this("NO MESSAGE");
+    super("NO MESSAGE");
   }
 
   /**
@@ -29,7 +29,7 @@ public class Bid4WinException extends Exception
    */
   public Bid4WinException(String message)
   {
-    super((UtilString.trimNotNull(message).equals("") ? "NO MESSAGE" : message.trim()));
+    super((UtilString.trimNotNull(message).equals(UtilString.EMPTY) ? "NO MESSAGE" : message.trim()));
   }
 
   /**
@@ -38,7 +38,7 @@ public class Bid4WinException extends Exception
    */
   public Bid4WinException(Throwable throwable)
   {
-    super("", throwable);
+    super(UtilString.EMPTY, throwable);
   }
 
   /**
@@ -48,9 +48,10 @@ public class Bid4WinException extends Exception
    */
   public Bid4WinException(String message, Throwable throwable)
   {
-    super((UtilString.trimNotNull(message).equals("") ? "" : message.trim()), throwable);
+    super((UtilString.trimNotNull(message).equals(UtilString.EMPTY) ? "NO MESSAGE" : message.trim()),
+          throwable);
   }
-  
+
   /**
    * Redéfini la méthode de la classe mère afin de récupérer le message de l'exception
    * et de sa cause
@@ -71,7 +72,7 @@ public class Bid4WinException extends Exception
     }
     return message;
   }
-  
+
   /**
    * Cette méthode défini la récupération du message de base de l'exception avec
    * la possibilité de ne pas retourner de message vide mais au moins la classe
@@ -86,7 +87,7 @@ public class Bid4WinException extends Exception
     // Si celui-ci est vide, on indique l'exception si demandé
     if(!empty)
     {
-      if(message.equals(""))
+      if(message.equals("NO MESSAGE"))
       {
         message = "Exception " + UtilSystem.getCanonicalClassName(this);
       }
@@ -96,17 +97,5 @@ public class Bid4WinException extends Exception
       }
     }
     return message;
-  }
-  
-  /**
-   * Cette méthode défini la récupération du message de base de l'exception avec
-   * la possibilité de ne pas retourner de message vide mais au moins la classe
-   * dont est issue l'exception
-   * @param empty Indique si on accepte un message vide ou non
-   * @return Le message non vide associé à l'exception
-   */
-  public String getMessageBaseWithoutQuotes(boolean empty)
-  {
-    return this.getMessageBase(empty).replaceAll("\"", "");
   }
 }

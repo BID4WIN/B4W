@@ -16,6 +16,8 @@ import com.bid4win.commons.core.reference.MessageRef;
  */
 public class UtilString
 {
+  /** Chaîne de caractères vide */
+  public final static String EMPTY = "";
   /** Caractère par défaut représentant une nouvelle ligne */
   public final static String SEPARATOR_NEW_LINE = "\n";
   /** Caractère par défaut représentant un retour à la ligne (spécifique windows) */
@@ -69,7 +71,7 @@ public class UtilString
   {
     if(toTrim == null)
     {
-      return "";
+      return UtilString.EMPTY;
     }
     return toTrim.trim();
   }
@@ -308,7 +310,7 @@ public class UtilString
   public static String checkEmpty(String name, String string, int stackLevel)
          throws ModelArgumentException
   {
-    if(!"".equals(string))
+    if(!UtilString.EMPTY.equals(string))
     {
       ModelArgumentException.notEmptyString(name, string, 1 + stackLevel);
     }
@@ -373,7 +375,7 @@ public class UtilString
   public static String checkNotEmpty(String name, String string, int stackLevel)
          throws ModelArgumentException
   {
-    if("".equals(string))
+    if(UtilString.EMPTY.equals(string))
     {
       ModelArgumentException.emptyString(name, 1 + stackLevel);
     }

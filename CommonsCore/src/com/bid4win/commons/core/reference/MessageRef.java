@@ -98,25 +98,25 @@ public class MessageRef extends Reference<MessageRef>
     public final static MessageRef CURRENCY_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CURRENCY);
 
     /** Définition de la référence de message liée aux montants */
-    public final static MessageRef CURRENCY_AMOUNT = new MessageRef("amount", CURRENCY);
+    public final static MessageRef AMOUNT = new MessageRef("amount", CURRENCY);
     /** Définition de la référence de message d'erreur d'un montant invalide*/
-    public final static MessageRef CURRENCY_AMOUNT_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, CURRENCY_AMOUNT);
+    public final static MessageRef AMOUNT_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, AMOUNT);
     /** Définition de la référence de message d'erreur d'un montant invalide*/
-    public final static MessageRef CURRENCY_AMOUNT_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CURRENCY_AMOUNT);
+    public final static MessageRef AMOUNT_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, AMOUNT);
 
     /** Définition de la référence de message liée aux prix */
-    public final static MessageRef CURRENCY_PRICE = new MessageRef("price", CURRENCY);
+    public final static MessageRef PRICE = new MessageRef("price", CURRENCY);
     /** TODO A COMMENTER */
-    public final static MessageRef CURRENCY_PRICE_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, CURRENCY_PRICE);
+    public final static MessageRef PRICE_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, PRICE);
 
     /** Définition de la référence de message liée aux taux de change */
-    public final static MessageRef CURRENCY_EXCHANGE_RATE = new MessageRef("exchange_rate", CURRENCY);
+    public final static MessageRef EXCHANGE_RATE = new MessageRef("exchange_rate", CURRENCY);
     /** TODO A COMMENTER */
-    public final static MessageRef CURRENCY_EXCHANGE_RATE_UNDEFINED_ERROR = new MessageRef(SUFFIX_UNDEFINED_ERROR, CURRENCY_EXCHANGE_RATE);
+    public final static MessageRef EXCHANGE_RATE_UNDEFINED_ERROR = new MessageRef(SUFFIX_UNDEFINED_ERROR, EXCHANGE_RATE);
     /** TODO A COMMENTER */
-    public final static MessageRef CURRENCY_EXCHANGE_RATE_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, CURRENCY_EXCHANGE_RATE);
+    public final static MessageRef EXCHANGE_RATE_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, EXCHANGE_RATE);
     /** TODO A COMMENTER */
-    public final static MessageRef CURRENCY_EXCHANGE_RATE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CURRENCY_EXCHANGE_RATE);
+    public final static MessageRef EXCHANGE_RATE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, EXCHANGE_RATE);
   }
   /* ############################### LANGUAGE ############################### */
   /**
@@ -148,14 +148,23 @@ public class MessageRef extends Reference<MessageRef>
     public final static MessageRef IMAGE = new MessageRef("image");
     /** Définition de la référence de message d'erreur d'une ressource inconnue */
     public final static MessageRef RESOURCE_UNKNOWN_ERROR = new MessageRef(SUFFIX_UNKNOWN_ERROR, RESOURCE);
+    /** Définition de la référence de message d'erreur d'une ressource manquante */
+    public final static MessageRef RESOURCE_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, RESOURCE);
     /** Définition de la référence de message d'erreur d'une ressource non définie */
     public final static MessageRef RESOURCE_UNDEFINED_ERROR = new MessageRef(SUFFIX_UNDEFINED_ERROR, RESOURCE);
     public final static MessageRef IMAGE_UNDEFINED_ERROR = new MessageRef(SUFFIX_UNDEFINED_ERROR, IMAGE);
     /** Définition de la référence de message d'erreur d'une ressource déjà définie */
     public final static MessageRef RESOURCE_DEFINED_ERROR = new MessageRef(SUFFIX_DEFINED_ERROR, RESOURCE);
     public final static MessageRef IMAGE_DEFINED_ERROR = new MessageRef(SUFFIX_DEFINED_ERROR, IMAGE);
+    /** Définition de la référence de message d'erreur d'une ressource invalide */
+    public final static MessageRef RESOURCE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, RESOURCE);
+
     /** Définition de la référence de message d'erreur de l'abscence du repertoire de travail d'un magasin de ressources */
-    public final static MessageRef RESOURCE_WORKING_PATH_MISSING_ERROR = new MessageRef("working_path." + SUFFIX_MISSING_ERROR, RESOURCE);
+    public final static MessageRef WORKING_PATH_MISSING_ERROR = new MessageRef("working_path." + SUFFIX_MISSING_ERROR, RESOURCE);
+    /** Définition de la référence de message liée aux stockages de ressources */
+    public final static MessageRef STORAGE = new MessageRef("storage", RESOURCE);
+    /** Définition de la référence de message d'erreur de l'abscence de la propriété définissant la racine du magasin des stockages de ressources */
+    public final static MessageRef STORAGE_ROOT_PROPERTY_MISSING_ERROR = new MessageRef("root_property." + SUFFIX_MISSING_ERROR, STORAGE);
 
     /** Définition de la référence de message liée aux emplacements de stockage de ressources */
     public final static MessageRef RESOURCE_PATH = new MessageRef(SUFFIX_PATH, RESOURCE);
@@ -181,10 +190,6 @@ public class MessageRef extends Reference<MessageRef>
     public final static MessageRef RESOURCE_TYPE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, RESOURCE_TYPE);
     public final static MessageRef IMAGE_TYPE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, IMAGE_TYPE);
 
-    /** Définition de la référence de message liée aux stockages de ressources */
-    public final static MessageRef RESOURCE_STORAGE = new MessageRef("storage", RESOURCE);
-    /** Définition de la référence de message d'erreur de l'abscence de la propriété définissant la racine du magasin des stockages de ressources */
-    public final static MessageRef RESOURCE_STORAGE_ROOT_PROPERTY_MISSING_ERROR = new MessageRef("root_property." + SUFFIX_MISSING_ERROR, RESOURCE_STORAGE);
 
     /** Définition de la référence de message liée aux utilisations de ressources */
     public final static MessageRef RESOURCE_USAGE = new MessageRef(SUFFIX_USAGE, RESOURCE);
@@ -273,36 +278,36 @@ public class MessageRef extends Reference<MessageRef>
     public final static MessageRef CONNECTION_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CONNECTION);
 
     /** Définition de la référence de message liée aux logins/emails de connexion */
-    public final static MessageRef CONNECTION_LOGIN_OR_EMAIL = new MessageRef("login_or_email", CONNECTION);
+    public final static MessageRef LOGIN_OR_EMAIL = new MessageRef("login_or_email", CONNECTION);
     /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_LOGIN_OR_EMAIL_UNKNOWN_ERROR = new MessageRef(SUFFIX_UNKNOWN_ERROR, CONNECTION_LOGIN_OR_EMAIL);
+    public final static MessageRef LOGIN_OR_EMAIL_UNKNOWN_ERROR = new MessageRef(SUFFIX_UNKNOWN_ERROR, LOGIN_OR_EMAIL);
 
     /** Définition de la référence de message liée aux logins de connexion */
-    public final static MessageRef CONNECTION_LOGIN = new MessageRef("login", CONNECTION);
+    public final static MessageRef LOGIN = new MessageRef("login", CONNECTION);
     /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_LOGIN_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, CONNECTION_LOGIN);
+    public final static MessageRef LOGIN_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, LOGIN);
     /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_LOGIN_EXISTING_ERROR = new MessageRef(SUFFIX_EXISTING_ERROR, CONNECTION_LOGIN);
+    public final static MessageRef LOGIN_EXISTING_ERROR = new MessageRef(SUFFIX_EXISTING_ERROR, LOGIN);
     /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_LOGIN_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CONNECTION_LOGIN);
+    public final static MessageRef LOGIN_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, LOGIN);
 
     /** Définition de la référence de message liée aux mots de passes de connexion */
-    public final static MessageRef CONNECTION_PASSWORD = new MessageRef("password", CONNECTION);
+    public final static MessageRef PASSWORD = new MessageRef("password", CONNECTION);
     /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_PASSWORD_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, CONNECTION_PASSWORD);
+    public final static MessageRef PASSWORD_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, PASSWORD);
     /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_PASSWORD_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CONNECTION_PASSWORD);
+    public final static MessageRef PASSWORD_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, PASSWORD);
     /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_PASSWORD_WRONG_ERROR = new MessageRef("wrong_" + SUFFIX_ERROR, CONNECTION_PASSWORD);
+    public final static MessageRef PASSWORD_WRONG_ERROR = new MessageRef("wrong_" + SUFFIX_ERROR, PASSWORD);
 
     /** Définition de la référence de message liée aux emails de connexion */
-    public final static MessageRef CONNECTION_EMAIL = new MessageRef("email", CONNECTION);
+    public final static MessageRef EMAIL = new MessageRef("email", CONNECTION);
     /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_EMAIL_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, CONNECTION_EMAIL);
+    public final static MessageRef EMAIL_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, EMAIL);
     /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_EMAIL_EXISTING_ERROR = new MessageRef(SUFFIX_EXISTING_ERROR, CONNECTION_EMAIL);
+    public final static MessageRef EMAIL_EXISTING_ERROR = new MessageRef(SUFFIX_EXISTING_ERROR, EMAIL);
     /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_EMAIL_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CONNECTION_EMAIL);
+    public final static MessageRef EMAIL_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, EMAIL);
 
     /** Définition de la référence de message liée aux rémanences de connexion */
     public final static MessageRef CONNECTION_REMANENCE = new MessageRef("remanence", CONNECTION);
@@ -310,37 +315,38 @@ public class MessageRef extends Reference<MessageRef>
     public final static MessageRef CONNECTION_REMANENCE_UNKNOWN_ERROR = new MessageRef(SUFFIX_UNKNOWN_ERROR, CONNECTION_REMANENCE);
     /** TODO A COMMENTER */
     public final static MessageRef CONNECTION_REMANENCE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CONNECTION_REMANENCE);
-
-    /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_SUBSCRIPTION = new MessageRef("subscription", CONNECTION);
-    /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_SUBSCRIPTION_NOT_VALIDATED_ERROR = new MessageRef("not_validated_" + SUFFIX_ERROR, CONNECTION_SUBSCRIPTION);
-    /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_SUBSCRIPTION_VALIDATED_ERROR = new MessageRef("validated_" + SUFFIX_ERROR, CONNECTION_SUBSCRIPTION);
-
-    /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_SESSION = new MessageRef("session", CONNECTION);
-    /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_SESSION_UNDEFINED_ERROR = new MessageRef(SUFFIX_UNDEFINED_ERROR, CONNECTION_SESSION);
-    /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_SESSION_DEFINED_ERROR = new MessageRef(SUFFIX_DEFINED_ERROR, CONNECTION_SESSION);
-    /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_SESSION_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CONNECTION_SESSION);
-    public final static MessageRef CONNECTION_PERMISSION_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, CONNECTION_SESSION);
-    public final static MessageRef CONNECTION_PERMISSION_EXISTING_ERROR = new MessageRef(SUFFIX_EXISTING_ERROR, CONNECTION_SESSION);
-
-    /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_PERMISSION = new MessageRef("permission", CONNECTION);
-    /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_PERMISSION_NOT_GRANTED_ERROR = new MessageRef("not_granted_" + SUFFIX_ERROR, CONNECTION_PERMISSION);
-
-    /** TODO A COMMENTER */
-    public final static MessageRef CONNECTION_IP = new MessageRef("ip", CONNECTION);
-    public final static MessageRef CONNECTION_IP_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, CONNECTION_IP);
-    public final static MessageRef CONNECTION_IP_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CONNECTION_IP);
     /** TODO A COMMENTER */
     public final static MessageRef CONNECTION_FINGERPRINT = new MessageRef("fingerprint", CONNECTION);
     public final static MessageRef CONNECTION_FINGERPRINT_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, CONNECTION_FINGERPRINT);
+
+    /** TODO A COMMENTER */
+    public final static MessageRef SUBSCRIPTION = new MessageRef("subscription", CONNECTION);
+    /** TODO A COMMENTER */
+    public final static MessageRef SUBSCRIPTION_NOT_VALIDATED_ERROR = new MessageRef("not_validated_" + SUFFIX_ERROR, SUBSCRIPTION);
+    /** TODO A COMMENTER */
+    public final static MessageRef SUBSCRIPTION_VALIDATED_ERROR = new MessageRef("validated_" + SUFFIX_ERROR, SUBSCRIPTION);
+
+    /** TODO A COMMENTER */
+    public final static MessageRef SESSION = new MessageRef("session", CONNECTION);
+    /** TODO A COMMENTER */
+    public final static MessageRef SESSION_UNDEFINED_ERROR = new MessageRef(SUFFIX_UNDEFINED_ERROR, SESSION);
+    /** TODO A COMMENTER */
+    public final static MessageRef SESSION_DEFINED_ERROR = new MessageRef(SUFFIX_DEFINED_ERROR, SESSION);
+    /** TODO A COMMENTER */
+    public final static MessageRef SESSION_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, SESSION);
+
+
+    /** TODO A COMMENTER */
+    public final static MessageRef PERMISSION = new MessageRef("permission", CONNECTION);
+    /** TODO A COMMENTER */
+//    public final static MessageRef PERMISSION_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, PERMISSION);
+//    public final static MessageRef PERMISSION_EXISTING_ERROR = new MessageRef(SUFFIX_EXISTING_ERROR, PERMISSION);
+    public final static MessageRef PERMISSION_NOT_GRANTED_ERROR = new MessageRef("not_granted_" + SUFFIX_ERROR, PERMISSION);
+
+    /** TODO A COMMENTER */
+    public final static MessageRef IP = new MessageRef("ip", CONNECTION);
+    public final static MessageRef IP_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, IP);
+    public final static MessageRef IP_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, IP);
   }
   /* ############################### PRODUCT ################################ */
   /**
@@ -352,16 +358,16 @@ public class MessageRef extends Reference<MessageRef>
     public final static MessageRef PRODUCT = new MessageRef("product");
 
     /** Définition de la référence de message liée aux noms de produit */
-    public final static MessageRef PRODUCT_NAME = new MessageRef(SUFFIX_NAME, PRODUCT);
+    public final static MessageRef NAME = new MessageRef(SUFFIX_NAME, PRODUCT);
     /** TODO A COMMENTER */
-    public final static MessageRef PRODUCT_NAME_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, PRODUCT_NAME);
+    public final static MessageRef NAME_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, NAME);
     /** TODO A COMMENTER */
-    public final static MessageRef PRODUCT_NAME_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, PRODUCT_NAME);
+    public final static MessageRef NAME_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, NAME);
 
     /** Définition de la référence de message liée aux résumés de description de produit */
-    public final static MessageRef PRODUCT_SUMMARY = new MessageRef("summary", PRODUCT);
+    public final static MessageRef SUMMARY = new MessageRef("summary", PRODUCT);
     /** TODO A COMMENTER */
-    public final static MessageRef PRODUCT_SUMMARY_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, PRODUCT_SUMMARY);
+    public final static MessageRef SUMMARY_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, SUMMARY);
   }
 
   /* ############################### ACCOUNT ################################ */
@@ -382,30 +388,30 @@ public class MessageRef extends Reference<MessageRef>
     public final static MessageRef ACCOUNT_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, ACCOUNT);
 
     /** Définition de la référence de message liée aux informations utilisateur d'un compte */
-    public final static MessageRef ACCOUNT_USER = new MessageRef(SUFFIX_USER, ACCOUNT);
+    public final static MessageRef USER = new MessageRef(SUFFIX_USER, ACCOUNT);
     /** Définition de la référence de message liée au prénom d'un utilisateur */
-    public final static MessageRef ACCOUNT_USER_FIRST_NAME = new MessageRef("first_name", ACCOUNT_USER);
-    public final static MessageRef ACCOUNT_USER_MIDDLE_NAME = new MessageRef("middle_name", ACCOUNT_USER);
-    public final static MessageRef ACCOUNT_USER_LAST_NAME = new MessageRef("last_name", ACCOUNT_USER);
+    public final static MessageRef USER_FIRST_NAME = new MessageRef("first_name", USER);
+    public final static MessageRef USER_MIDDLE_NAME = new MessageRef("middle_name", USER);
+    public final static MessageRef USER_LAST_NAME = new MessageRef("last_name", USER);
 
-    public final static MessageRef ACCOUNT_PHONE = new MessageRef("phone", ACCOUNT);
-    public final static MessageRef ACCOUNT_PHONE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, ACCOUNT_PHONE);
+    public final static MessageRef PHONE = new MessageRef("phone", ACCOUNT);
+    public final static MessageRef PHONE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, PHONE);
 
     /** Définition de la référence de message liée aux crédits d'un compte utilisateur */
-    public final static MessageRef ACCOUNT_CREDIT = new MessageRef(SUFFIX_CREDIT, ACCOUNT);
+    public final static MessageRef CREDIT = new MessageRef(SUFFIX_CREDIT, ACCOUNT);
 
-    public final static MessageRef ACCOUNT_CREDIT_NOT_HISTORIZED_ERROR = new MessageRef(SUFFIX_NOT_HISTORIZED_ERROR, ACCOUNT_CREDIT);
-    public final static MessageRef ACCOUNT_CREDIT_HISTORIZED_ERROR = new MessageRef(SUFFIX_HISTORIZED_ERROR, ACCOUNT_CREDIT);
+    public final static MessageRef CREDIT_NOT_HISTORIZED_ERROR = new MessageRef(SUFFIX_NOT_HISTORIZED_ERROR, CREDIT);
+    public final static MessageRef CREDIT_HISTORIZED_ERROR = new MessageRef(SUFFIX_HISTORIZED_ERROR, CREDIT);
 
     /** Définition de la référence de message liée aux nombres de crédits d'un compte utilisateur */
-    public final static MessageRef ACCOUNT_CREDIT_NB = new MessageRef("nb", ACCOUNT_CREDIT);
-    public final static MessageRef ACCOUNT_CREDIT_NB_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, ACCOUNT_CREDIT_NB);
-    public final static MessageRef ACCOUNT_CREDIT_NB_INSUFFICIENT_ERROR = new MessageRef("not_enought_error", ACCOUNT_CREDIT_NB);
+    public final static MessageRef CREDIT_NB = new MessageRef("nb", CREDIT);
+    public final static MessageRef CREDIT_NB_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CREDIT_NB);
+    public final static MessageRef CREDIT_NB_INSUFFICIENT_ERROR = new MessageRef("not_enought_error", CREDIT_NB);
 
     /** Définition de la référence de message liée aux références de crédits d'un compte utilisateur */
-    public final static MessageRef ACCOUNT_CREDIT_REFERENCE = new MessageRef("reference", ACCOUNT_CREDIT);
-    public final static MessageRef ACCOUNT_CREDIT_REFERENCE_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, ACCOUNT_CREDIT_REFERENCE);
-    public final static MessageRef ACCOUNT_CREDIT_REFERENCE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, ACCOUNT_CREDIT_REFERENCE);
+    public final static MessageRef CREDIT_REFERENCE = new MessageRef("reference", CREDIT);
+    public final static MessageRef CREDIT_REFERENCE_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, CREDIT_REFERENCE);
+    public final static MessageRef CREDIT_REFERENCE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, CREDIT_REFERENCE);
   }
 
 
@@ -444,48 +450,48 @@ public class MessageRef extends Reference<MessageRef>
     public final static MessageRef AUCTION_HISTORIZED_ERROR = new MessageRef(SUFFIX_HISTORIZED_ERROR, AUCTION);
 
     /** Définition de la référence de message liée aux status d'une vente aux enchères */
-    public final static MessageRef AUCTION_STATUS = new MessageRef(SUFFIX_STATUS, AUCTION);
+    public final static MessageRef STATUS = new MessageRef(SUFFIX_STATUS, AUCTION);
     /** Définition de la référence de message d'erreur d'un status de vente aux enchères manquant */
-    public final static MessageRef AUCTION_STATUS_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, AUCTION_STATUS);
+    public final static MessageRef STATUS_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, STATUS);
     /** Définition de la référence de message d'erreur d'un status de vente aux enchères invalide */
-    public final static MessageRef AUCTION_STATUS_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, AUCTION_STATUS);
+    public final static MessageRef STATUS_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, STATUS);
     /** Définition de la référence de message d'erreur d'une vente aux enchères non démarrée */
-    public final static MessageRef AUCTION_STATUS_NOT_STARTED_ERROR = new MessageRef("not_started_" + SUFFIX_ERROR, AUCTION_STATUS);
+    public final static MessageRef STATUS_NOT_STARTED_ERROR = new MessageRef("not_started_" + SUFFIX_ERROR, STATUS);
     /** Définition de la référence de message d'erreur d'une vente aux enchères non terminée */
-    public final static MessageRef AUCTION_STATUS_NOT_ENDED_ERROR = new MessageRef("not_ended_" + SUFFIX_ERROR, AUCTION_STATUS);
+    public final static MessageRef STATUS_NOT_ENDED_ERROR = new MessageRef("not_ended_" + SUFFIX_ERROR, STATUS);
     /** Définition de la référence de message d'erreur d'une vente aux enchères terminée */
-    public final static MessageRef AUCTION_STATUS_ENDED_ERROR = new MessageRef("ended_" + SUFFIX_ERROR, AUCTION_STATUS);
+    public final static MessageRef STATUS_ENDED_ERROR = new MessageRef("ended_" + SUFFIX_ERROR, STATUS);
 
-    public final static MessageRef AUCTION_VALUE= new MessageRef(SUFFIX_VALUE, AUCTION);
-    public final static MessageRef AUCTION_VALUE_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, AUCTION_VALUE);
+    public final static MessageRef VALUE= new MessageRef(SUFFIX_VALUE, AUCTION);
+    public final static MessageRef VALUE_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, VALUE);
 
     /** Définition de la référence de message liée aux enchères */
-    public final static MessageRef AUCTION_BID = new MessageRef("bid", AUCTION);
+    public final static MessageRef BID = new MessageRef("bid", AUCTION);
     /** Définition de la référence de message d'erreur d'une enchère manquante */
-    public final static MessageRef AUCTION_BID_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, AUCTION_BID);
+    public final static MessageRef BID_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, BID);
     /** Définition de la référence de message d'erreur d'une enchère déjà définie */
-    public final static MessageRef AUCTION_BID_DEFINED_ERROR = new MessageRef(SUFFIX_DEFINED_ERROR, AUCTION_BID);
+    public final static MessageRef BID_DEFINED_ERROR = new MessageRef(SUFFIX_DEFINED_ERROR, BID);
     /** Définition de la référence de message d'erreur d'une enchère invalide */
-    public final static MessageRef AUCTION_BID_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, AUCTION_BID);
+    public final static MessageRef BID_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, BID);
 
     /** Définition de la référence de message liée aux nombres d'enchères */
-    public final static MessageRef AUCTION_BID_NB = new MessageRef("nb", AUCTION_BID);
+    public final static MessageRef BID_NB = new MessageRef("nb", BID);
     /** Définition de la référence de message d'erreur d'un nombres d'enchères invalide */
-    public final static MessageRef AUCTION_BID_NB_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, AUCTION_BID_NB);
+    public final static MessageRef BID_NB_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, BID_NB);
 
     /** Définition de la référence de message liée aux conditions de vente aux enchères */
-    public final static MessageRef AUCTION_TERMS = new MessageRef("terms", AUCTION);
+    public final static MessageRef TERMS = new MessageRef("terms", AUCTION);
     /** Définition de la référence de message d'erreur de conditions de vente aux enchères manquantes */
-    public final static MessageRef AUCTION_TERMS_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, AUCTION_TERMS);
+    public final static MessageRef TERMS_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, TERMS);
     /** Définition de la référence de message d'erreur de conditions de vente aux enchères invalides */
-    public final static MessageRef AUCTION_TERMS_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, AUCTION_TERMS);
+    public final static MessageRef TERMS_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, TERMS);
 
     /** Définition de la référence de message liée à la planification de vente aux enchères */
-    public final static MessageRef AUCTION_SCHEDULE = new MessageRef("schedule", AUCTION);
+    public final static MessageRef SCHEDULE = new MessageRef("schedule", AUCTION);
     /** Définition de la référence de message d'erreur d'une planification de vente aux enchères manquante */
-    public final static MessageRef AUCTION_SCHEDULE_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, AUCTION_SCHEDULE);
+    public final static MessageRef SCHEDULE_MISSING_ERROR = new MessageRef(SUFFIX_MISSING_ERROR, SCHEDULE);
     /** Définition de la référence de message d'erreur d'une planification de vente aux enchères invalide */
-    public final static MessageRef AUCTION_SCHEDULE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, AUCTION_SCHEDULE);
+    public final static MessageRef SCHEDULE_INVALID_ERROR = new MessageRef(SUFFIX_INVALID_ERROR, SCHEDULE);
   }
   /** TODO A COMMENTER */
   //public final static MessageRef ERROR_AUCTION_NOT_BOOKED = new MessageRef("error.auction.not_booked");

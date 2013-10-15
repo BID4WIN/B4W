@@ -1,7 +1,8 @@
 package com.bid4win.commons.core.collection;
 
-import java.util.Iterator;
 import java.util.Map;
+
+import com.bid4win.commons.core.security.exception.ProtectionException;
 
 /**
  * Cette classe permet d'organiser des listes d'objets par clé<BR>
@@ -131,10 +132,12 @@ public class Bid4WinSetByObjectMap<KEY, TYPE> extends Bid4WinMap<KEY, Bid4WinSet
    * @param value {@inheritDoc}
    * @return Le set issu de l'ajout aux données déjà référencées, celles en argument
    * @throws IllegalArgumentException {@inheritDoc}
+   * @throws ProtectionException Si la map ou le set auquel ajouter les valeurs
+   * de celui en argument sont protégés contre les modifications
    * @see com.bid4win.commons.core.collection.Bid4WinMap#put(java.lang.Object, java.lang.Object)
    */
   @Override
-  public Bid4WinSet<TYPE> put(KEY key, Bid4WinSet<TYPE> value)
+  public Bid4WinSet<TYPE> put(KEY key, Bid4WinSet<TYPE> value) throws ProtectionException
   {
     // Récupère le set potentiellement existant pour cette clé
     Bid4WinSet<TYPE> set = this.get(key);
@@ -142,6 +145,7 @@ public class Bid4WinSetByObjectMap<KEY, TYPE> extends Bid4WinMap<KEY, Bid4WinSet
     {
       // Ajoute directement le set une fois cloné
       set = value.clone();
+      set.protect(this.getProtection());
       super.put(key, set);
     }
     else
@@ -156,18 +160,18 @@ public class Bid4WinSetByObjectMap<KEY, TYPE> extends Bid4WinMap<KEY, Bid4WinSet
    * Cette méthode redéfini celle de la classe mère afin de ne pas écraser les
    * sets déjà existant mais d'y rajouter le contenu de ceux en argument
    * @param toBePut {@inheritDoc}
+   * @throws ProtectionException Si la map ou le set auquel ajouter les valeurs
+   * de celui en argument sont protégés contre les modifications
    * @see com.bid4win.commons.core.collection.Bid4WinMap#putAll(java.util.Map)
    */
   @Override
   public void putAll(Map<? extends KEY, ? extends Bid4WinSet<TYPE>> toBePut)
+         throws ProtectionException
   {
     // Ajoute les sets un par un pour les regrouper
-    Iterator<? extends KEY> iterator = toBePut.keySet().iterator();
-    while(iterator.hasNext())
+    for(Entry<? extends KEY, ? extends Bid4WinSet<TYPE>> entry : toBePut.entrySet())
     {
-      KEY key = iterator.next();
-      Bid4WinSet<TYPE> value = toBePut.get(key);
-      this.put(key, value);
+      this.put(entry.getKey(), entry.getValue());
     }
   }
 }

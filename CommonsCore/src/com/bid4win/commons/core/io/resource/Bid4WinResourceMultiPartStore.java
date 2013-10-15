@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.exception.CommunicationException;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.core.exception.UserException;
@@ -191,13 +191,14 @@ public interface Bid4WinResourceMultiPartStore<RESOURCE extends Bid4WinResourceM
    */
   public PART_TYPE getPartTypeDefault();
   /**
-   * Getter du set de types de portions de ressource autre que celui par défaut
-   * @return Le set de types de portions de ressource autre que celui par défaut
+   * Getter des types de portions de ressource autre que celui par défaut
+   * @return Les types de portions de ressource autre que celui par défaut
    */
-  public Bid4WinSet<PART_TYPE> getPartTypeSet();
+  public Bid4WinCollection<PART_TYPE> getPartTypes();
   /**
-   * Getter du set de tous les types de portions de ressource
-   * @return Le set de tous les types de portions de ressource
+   * Getter de tous les types de portions de ressource. Attention, la collection
+   * sera protégée contre toute modification
+   * @return Tous les types de portions de ressource
    */
-  public Bid4WinSet<PART_TYPE> getPartTypeSetFull();
+  public Bid4WinCollection<PART_TYPE> getPartTypesFull();
 }

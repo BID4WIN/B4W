@@ -2,6 +2,8 @@ package com.bid4win.commons.core.collection;
 
 import java.util.Map;
 
+import com.bid4win.commons.core.security.exception.ProtectionException;
+
 /**
  * Cette classe est la classe de base de toute map du projet dont les types des
  * clé et des valeurs sont identiques<BR>
@@ -138,8 +140,9 @@ public class Bid4WinSameTypeMap<TYPE> extends Bid4WinMap<TYPE, TYPE>
    * Cette méthode permet d'ajouter tableau en argument pour remplir la map en
    * recherchant les couples clé/valeur suivant la deuxième dimension du tableau
    * @param keysAndValues Tableau de couples clé/valeur à ajouter à la map à construire
+   * @throws ProtectionException Si la map est protégée contre les modifications
    */
-  public void putAll(TYPE[][] keysAndValues)
+  public void putAll(TYPE[][] keysAndValues) throws ProtectionException
   {
     for(int i = 0 ; i < keysAndValues.length ; i++)
     {

@@ -13,8 +13,10 @@ import com.bid4win.commons.core.security.exception.ProtectionException;
  */
 public class ObjectProtector
 {
-  /** Identifiant de protection */
+  /** Pile des identifiants de protection */
   private final static ThreadLocal<Bid4WinList<String>> PROTECTION_ID_LIST = new ThreadLocal<Bid4WinList<String>>();
+  /** Protection courante */
+  private final static ThreadLocal<ObjectProtection> protection = new ThreadLocal<ObjectProtection>();
 
   /**
    * Vérifie si le thread courant possède l'identifiant de protection en paramètre
@@ -26,6 +28,31 @@ public class ObjectProtector
   {
     Bid4WinList<String> protectionIdList = ObjectProtector.findProtectionIdList();
     return protectionIdList != null && protectionIdList.contains(protectionId);
+  }
+
+  /**
+   * Cette méthode permet de récupérer la potentielle protection courante
+   * @return La protection courante si elle est démarrée ou null le cas échéant
+   */
+  public static ObjectProtection getProtection()
+  {
+    return ObjectProtector.protection.get();
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   */
+  private static void defineProtection(String protectionId)
+  {
+    ObjectProtector.protection.set(new ObjectProtection(protectionId));
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   */
+  private static void removeProtection()
+  {
+    ObjectProtector.protection.remove();
   }
 
   /**
@@ -53,6 +80,7 @@ public class ObjectProtector
       ObjectProtector.PROTECTION_ID_LIST.set(protectionIdList);
     }
     protectionIdList.add(protectionId);
+    ObjectProtector.defineProtection(protectionId);
   }
   /**
    * Cette méthode permet d'arrêter la protection des objets pour le thread courant
@@ -72,10 +100,12 @@ public class ObjectProtector
       if(protectionIdList.size() == 1)
       {
         ObjectProtector.PROTECTION_ID_LIST.remove();
+        ObjectProtector.removeProtection();
       }
       else
       {
         protectionIdList.removeLast();
+        ObjectProtector.defineProtection(protectionIdList.getLast());
       }
     }
   }
@@ -87,26 +117,13 @@ public class ObjectProtector
   {
     return ObjectProtector.findProtectionIdList() != null;
   }
-  /**
-   * Getter de l'identifiant de protection à utiliser pour le thread courant
-   * @return L'identifiant de protection à utiliser pour le thread courant
-   */
-  protected static String getProtectionId()
-  {
-    Bid4WinList<String> protectionIdList = ObjectProtector.findProtectionIdList();
-    if(protectionIdList == null)
-    {
-      return null;
-    }
-    return protectionIdList.getLast();
-  }
 
   /**
    * Getter de la liste d'identifiants de protection définis pour le thread courant
    * @return La liste d'identifiants de protection définis pour le thread courant
    * ou null si aucun identifiant de protection n'a encore été défini
    */
-  protected static Bid4WinList<String> findProtectionIdList()
+  private static Bid4WinList<String> findProtectionIdList()
   {
     return ObjectProtector.PROTECTION_ID_LIST.get();
   }

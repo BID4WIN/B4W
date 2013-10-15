@@ -29,8 +29,8 @@ public class UtilStringTest extends Bid4WinCoreTester
   @Test
   public void testTrimNotNull_String()
   {
-    assertEquals("Bad result", "", UtilString.trimNotNull(null));
-    assertEquals("Bad result", "", UtilString.trimNotNull("    "));
+    assertEquals("Bad result", UtilString.EMPTY, UtilString.trimNotNull(null));
+    assertEquals("Bad result", UtilString.EMPTY, UtilString.trimNotNull("    "));
     assertEquals("Bad result", "a b c", UtilString.trimNotNull("  a b c  "));
   }
   /**
@@ -95,7 +95,7 @@ public class UtilStringTest extends Bid4WinCoreTester
   {
     try
     {
-      String string = "";
+      String string = UtilString.EMPTY;
       String result = UtilString.checkEmpty("string", string);
       assertTrue("Bad result", string == result);
     }
@@ -131,7 +131,7 @@ public class UtilStringTest extends Bid4WinCoreTester
   {
     try
     {
-      String string = "";
+      String string = UtilString.EMPTY;
       String result = UtilString.checkEmpty("string", string, MessageRef.UNKNOWN_ERROR);
       assertTrue("Bad result", string == result);
     }
@@ -181,7 +181,7 @@ public class UtilStringTest extends Bid4WinCoreTester
     }
     try
     {
-      UtilString.checkNotEmpty("string", "");
+      UtilString.checkNotEmpty("string", UtilString.EMPTY);
       fail("Should fail");
     }
     catch(ModelArgumentException ex)
@@ -211,7 +211,7 @@ public class UtilStringTest extends Bid4WinCoreTester
     }
     try
     {
-      UtilString.checkNotEmpty("string", "", MessageRef.UNKNOWN_ERROR);
+      UtilString.checkNotEmpty("string", UtilString.EMPTY, MessageRef.UNKNOWN_ERROR);
       fail("Should fail");
     }
     catch(UserException ex)
@@ -265,8 +265,8 @@ public class UtilStringTest extends Bid4WinCoreTester
   @Test
   public void testTrimEmptyLine_StringBuffer()
   {
-    assertEquals("Bad result", "", UtilString.trimEmptyLine(null).toString());
-    assertEquals("Bad result", "", UtilString.trimEmptyLine(
+    assertEquals("Bad result", UtilString.EMPTY, UtilString.trimEmptyLine(null).toString());
+    assertEquals("Bad result", UtilString.EMPTY, UtilString.trimEmptyLine(
         new StringBuffer(UtilString.SEPARATOR_NEW_LINE +
                          UtilString.SEPARATOR_NEW_LINE +
                          UtilString.SEPARATOR_NEW_LINE)).toString());
@@ -286,7 +286,7 @@ public class UtilStringTest extends Bid4WinCoreTester
   {
     String sep = UtilString.SEPARATOR_NEW_LINE;
 
-    StringBuffer text = new StringBuffer("");
+    StringBuffer text = new StringBuffer();
     StringBuffer expected = new StringBuffer("------");
     StringBuffer result = UtilString.indent(text, sep, 3, "--");
     assertEquals("Wrong indentation", expected.toString(), result.toString());

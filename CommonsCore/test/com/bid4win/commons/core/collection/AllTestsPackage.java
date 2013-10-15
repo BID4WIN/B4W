@@ -11,7 +11,10 @@ import com.bid4win.commons.core.Bid4WinCoreTester;
  * @author Emeric Fillâtre
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({com.bid4win.commons.core.collection.Bid4WinSameTypeMapTest.class,
+@Suite.SuiteClasses({com.bid4win.commons.core.collection.Bid4WinCollectionTest.class,
+                     com.bid4win.commons.core.collection.Bid4WinListTest.class,
+                     com.bid4win.commons.core.collection.Bid4WinMapTest.class,
+                     com.bid4win.commons.core.collection.Bid4WinSameTypeMapTest.class,
                      com.bid4win.commons.core.collection.Bid4WinSetTest.class,
                      com.bid4win.commons.core.collection.Bid4WinSortedPropertiesTest.class,
                      com.bid4win.commons.core.collection.Bid4WinStringRecursiveMapTest.class})

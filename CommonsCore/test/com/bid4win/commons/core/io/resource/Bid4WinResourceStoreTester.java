@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.bid4win.commons.core.Bid4WinCoreTester;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.io.UtilFile;
@@ -36,7 +37,7 @@ public abstract class Bid4WinResourceStoreTester<RESOURCE extends Bid4WinResourc
   @Test
   public void test_complete_test_for_store() throws Exception
   {
-    String path = "";
+    String path = UtilString.EMPTY;
     String name = this.getFilename1();
 
     // Test de recherche d'un fichier inexistant
@@ -373,7 +374,7 @@ public abstract class Bid4WinResourceStoreTester<RESOURCE extends Bid4WinResourc
    */
   protected String concatRelativePath(String ... paths) throws UserException
   {
-    return UtilFile.concatRelativePath(this.createResource("", "name", this.getType1()).getMessageRef(),
+    return UtilFile.concatRelativePath(this.createResource(UtilString.EMPTY, "name", this.getType1()).getMessageRef(),
                                        paths);
   }
   /**
@@ -385,7 +386,7 @@ public abstract class Bid4WinResourceStoreTester<RESOURCE extends Bid4WinResourc
    */
   protected String concatAbsolutePath(String ... paths) throws UserException
   {
-    return UtilFile.concatAbsolutePath(this.createResource("", "name", this.getType1()).getMessageRef(),
+    return UtilFile.concatAbsolutePath(this.createResource(UtilString.EMPTY, "name", this.getType1()).getMessageRef(),
                                        paths);
   }
   /**

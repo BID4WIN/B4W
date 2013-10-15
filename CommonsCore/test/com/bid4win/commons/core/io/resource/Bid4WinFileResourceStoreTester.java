@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.collection.Bid4WinStringRecursiveMap;
 
 /**
@@ -131,17 +132,17 @@ public abstract class Bid4WinFileResourceStoreTester<RESOURCE extends Bid4WinFil
   public void testGetSubdirectories_String() throws Exception
   {
     // S'assure de la création du magasin
-    Bid4WinStringRecursiveMap result = this.getStore().getSubdirectories("");
-    assertTrue("", 0 == result.size());
+    Bid4WinStringRecursiveMap result = this.getStore().getSubdirectories(UtilString.EMPTY);
+    assertTrue(UtilString.EMPTY, 0 == result.size());
     result = this.getStore().getSubdirectories("1");
-    assertTrue("", 0 == result.size());
+    assertTrue(UtilString.EMPTY, 0 == result.size());
 
     Bid4WinStringRecursiveMap root = new Bid4WinStringRecursiveMap();
 
     int i = 0;
     FileInputStream inputStream = new FileInputStream(this.getTestFile(this.getFilename1()));
     RESOURCE resource = this.createResource(this.concatRelativePath("1", "1_1", "1_1_1"),
-                                            "" + i++, this.getType1());
+                                            UtilString.EMPTY + i++, this.getType1());
     try
     {
       this.getStore().store(inputStream, resource);
@@ -159,7 +160,7 @@ public abstract class Bid4WinFileResourceStoreTester<RESOURCE extends Bid4WinFil
 
     inputStream = new FileInputStream(this.getTestFile(this.getFilename1()));
     resource = this.createResource(this.concatRelativePath("1", "1_1", "1_1_1"),
-                                   "" + i++, this.getType1());
+                                   UtilString.EMPTY + i++, this.getType1());
     try
     {
       this.getStore().store(inputStream, resource);
@@ -170,7 +171,7 @@ public abstract class Bid4WinFileResourceStoreTester<RESOURCE extends Bid4WinFil
     }
     inputStream = new FileInputStream(this.getTestFile(this.getFilename1()));
     resource = this.createResource(this.concatRelativePath("1", "1_1", "1_1_2"),
-                                   "" + i++, this.getType1());
+                                   UtilString.EMPTY + i++, this.getType1());
     try
     {
       this.getStore().store(inputStream, resource);
@@ -185,7 +186,7 @@ public abstract class Bid4WinFileResourceStoreTester<RESOURCE extends Bid4WinFil
 
     inputStream = new FileInputStream(this.getTestFile(this.getFilename1()));
     resource = this.createResource(this.concatRelativePath("1", "1_1"),
-                                   "" + i++, this.getType1());
+                                   UtilString.EMPTY + i++, this.getType1());
     try
     {
       this.getStore().store(inputStream, resource);
@@ -196,7 +197,7 @@ public abstract class Bid4WinFileResourceStoreTester<RESOURCE extends Bid4WinFil
     }
     inputStream = new FileInputStream(this.getTestFile(this.getFilename1()));
     resource = this.createResource(this.concatRelativePath("2", "2_1"),
-                                   "" + i++, this.getType1());
+                                   UtilString.EMPTY + i++, this.getType1());
     try
     {
       this.getStore().store(inputStream, resource);
@@ -214,7 +215,7 @@ public abstract class Bid4WinFileResourceStoreTester<RESOURCE extends Bid4WinFil
     File lockDir = this.getStore().getLockFile().getParentFile();
     inputStream = new FileInputStream(this.getTestFile(this.getFilename1()));
     resource = this.createResource(this.concatRelativePath("2", lockDir.getName()),
-                                   "" + i++, this.getType1());
+                                   UtilString.EMPTY + i++, this.getType1());
     try
     {
       this.getStore().store(inputStream, resource);
@@ -226,7 +227,7 @@ public abstract class Bid4WinFileResourceStoreTester<RESOURCE extends Bid4WinFil
     Bid4WinStringRecursiveMap root_2_lockDir = new Bid4WinStringRecursiveMap();
     root_2.put(lockDir.getName(), root_2_lockDir);
 
-    result = this.getStore().getSubdirectories("");
+    result = this.getStore().getSubdirectories(UtilString.EMPTY);
     assertTrue("", result.equals(root));
     result = this.getStore().getSubdirectories("1");
     assertTrue("", result.equals(root_1));
@@ -244,7 +245,7 @@ public abstract class Bid4WinFileResourceStoreTester<RESOURCE extends Bid4WinFil
     assertTrue("", 0 == result.size());
 
     this.getStore().unlock();
-    result = this.getStore().getSubdirectories("");
+    result = this.getStore().getSubdirectories(UtilString.EMPTY);
     assertTrue("", result.equals(root));
     result = this.getStore().getSubdirectories("1");
     assertTrue("", result.equals(root_1));

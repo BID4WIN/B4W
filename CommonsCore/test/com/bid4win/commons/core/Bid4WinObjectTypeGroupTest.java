@@ -22,7 +22,7 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
  */
 @RunWith(Bid4WinJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-commons.xml")
-public class Bid4WinObjectTypeGroupTest extends Bid4WinCoreTester
+public class Bid4WinObjectTypeGroupTest extends Bid4WinObjectTypeTester
 {
   /** TODO A COMMENTER */
   private static int index = 0;
@@ -116,10 +116,10 @@ public class Bid4WinObjectTypeGroupTest extends Bid4WinCoreTester
     assertTrue("Wrong type",
                stub3 == Bid4WinObjectType.getType(Bid4WinObjectTypeGroupStub.class,
                                                   stub3.getCode()));
-    assertEquals("Wrong subtype set", 1, stub1.getSubtypeSet().size());
-    assertTrue("Wrong subtype set", stub1.getSubtypeSet().contains(stub3));
-    assertEquals("Wrong subtype set", 1, stub2.getSubtypeSet().size());
-    assertTrue("Wrong subtype set", stub2.getSubtypeSet().contains(stub3));
+    assertEquals("Wrong subtype set", 1, stub1.getSubtypes().size());
+    assertTrue("Wrong subtype set", stub1.getSubtypes().contains(stub3));
+    assertEquals("Wrong subtype set", 1, stub2.getSubtypes().size());
+    assertTrue("Wrong subtype set", stub2.getSubtypes().contains(stub3));
 
     try
     {
@@ -128,8 +128,8 @@ public class Bid4WinObjectTypeGroupTest extends Bid4WinCoreTester
     catch(RuntimeInstantiationException ex)
     {
       System.out.println(ex.getMessage());
-      assertEquals("Wrong subtype set", 1, stub1.getSubtypeSet().size());
-      assertTrue("Wrong subtype set", stub1.getSubtypeSet().contains(stub3));
+      assertEquals("Wrong subtype set", 1, stub1.getSubtypes().size());
+      assertTrue("Wrong subtype set", stub1.getSubtypes().contains(stub3));
     }
   }
   /**
@@ -193,5 +193,17 @@ public class Bid4WinObjectTypeGroupTest extends Bid4WinCoreTester
                  stub3.getPrimitiveSet());
     assertEquals("Wrong primitive", new Bid4WinSet<Bid4WinObjectTypeGroupStub>(stub1, stub2),
                  stub4.getPrimitiveSet());
+  }
+
+  /**
+   *
+   * TODO A COMMENTER {@inheritDoc}
+   * @see com.bid4win.commons.core.Bid4WinObjectTypeTester#testGetDefaultType_Class()
+   */
+  @Override
+  @Test
+  public void testGetDefaultType_Class()
+  {
+    // TODO Auto-generated method stub
   }
 }

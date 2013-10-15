@@ -1,9 +1,9 @@
 package com.bid4win.commons.core;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Map;
 
+import com.bid4win.commons.core.collection.Bid4WinCollection;
+import com.bid4win.commons.core.collection.Bid4WinCollectionAbstract;
 import com.bid4win.commons.core.collection.Bid4WinMap;
 import com.bid4win.commons.core.collection.Bid4WinObjectTypeContainer;
 import com.bid4win.commons.core.collection.Bid4WinSet;
@@ -14,6 +14,8 @@ import com.bid4win.commons.core.exception.RuntimeInstantiationException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.reference.MessageRef;
 import com.bid4win.commons.core.security.ObjectProtection;
+import com.bid4win.commons.core.security.ObjectProtector;
+import com.bid4win.commons.core.security.ProtectableObject;
 import com.bid4win.commons.core.security.exception.ProtectionException;
 
 /**
@@ -25,18 +27,22 @@ import com.bid4win.commons.core.security.exception.ProtectionException;
  * @author Emeric Fillâtre
  */
 public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
+       extends ProtectableObject
 {
-  /** Protection éventuelle de l'objet */
-  private ObjectProtection<CLASS> protection = null;
-
   /**
    * Constructeur de base avec initialisation de la potentielle protection
    */
-  @SuppressWarnings("unchecked")
   public Bid4WinObject()
   {
     super();
-    this.setProtection(new ObjectProtection<CLASS>((CLASS)this));
+  }
+  /**
+   * Constructeur de base avec précision de la potentielle protection
+   * @param protection Potentielle protection de l'objet
+   */
+  public Bid4WinObject(ObjectProtection protection)
+  {
+    super(protection);
   }
 
   /**
@@ -116,31 +122,6 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
   public abstract StringBuffer render();
 
   /**
-   * Cette méthode permet de vérifier la protection de l'objet
-   * @throws ProtectionException Si la protection n'est pas vérifiée
-   */
-  public void checkProtection() throws ProtectionException
-  {
-    this.getProtection().check(1);
-  }
-  /**
-   * Getter de la protection de l'objet
-   * @return La protection de l'objet
-   */
-  private ObjectProtection<CLASS> getProtection()
-  {
-    return this.protection;
-  }
-  /**
-   * Setter de la protection de l'objet
-   * @param protection Protection de l'objet à positionner
-   */
-  private void setProtection(ObjectProtection<CLASS> protection)
-  {
-    this.protection = protection;
-  }
-
-  /**
    * Cette méthode permet de définir la base des références de messages liées à
    * l'objet courant
    * @return La base des références de messages liées à l'objet courant
@@ -169,15 +150,14 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
    * en argument
    * @param toBeAdded Objet à ajouter à la collection en argument
    * @param base Base des messages liés à l'objet en argument
-   * @throws ProtectionException Si l'objet courant est protégé
+   * @throws ProtectionException Si la collection en argument est protégée
    * @throws UserException Si l'objet en argument est nul ou déjà référencé par
    * la collection
    */
-  protected <TYPE> void add(Collection<TYPE> collection, TYPE toBeAdded, MessageRef base)
+  protected <TYPE> void add(Bid4WinCollectionAbstract<TYPE, ?, ?> collection,
+                            TYPE toBeAdded, MessageRef base)
             throws ProtectionException, UserException
   {
-    // Vérifie la protection de l'objet courant
-    this.checkProtection();
     // Vérifie que l'objet à ajouter n'est pas nul
     UtilObject.checkNotNull("toBeAdded", toBeAdded,
                             base.getMessageRef(MessageRef.SUFFIX_MISSING_ERROR));
@@ -194,15 +174,14 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
    * en argument
    * @param toBeRemoved Objet à retirer de la collection en argument
    * @param base Base des messages liés à l'objet en argument
-   * @throws ProtectionException Si l'objet courant est protégé
+   * @throws ProtectionException Si la collection en argument est protégée
    * @throws UserException Si l'objet en argument est nul ou pas référencé par la
    * collection
    */
-  protected <TYPE> void remove(Collection<TYPE> collection, TYPE toBeRemoved, MessageRef base)
+  protected <TYPE> void remove(Bid4WinCollectionAbstract<TYPE, ?, ?> collection,
+                               TYPE toBeRemoved, MessageRef base)
             throws ProtectionException, UserException
   {
-    // Vérifie la protection de l'objet courant
-    this.checkProtection();
     // Vérifie que l'objet à retirer n'est pas nul
     UtilObject.checkNotNull("toBeRemoved", toBeRemoved,
                             base.getMessageRef(MessageRef.SUFFIX_MISSING_ERROR));
@@ -217,15 +196,14 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
    * @param key Clé du couple à ajouter à la map en argument
    * @param value Valeur du couple à ajouter à la map en argument
    * @param base Base des messages liés au couple en argument
-   * @throws ProtectionException Si l'objet courant est protégé
+   * @throws ProtectionException Si la map en argument est protégée
    * @throws UserException Si le couple en argument est nul ou déjà référencé par
    * la map
    */
-  protected <KEY, VALUE> void add(Map<KEY, VALUE> map, KEY key, VALUE value, MessageRef base)
+  protected <KEY, VALUE> void add(Bid4WinMap<KEY, VALUE> map, KEY key,
+                                  VALUE value, MessageRef base)
             throws ProtectionException, UserException
   {
-    // Vérifie la protection de l'objet courant
-    this.checkProtection();
     // Vérifie que le couple à ajouter n'est pas nul
     UtilObject.checkNotNull("key", key,
                             base.getMessageRef(MessageRef.SUFFIX_MISSING_ERROR));
@@ -244,15 +222,14 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
    * @param key Clé du couple à retirer de la map en argument
    * @param value Valeur du couple à retirer de la map en argument
    * @param base Base des messages liés au couple en argument
-   * @throws ProtectionException Si l'objet courant est protégé
+   * @throws ProtectionException Si la map en argument est protégée
    * @throws UserException Si le couple en argument est nul ou pas référencé par
    * la map
    */
-  protected <KEY, VALUE> void remove(Map<KEY, VALUE> map, KEY key, VALUE value, MessageRef base)
+  protected <KEY, VALUE> void remove(Bid4WinMap<KEY, VALUE> map, KEY key,
+                                     VALUE value, MessageRef base)
             throws ProtectionException, UserException
   {
-    // Vérifie la protection de l'objet courant
-    this.checkProtection();
     // Vérifie que le couple à retirer n'est pas nul
     UtilObject.checkNotNull("key", key,
                             base.getMessageRef(MessageRef.SUFFIX_MISSING_ERROR));
@@ -293,14 +270,22 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
      * valeur doit être modifiée si une évolution de la classe la rend incompatible
      * avec les versions précédentes */
     private static final long serialVersionUID = 3178766485328107089L;
+    /** Identifiant de protection des maps et conteneur */
+    private static final String PROTECTION_ID = ObjectProtector.startProtection();
+    /** Object de protection des maps et conteneur */
+    private static final ObjectProtection PROTECTION = ObjectProtector.getProtection();
+    static
+    {
+      ObjectProtector.stopProtection(Bid4WinObjectType.PROTECTION_ID);
+    }
     /** Conteneur des types d'objets par défaut */
     private static Bid4WinMap<Class<? extends Bid4WinObjectType<?>>, String>
-        defaultCodeMap = new Bid4WinMap<Class<? extends Bid4WinObjectType<?>>, String>();
+        defaultCodeMap = new Bid4WinMap<Class<? extends Bid4WinObjectType<?>>, String>(PROTECTION);
     /** Conteneur des bases de message liées au différents types d'objet */
     private static Bid4WinMap<Class<? extends Bid4WinObjectType<?>>, MessageRef>
-        messageRefBaseMap = new Bid4WinMap<Class<? extends Bid4WinObjectType<?>>, MessageRef>();
+        messageRefBaseMap = new Bid4WinMap<Class<? extends Bid4WinObjectType<?>>, MessageRef>(PROTECTION);
     /** Conteneur de tous les types d'objet déjà créés */
-    private static Bid4WinObjectTypeContainer container = new Bid4WinObjectTypeContainer();
+    private static Bid4WinObjectTypeContainer container = new Bid4WinObjectTypeContainer(PROTECTION);
 
     /**
      * Cette méthode permet de récupérer n'importe quel type d'objet déjà créé
@@ -313,7 +298,7 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
     private static <TYPE extends Bid4WinObjectType<TYPE>>
             TYPE getTypeInternal(Class<TYPE> typeClass, String code)
     {
-      TYPE type = Bid4WinObjectType.container.get(typeClass, code);
+      TYPE type = Bid4WinObjectType.container.getType(typeClass, code);
       if(type == null)
       {
         try
@@ -326,7 +311,7 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
           ex.printStackTrace();
           return null;
         }
-        type = Bid4WinObjectType.container.get(typeClass, code);
+        type = Bid4WinObjectType.container.getType(typeClass, code);
       }
       return type;
     }
@@ -415,17 +400,18 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
       return Bid4WinObjectType.getMessageRefBase(typeClass).getMessageRef(partialCodes);
     }
     /**
-     * Cette méthode permet de récupérer le set complet de n'importe quel type
-     * d'objet déjà créés
+     * Cette méthode permet de récupérer la collection complète de n'importe quel
+     * type d'objet déjà créés. Attention, la collection sera protégée contre toute
+     * modification
      * @param <TYPE> Définition du type des types d'objet à récupérer
      * @param typeClass Classe des types d'objet à récupérer
-     * @return Le set complet de n'importe quel type d'objet déjà créés
+     * @return La collection complète de n'importe quel type d'objet déjà créés
      */
     public final static <TYPE extends Bid4WinObjectType<TYPE>>
-           Bid4WinSet<TYPE> getTypeSet(Class<TYPE> typeClass)
+           Bid4WinCollection<TYPE> getTypes(Class<TYPE> typeClass)
     {
-      Bid4WinSet<TYPE> set = Bid4WinObjectType.container.getSet(typeClass);
-      if(set.isEmpty())
+      Bid4WinCollection<TYPE> types = Bid4WinObjectType.container.getTypes(typeClass);
+      if(types.isEmpty())
       {
         try
         {
@@ -437,24 +423,24 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
           ex.printStackTrace();
           return null;
         }
-        set = Bid4WinObjectType.container.getSet(typeClass);
+        types = Bid4WinObjectType.container.getTypes(typeClass);
       }
-      return set;
+      return types;
     }
     /**
-     * Cette méthode permet de récupérer le set complet des parents primitifs de
-     * n'importe quel type d'objet déjà créés
+     * Cette méthode permet de récupérer la collection complète des parents primitifs
+     * de n'importe quel type d'objet déjà créés
      * @param <TYPE> Définition du type des parents primitifs de types d'objet à
      * récupérer
      * @param typeClass Classe des parents primitifs de types d'objet à récupérer
-     * @return Le set complet des parents primitifs de n'importe quel type d'objet
-     * déjà créés
+     * @return La collection complète des parents primitifs de n'importe quel type
+     * d'objet déjà créés
      */
     public final static <TYPE extends Bid4WinObjectType<TYPE>>
-           Bid4WinSet<TYPE> getPrimiviteTypeSet(Class<TYPE> typeClass)
+           Bid4WinCollection<TYPE> getPrimiviteTypes(Class<TYPE> typeClass)
     {
-      Bid4WinSet<TYPE> set = Bid4WinObjectType.getTypeSet(typeClass);
-      Bid4WinSet<TYPE> result = new Bid4WinSet<TYPE>(set.size());
+      Bid4WinCollection<TYPE> set = Bid4WinObjectType.getTypes(typeClass);
+      Bid4WinCollection<TYPE> result = new Bid4WinCollection<TYPE>(set.size());
       for(TYPE type : set)
       {
         if(!type.hasParent())
@@ -466,15 +452,18 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
     }
     /**
      * Cette méthode permet d'ajouter n'importe quel type d'objet. Le premier type
-     * ajouté d'une classe sera considéré comme le type par défaut TODO MessageRefBase
+     * ajouté d'une classe sera considéré comme le type par défaut et définira aussi
+     * la base des messages qui leur seront associés
      * @param <TYPE> Définition du type de type d'objet à ajouter
      * @param typeClass Classe du type d'objet à ajouter
      * @param type Type d'objet à ajouter
      * @throws ModelArgumentException Si un type d'objet de même classe et de même
      * code a déjà été ajouté
+     * @throws ProtectionException Si une des maps ou conteneur est protégé
      */
     private synchronized static <TYPE extends Bid4WinObjectType<TYPE>>
-            void putType(Class<TYPE> typeClass, TYPE type) throws ModelArgumentException
+            void putType(Class<TYPE> typeClass, TYPE type)
+            throws ModelArgumentException, ProtectionException
     {
       Bid4WinObjectType.container.put(typeClass, type);
       if(Bid4WinObjectType.getDefaultCode(typeClass) == null)
@@ -485,9 +474,9 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
     }
 
     /** Code du type d'objet */
-    private String code = "";
+    private String code = UtilString.EMPTY;
     /** Libellé du type d'objet */
-    private String wording = "";
+    private String wording = UtilString.EMPTY;
     /** Parent du type d'objet */
     private CLASS parent = null;
     /** Map de types d'objet ayant le type courant comme parent */
@@ -545,16 +534,26 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
     protected Bid4WinObjectType(String code, String wording, CLASS parent)
               throws RuntimeInstantiationException
     {
+      super(null);
+      this.protect(PROTECTION);
+      this.getSubtypeMap().protect(PROTECTION);
       this.setCode(code);
       this.setWording(wording);
       this.setParent(parent);
+      // Démarre la protection
+      ObjectProtector.startProtection(Bid4WinObjectType.PROTECTION_ID);
       try
       {
+        // On est en mode protégé, on peut modifier le référencement
         Bid4WinObjectType.putType((Class<CLASS>)this.getClass(), (CLASS)this);
       }
       catch(ModelArgumentException ex)
       {
         throw new RuntimeInstantiationException(ex);
+      }
+      finally
+      {
+        ObjectProtector.stopProtection(Bid4WinObjectType.PROTECTION_ID);
       }
       if(parent != null)
       {
@@ -690,25 +689,25 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
       return subtype;
     }
     /**
-     * Getter du set de types d'objet ayant le type courant comme parent
-     * @return Le set de types d'objet ayant le type courant comme parent
+     * Getter des types d'objet ayant le type courant comme parent. Attention, la
+     * collection sera protégée contre toute modification
+     * @return Les types d'objet ayant le type courant comme parent
      */
-    public Bid4WinSet<CLASS> getSubtypeSet()
+    public Bid4WinCollection<CLASS> getSubtypes()
     {
-      return new Bid4WinSet<CLASS>(this.getSubtypeMap().values());
+      return this.getSubtypeMap().values();
     }
     /**
-     * Getter du set de tous les types d'objet ayant le type courant comme parent
-     * même indirectement
-     * @return Le set de tous les types d'objet ayant le type courant comme parent
-     * même indirectement
+     * Getter de tous les types d'objet ayant le type courant comme parent même
+     * indirectement
+     * @return Tous les types d'objet ayant le type courant comme parent même indirectement
      */
-    public Bid4WinSet<CLASS> getRecursiveSubtypeSet()
+    public Bid4WinCollection<CLASS> getRecursiveSubtypes()
     {
-      Bid4WinSet<CLASS> result = this.getSubtypeSet();
+      Bid4WinCollection<CLASS> result = new Bid4WinCollection<CLASS>(this.getSubtypes());
       for(CLASS type : this.getSubtypeMap().values())
       {
-        result.addAll(type.getRecursiveSubtypeSet());
+        result.addAll(type.getRecursiveSubtypes());
       }
       return result;
     }
@@ -741,7 +740,7 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
      * Setter interne du parent du type d'objet
      * @param parent Parent du type d'objet
      */
-    private void setParent(CLASS parent)
+    private void setParent(CLASS parent) throws ProtectionException
     {
       this.parent = parent;
     }
@@ -749,17 +748,27 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
      * Cette méthode permet d'ajouter un type d'objet ayant le type courant comme
      * parent
      * @param subtype Le types d'objet ayant le type courant comme parent
+     * @throws ProtectionException Si la méthode est appelée en dehors de la hiérarchie
+     * de classe
      */
     protected void addSubtype(CLASS subtype)
     {
-      this.getSubtypeMap().put(subtype.getCode(), subtype);
+      this.checkHierarchy(Bid4WinObjectType.class);
+      ObjectProtector.startProtection(Bid4WinObjectType.PROTECTION_ID);
+      try
+      {
+        this.getSubtypeMap().put(subtype.getCode(), subtype);
+      }
+      finally
+      {
+        ObjectProtector.stopProtection(Bid4WinObjectType.PROTECTION_ID);
+      }
     }
   }
 
   //*************************************************************************//
   //************** Définition des groupes de types d'objet ******************//
   //*************************************************************************//
-
   /**
    * Cette classe défini un groupe de types d'objet comparable à une énumération
    * ayant la notion d'appartenance à un groupe de types supérieur<BR>
@@ -794,6 +803,8 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
       {
         this.addParent(myClass);
       }
+      // On protège la map contre toute modification ultérieure
+      this.getParentMap().protect(this.getProtection());
     }
 
     /**
@@ -821,12 +832,13 @@ public abstract class Bid4WinObject<CLASS extends Bid4WinObject<CLASS>>
       throw new RuntimeArgumentException("Cannot get unique parent from a type group");
     }
     /**
-     * Getter du set de parents du groupe de types d'objet
+     * Getter des parents du groupe de types d'objet. Attention, la collection sera
+     * protégée contre toute modification
      * @return Le set de parents du groupe de types d'objet
      */
-    public Bid4WinSet<CLASS> getParentSet()
+    public Bid4WinCollection<CLASS> getParentSet()
     {
-      return new Bid4WinSet<CLASS>(this.getParentMap().values());
+      return this.getParentMap().values();
     }
     /**
      * Getter de la map de parents du groupe de types d'objet

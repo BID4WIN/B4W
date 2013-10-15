@@ -1,7 +1,6 @@
 package com.bid4win.commons.core.collection;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -43,13 +42,11 @@ public class Bid4WinStringRecursiveMapTest
     map.put("2", map2);
 
     Bid4WinStringRecursiveMap result = new Bid4WinStringRecursiveMap(map, false);
-    assertFalse("Wrong internal map", map == result.getInternal());
     assertTrue("Wrong result size", map.size() == result.size());
     assertTrue("Wrong result size", map.get("1") == result.get("1"));
     assertTrue("Wrong result size", map.get("2") == result.get("2"));
 
     result = new Bid4WinStringRecursiveMap(map, true);
-    assertTrue("Wrong internal map", map == result.getInternal());
   }
   /**
    * Test of add(String, Bid4WinStringRecursiveMap),

@@ -2,6 +2,7 @@ package com.bid4win.commons.core.security.collection;
 
 import java.util.Collection;
 
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.security.IdPattern.Type;
 
@@ -61,8 +62,8 @@ public class IdPatternTypeList extends Bid4WinList<Type>
    */
   public String getRegexp()
   {
-    String result = "";
-    String regexp = "";
+    String result = UtilString.EMPTY;
+    String regexp = UtilString.EMPTY;
     int nb = 0;
     for(Type type : this)
     {

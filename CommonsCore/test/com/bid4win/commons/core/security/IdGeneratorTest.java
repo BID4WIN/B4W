@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.bid4win.commons.core.Bid4WinCoreTester;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
@@ -26,8 +27,8 @@ public class IdGeneratorTest extends Bid4WinCoreTester
   @Test
   public void testGenerateId_int()
   {
-    assertEquals("Wrong ID", "", IdGenerator.generateId(-1));
-    assertEquals("Wrong ID", "", IdGenerator.generateId(0));
+    assertEquals("Wrong ID", UtilString.EMPTY, IdGenerator.generateId(-1));
+    assertEquals("Wrong ID", UtilString.EMPTY, IdGenerator.generateId(0));
     assertEquals("Wrong ID", 1, IdGenerator.generateId(1).length());
     assertEquals("Wrong ID", 10, IdGenerator.generateId(10).length());
     assertEquals("Wrong ID", 100, IdGenerator.generateId(100).length());
@@ -47,7 +48,7 @@ public class IdGeneratorTest extends Bid4WinCoreTester
     id = IdGenerator.generateId(pattern);
     assertTrue("Wrong ID", pattern.matches(id));
 
-    pattern = new IdPattern("");
+    pattern = new IdPattern(UtilString.EMPTY);
     id = IdGenerator.generateId(pattern);
     assertTrue("Wrong ID", pattern.matches(id));
 

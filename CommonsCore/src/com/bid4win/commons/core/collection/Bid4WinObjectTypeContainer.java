@@ -3,17 +3,30 @@ package com.bid4win.commons.core.collection;
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
 import com.bid4win.commons.core.UtilObject;
 import com.bid4win.commons.core.exception.ModelArgumentException;
+import com.bid4win.commons.core.security.ObjectProtection;
+import com.bid4win.commons.core.security.ProtectableObject;
+import com.bid4win.commons.core.security.exception.ProtectionException;
 
 /**
  * Cette classe défini un conteneur de type d'objets<BR>
  * <BR>
  * @author Emeric Fillâtre
  */
-public class Bid4WinObjectTypeContainer
+public class Bid4WinObjectTypeContainer extends ProtectableObject
 {
   /** Map interne du conteneur */
   private Bid4WinMap<Class<?>, Bid4WinMap<String, ? extends Bid4WinObjectType<?>>> internalMap =
       new Bid4WinMap<Class<?>, Bid4WinMap<String, ? extends Bid4WinObjectType<?>>>();
+
+  /**
+   * Constructeur de base avec précision de la potentielle protection
+   * @param protection Potentielle protection de l'objet
+   */
+  public Bid4WinObjectTypeContainer(ObjectProtection protection)
+  {
+    super(null);
+    this.protect(protection);
+  }
 
   /**
    * Cette méthode permet d'ajouter un type d'objet défini au conteneur. Si un
@@ -42,8 +55,8 @@ public class Bid4WinObjectTypeContainer
    * @return Le type d'objet défini correspondant au code en argument ou null s'il
    * n'est pas référencé
    */
-  public <TYPE extends Bid4WinObjectType<TYPE>> TYPE get(Class<TYPE> typeClass,
-                                                         String code)
+  public <TYPE extends Bid4WinObjectType<TYPE>> TYPE getType(Class<TYPE> typeClass,
+                                                             String code)
   {
     Bid4WinMap<String, TYPE> typeMap = this.getTypeMap(typeClass);
     if(typeMap == null)
@@ -53,19 +66,34 @@ public class Bid4WinObjectTypeContainer
     return typeMap.get(code);
   }
   /**
-   * Cette méthode permet de récupérer le set de types d'objet défini
+   * Cette méthode permet de récupérer la collection de types d'objet défini. Attention,
+   * la collection sera protégée comme le conteneur courant
    * @param <TYPE> Définition du type d'objet à rechercher
    * @param typeClass Classe du type d'objet à rechercher
-   * @return Le set de types d'objet défini
+   * @return La collection de types d'objet défini
    */
-  public <TYPE extends Bid4WinObjectType<TYPE>> Bid4WinSet<TYPE> getSet(Class<TYPE> typeClass)
+  public <TYPE extends Bid4WinObjectType<TYPE>> Bid4WinCollection<TYPE> getTypes(Class<TYPE> typeClass)
   {
     Bid4WinMap<String, TYPE> typeMap = this.getTypeMap(typeClass);
     if(typeMap == null)
     {
-      return new Bid4WinSet<TYPE>();
+      return new Bid4WinCollection<TYPE>();
     }
-    return new Bid4WinSet<TYPE>(typeMap.values());
+    return typeMap.values();
+  }
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @param protection {@inheritDoc}
+   * @throws ProtectionException {@inheritDoc}
+   * @see com.bid4win.commons.core.security.ProtectableObject#protect(com.bid4win.commons.core.security.ObjectProtection)
+   */
+  @Override
+  public synchronized void protect(ObjectProtection protection) throws ProtectionException
+  {
+    super.protect(protection);
+    this.getInternalMap().protect(protection);
   }
 
   /**

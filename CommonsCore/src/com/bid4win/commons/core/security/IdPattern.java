@@ -153,7 +153,7 @@ public class IdPattern
     /** Nombre de valeurs du type de pattern */
     private int valueNb = 0;
     /** Expression régulière du type de pattern */
-    private String regexp = "";
+    private String regexp = UtilString.EMPTY;
 
     /**
      * Constructeur

@@ -215,7 +215,7 @@ public class UtilNumber
     if(value < minValue || (!inclusive && value == minValue))
     {
       ModelArgumentException.wrongMinParameterValue(
-          name, "" + value, "" + minValue, inclusive, 1 + stackLevel);
+          name, UtilString.EMPTY + value, UtilString.EMPTY + minValue, inclusive, 1 + stackLevel);
     }
     return value;
   }
@@ -487,7 +487,7 @@ public class UtilNumber
     if(value > maxValue || (!inclusive && value == maxValue))
     {
       ModelArgumentException.wrongMaxParameterValue(
-          name, "" + value, "" + maxValue, inclusive, 1 + stackLevel);
+          name, UtilString.EMPTY + value, UtilString.EMPTY + maxValue, inclusive, 1 + stackLevel);
     }
     return value;
   }

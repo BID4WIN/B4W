@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.collection.Bid4WinSet;
 import com.bid4win.commons.core.collection.Bid4WinStringRecursiveMap;
 import com.bid4win.commons.core.exception.CommunicationException;
@@ -310,7 +311,7 @@ public abstract class Bid4WinFileResourceMultiPartStore<RESOURCE extends Bid4Win
       this.copy(store, source.getPart(defaultPartType), resource.getPart(defaultPartType));
       undoSet.add(defaultPartType);
       // Continue avec toutes les autres portions de ressource
-      for(PART_TYPE partType : this.getPartTypeSet())
+      for(PART_TYPE partType : this.getPartTypes())
       {
         if(store.exists(source.getPart(partType)))
         {
@@ -369,7 +370,7 @@ public abstract class Bid4WinFileResourceMultiPartStore<RESOURCE extends Bid4Win
     try
     {
       // Commence avec toutes les portions de ressource autres que par défaut
-      for(PART_TYPE partType : this.getPartTypeSet())
+      for(PART_TYPE partType : this.getPartTypes())
       {
         PART part = resource.getPart(partType);
         if(this.exists(part))
@@ -434,7 +435,7 @@ public abstract class Bid4WinFileResourceMultiPartStore<RESOURCE extends Bid4Win
   {
     if(part.getPartType().equals(this.getPartTypeDefault()))
     {
-      for(PART_TYPE partType : this.getPartTypeSet())
+      for(PART_TYPE partType : this.getPartTypes())
       {
         if(this.exists(part.getPart(partType)))
         {
@@ -528,27 +529,28 @@ public abstract class Bid4WinFileResourceMultiPartStore<RESOURCE extends Bid4Win
   }
 
   /**
-   * Getter du set de types de portions de ressource autre que celui par défaut
+   * Getter des types de portions de ressource autre que celui par défaut
    * @return {@inheritDoc}
-   * @see com.bid4win.commons.core.io.resource.Bid4WinResourceMultiPartStore#getPartTypeSet()
+   * @see com.bid4win.commons.core.io.resource.Bid4WinResourceMultiPartStore#getPartTypes()
    */
   @Override
-  public final Bid4WinSet<PART_TYPE> getPartTypeSet()
+  public final Bid4WinCollection<PART_TYPE> getPartTypes()
   {
-    Bid4WinSet<PART_TYPE> set = this.getPartTypeSetFull();
-    set.remove(this.getPartTypeDefault());
-    return set;
+    Bid4WinCollection<PART_TYPE> result = new Bid4WinCollection<PART_TYPE>(this.getPartTypesFull());
+    result.remove(this.getPartTypeDefault());
+    return result;
   }
   /**
-   * Getter du set de tous les types de portions de ressource
+   * Getter de tous les types de portions de ressource. Attention, la collection
+   * sera protégée contre toute modification
    * @return {@inheritDoc}
-   * @see com.bid4win.commons.core.io.resource.Bid4WinResourceMultiPartStore#getPartTypeSetFull()
+   * @see com.bid4win.commons.core.io.resource.Bid4WinResourceMultiPartStore#getPartTypesFull()
    */
   @SuppressWarnings("unchecked")
   @Override
-  public final Bid4WinSet<PART_TYPE> getPartTypeSetFull()
+  public final Bid4WinCollection<PART_TYPE> getPartTypesFull()
   {
-    return Bid4WinObjectType.getTypeSet((Class<PART_TYPE>)this.getPartTypeDefault().getClass());
+    return Bid4WinObjectType.getTypes((Class<PART_TYPE>)this.getPartTypeDefault().getClass());
   }
   /**
    * Getter du magasin de gestion de stockage des portions de ressource sous forme

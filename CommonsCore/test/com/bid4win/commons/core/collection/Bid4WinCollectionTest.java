@@ -20,7 +20,7 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
  */
 @RunWith(Bid4WinJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-commons.xml")
-public class Bid4WinSetTest extends Bid4WinCollectionAbstractTester<Bid4WinSet<String>, String>
+public class Bid4WinCollectionTest extends Bid4WinCollectionAbstractTester<Bid4WinCollection<String>, String>
 {
   /**
    * Test of equals(Object), of class Bid4WinSet.
@@ -50,9 +50,9 @@ public class Bid4WinSetTest extends Bid4WinCollectionAbstractTester<Bid4WinSet<S
    * @see com.bid4win.commons.core.collection.Bid4WinCollectionAbstractTester#createCollection()
    */
   @Override
-  public Bid4WinSet<String> createCollection()
+  public Bid4WinCollection<String> createCollection()
   {
-    return new Bid4WinSet<String>();
+    return new Bid4WinCollection<String>();
   }
   /**
    *
