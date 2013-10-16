@@ -14,7 +14,7 @@ import com.bid4win.commons.logging.aop.MethodTracer;
 @Component("Bid4WinSelfReferencedBeanStub")
 @Scope("singleton")
 public class Bid4WinSelfReferencedBeanStub
-extends Bid4WinSelfReferencedBean<Bid4WinSelfReferencedBeanStub>
+       extends Bid4WinSelfReferencedBean<Bid4WinSelfReferencedBeanStub>
 {
   /**
    *

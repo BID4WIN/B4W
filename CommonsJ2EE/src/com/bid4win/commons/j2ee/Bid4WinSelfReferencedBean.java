@@ -1,5 +1,7 @@
 package com.bid4win.commons.j2ee;
 
+import javax.annotation.PreDestroy;
+
 /**
  *
  * TODO A COMMENTER<BR>
@@ -13,6 +15,8 @@ public class Bid4WinSelfReferencedBean<BEAN extends Bid4WinSelfReferencedBean<BE
   /** TODO A COMMENTER */
   @SuppressWarnings("unchecked")
   private BEAN self = (BEAN)this;
+  /** TODO A COMMENTER */
+  private boolean registered = false;
 
   /**
    *
@@ -28,15 +32,24 @@ public class Bid4WinSelfReferencedBean<BEAN extends Bid4WinSelfReferencedBean<BE
    * TODO A COMMENTER
    * @param self TODO A COMMENTER
    */
-  protected void setSelf(BEAN self)
+  protected synchronized void setSelf(BEAN self)
   {
-    if(this.self != this)
+    if(this.registered)
     {
-      System.out.println("self already defined");
+      throw new RuntimeException("self already defined");
     }
-    else
-    {
-      this.self = self;
-    }
+    this.registered = true;
+    this.self = self;
+  }
+
+  /**
+   *
+   * TODO A COMMENTER
+   */
+  @SuppressWarnings({"unused", "unchecked"})
+  @PreDestroy
+  private void unregister()
+  {
+    this.self = (BEAN)this;
   }
 }

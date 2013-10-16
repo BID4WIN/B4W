@@ -10,6 +10,7 @@
   <!-- Injection des beans de test -->
   <context:component-scan base-package="com.bid4win.commons.j2ee">
     <context:include-filter type="regex" expression=".*Stub"/>
+    <context:exclude-filter type="regex" expression=".*Referer"/>
   </context:component-scan>
   <!-- Define bean injection -->
   <context:component-scan base-package="com.bid4win.commons.logging.aop"/>

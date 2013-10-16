@@ -11,5 +11,7 @@
   <!-- Define that class proxying will be done using CGLIB (real class implementation
        instead of interface only) -->
   <aop:config proxy-target-class="true"/>
-
+  <!-- Post processeur permettant aux beans le nécessitant d'avoir une référence
+       sur leur propre proxy -->
+  <bean class="com.bid4win.commons.j2ee.Bid4WinSelfReferer"/>
 </beans>
