@@ -126,7 +126,7 @@ public class CreditBundleDao extends CreditBundleAbstractDao_<CreditBundle>
     if((bundle.getCurrentNb() == 0 && bundle.isLinkedToAccount()) ||
         bundle.getCurrentNb() != 0 && !bundle.isLinkedToAccount())
     {
-      throw new UserException(AccountRef.ACCOUNT_CREDIT_NOT_HISTORIZED_ERROR);
+      throw new UserException(AccountRef.CREDIT_NOT_HISTORIZED_ERROR);
     }
     // Crée l'historique du lot de crédits
     this.getHistoryDao().add(bundle.historize());
@@ -145,11 +145,11 @@ public class CreditBundleDao extends CreditBundleAbstractDao_<CreditBundle>
   public CreditBundle clean(CreditBundle bundle) throws PersistenceException, UserException
   {
     UtilNumber.checkMaxValue("creditNb", bundle.getCurrentNb(), 0, true,
-                             AccountRef.ACCOUNT_CREDIT_NB_INVALID_ERROR);
+                             AccountRef.CREDIT_NB_INVALID_ERROR);
     UtilBoolean.checkTrue("historized", bundle.isHistorized(),
-                          AccountRef.ACCOUNT_CREDIT_NOT_HISTORIZED_ERROR);
+                          AccountRef.CREDIT_NOT_HISTORIZED_ERROR);
     UtilObject.checkNotNull("historized", bundle.getHistory().getId(),
-                            AccountRef.ACCOUNT_CREDIT_NOT_HISTORIZED_ERROR);
+                            AccountRef.CREDIT_NOT_HISTORIZED_ERROR);
     return this.remove(bundle);
   }
 

@@ -1,16 +1,15 @@
 package com.bid4win.persistence.dao.account;
 
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
-
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.bid4win.commons.core.collection.Bid4WinList;
+import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.persistence.dao.account.AccountAbstractDao_;
-import com.bid4win.commons.persistence.entity.account.security.Credential;
-import com.bid4win.commons.persistence.entity.contact.Email;
+import com.bid4win.commons.persistence.entity.Bid4WinField;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 import com.bid4win.persistence.entity.account.Account;
-import com.bid4win.persistence.entity.account.Account_;
+import com.bid4win.persistence.entity.account.Account_Fields;
 import com.bid4win.persistence.entity.connection.Connection;
 import com.bid4win.persistence.entity.connection.ConnectionHistory;
 
@@ -32,31 +31,67 @@ public class AccountDao extends AccountAbstractDao_<Account, Connection, Connect
   }
 
   /**
+   *
+   * TODO A COMMENTER
+   * @param sponsor TODO A COMMENTER
+   * @return TODO A COMMENTER
+   * @throws PersistenceException TODO A COMMENTER
+   */
+  public Bid4WinList<Account> findListBySponsor(Account sponsor) throws PersistenceException
+  {
+    if(sponsor == null)
+    {
+      return new Bid4WinList<Account>(0);
+    }
+    return this.findListBySponsorId(sponsor.getId());
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param sponsorId TODO A COMMENTER
+   * @return TODO A COMMENTER
+   * @throws PersistenceException TODO A COMMENTER
+   */
+  public Bid4WinList<Account> findListBySponsorId(String sponsorId) throws PersistenceException
+  {
+    return super.findList(this.getSponsorIdData(sponsorId), null);
+  }
+  /**
+   * Cette méthode permet de construire les critères permettant de rechercher les
+   * comptes utilisateur dont l'identifiant du parrain est précisé en argument
+   * @param sponsorId Identifiant du parrain des comptes utilisateur à rechercher
+   * @return Les critères permettant de rechercher les comptes utilisateur en fonction
+   * de l'identifiant de leur parrain
+   */
+  protected Bid4WinData<Account, String> getSponsorIdData(String sponsorId)
+  {
+    return new Bid4WinData<Account, String>(Account_Fields.SPONSOR_ID, sponsorId);
+  }
+
+  /***
    * A définir car :
    * Suite à un bug Hibernate, les @Embedded de @MapedSuperClass ne sont pas pris
    * en compte si défini dans le metamodel de la super class : bug HHH-5024
    * TODO suivre http://opensource.atlassian.com/projects/hibernate/browse/HHH-5024
-   * @param root {@inheritDoc}
    * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.dao.account.AccountAbstractDao_#getCredentialPath(javax.persistence.criteria.Root)
+   * @see com.bid4win.commons.persistence.dao.account.AccountAbstractDao_#getLoginValueField()
    */
   @Override
-  protected Path<Credential> getCredentialPath(Root<Account> root)
+  protected Bid4WinField<Account, ?, String, ?> getLoginValueField()
   {
-    return root.get(Account_.credential);
+    return Account_Fields.LOGIN_VALUE;
   }
   /**
    * A définir car :
    * Suite à un bug Hibernate, les @Embedded de @MapedSuperClass ne sont pas pris
    * en compte si défini dans le metamodel de la super class : bug HHH-5024
    * TODO suivre http://opensource.atlassian.com/projects/hibernate/browse/HHH-5024
-   * @param root {@inheritDoc}
    * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.dao.account.AccountAbstractDao_#getEmailPath(javax.persistence.criteria.Root)
+   * @see com.bid4win.commons.persistence.dao.account.AccountAbstractDao_#getEmailAddressField()
    */
   @Override
-  protected Path<Email> getEmailPath(Root<Account> root)
+  protected Bid4WinField<Account, ?, String, ?> getEmailAddressField()
   {
-    return root.get(Account_.email);
+    return Account_Fields.EMAIL_ADDRESS;
   }
 }

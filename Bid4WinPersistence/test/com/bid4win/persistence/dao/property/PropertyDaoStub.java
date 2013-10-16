@@ -1,10 +1,5 @@
 package com.bid4win.persistence.dao.property;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +12,10 @@ import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
 import com.bid4win.commons.persistence.dao.property.IPropertyAbstractDaoStub;
 import com.bid4win.commons.persistence.entity.Bid4WinEntityLoader;
+import com.bid4win.commons.persistence.entity.property.PropertyAbstract_Fields;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 import com.bid4win.persistence.entity.property.Property;
 import com.bid4win.persistence.entity.property.PropertyRoot;
-import com.bid4win.persistence.entity.property.Property_;
 
 /**
  * Stub du DAO pour les entités de la classe Property avec implémentation
@@ -120,7 +116,7 @@ public class PropertyDaoStub extends PropertyDao
   @Transactional(readOnly = false, rollbackFor = {Bid4WinException.class})
   public Property findOneByKey(String key) throws PersistenceException
   {
-    Property property = super.findOne(this.getCriteriaForKey(key));
+    Property property = super.findOne(this.getKeyData(key));
     return Bid4WinEntityLoader.getInstance().loadRelation(property);
   }
   /**
@@ -130,15 +126,17 @@ public class PropertyDaoStub extends PropertyDao
    * @return Les critères permettant de rechercher la propriété unique correspondant
    * à la clé en paramètre
    */
-  protected CriteriaQuery<Property> getCriteriaForKey(String key)
+  protected Bid4WinData<Property, String> getKeyData(String key)
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
+    return new Bid4WinData<Property, String>(PropertyAbstract_Fields.KEY, key);
+    /*CriteriaBuilder builder = this.getCriteriaBuilder();
 
-    CriteriaQuery<Property> criteria = this.createCriteria();
-    Root<Property> property_ = criteria.from(this.getEntityClass());
-    Predicate condition = builder.equal(property_.get(Property_.key), key);
+    CriteriaQuery<PropertyAbstractStub> criteria = this.createCriteria();
+    Root<PropertyAbstractStub> property_ = criteria.from(this.getEntityClass());
+    Path<String> key_ = property_.get(PropertyAbstract_.key);
+    Predicate condition = builder.equal(key_, key);
     criteria.where(condition);
-    return criteria;
+    return criteria;*/
   }
   /**
    * Cette fonction permet de récupérer le set d'entités dont les identifiants

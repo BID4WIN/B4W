@@ -173,7 +173,7 @@ public class AccountDaoStub extends AccountDao implements IAccountAbstractDaoStu
    */
   @Override
   public Account getOneByLoginOrEmail(String loginOrEmail)
-         throws PersistenceException, NotFoundEntityException, UserException
+         throws PersistenceException, NotFoundEntityException//, UserException
   {
     return super.getOneByLoginOrEmail(loginOrEmail).loadRelation();
   }
@@ -188,7 +188,7 @@ public class AccountDaoStub extends AccountDao implements IAccountAbstractDaoStu
    */
   @Override
   public Account findOneByLoginOrEmail(String loginOrEmail)
-         throws PersistenceException, UserException
+         throws PersistenceException//, UserException
   {
     return Bid4WinEntityLoader.getInstance().loadRelation(super.findOneByLoginOrEmail(loginOrEmail));
   }

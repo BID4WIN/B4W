@@ -1,20 +1,14 @@
 package com.bid4win.persistence.dao.auction;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.persistence.dao.account.AccountBasedEntityMultipleDao_;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 import com.bid4win.persistence.entity.account.Account;
 import com.bid4win.persistence.entity.auction.AuctionAbstract;
-import com.bid4win.persistence.entity.auction.AuctionAbstract_;
 import com.bid4win.persistence.entity.auction.BidAbstract;
-import com.bid4win.persistence.entity.auction.BidAbstract_;
+import com.bid4win.persistence.entity.auction.BidAbstract_Fields;
 import com.bid4win.persistence.entity.auction.BidHistory;
 
 /**
@@ -51,7 +45,11 @@ public abstract class BidAbstractDao_<BID extends BidAbstract<BID, AUCTION, HIST
    */
   public Bid4WinList<BID> findListByAuction(AUCTION auction) throws PersistenceException
   {
-    return super.findList(this.getCriteriaForAuction(auction));
+    if(auction == null)
+    {
+      return new Bid4WinList<BID>(0);
+    }
+    return this.findListByAuctionId(auction.getId());
   }
   /**
    * Cette fonction permet de récupérer la liste d'enchères en fonction de l'identifiant
@@ -63,20 +61,15 @@ public abstract class BidAbstractDao_<BID extends BidAbstract<BID, AUCTION, HIST
    */
   public Bid4WinList<BID> findListByAuctionId(String auctionId) throws PersistenceException
   {
-    return super.findList(this.getCriteriaForAuctionId(auctionId));
+    return super.findList(this.getAuctionIdData(auctionId), null);
   }
 
-  /**
-   * Cette méthode permet de construire les critères permettant de rechercher les
-   * enchères dont la vente est précisée en argument
-   * @param auction Vente des enchères à rechercher
-   * @return Les critères permettant de rechercher les enchères en fonction de
-   * leur vente
-   */
-  protected CriteriaQuery<BID> getCriteriaForAuction(AUCTION auction)
+  protected Bid4WinData<BID, String> getAuctionIdData(String auctionId)
   {
-    return this.getCriteriaForAuctionId(auction.getId());
+    return new Bid4WinData<BID, String>(BidAbstract_Fields.AUCTION_ID,
+                                        auctionId);
   }
+
   /**
    * Cette méthode permet de construire les critères permettant de rechercher les
    * enchères dont l'identifiant de la vente est précisé en argument
@@ -84,7 +77,7 @@ public abstract class BidAbstractDao_<BID extends BidAbstract<BID, AUCTION, HIST
    * @return Les critères permettant de rechercher les enchères en fonction de l'
    * identifiant de leur vente
    */
-  protected CriteriaQuery<BID> getCriteriaForAuctionId(String auctionId)
+/*  protected CriteriaQuery<BID> getCriteriaForAuctionId(String auctionId)
   {
     CriteriaBuilder builder = this.getCriteriaBuilder();
 
@@ -94,7 +87,7 @@ public abstract class BidAbstractDao_<BID extends BidAbstract<BID, AUCTION, HIST
     Predicate condition = builder.equal(auctionId_, auctionId);
     criteria.where(condition);
     return criteria;
-  }
+  }*/
 
   /**
    * Cette fonction permet d'ajouter l'enchère en argument
