@@ -11,6 +11,7 @@ import com.bid4win.commons.persistence.dao.resource.ResourceStorageDaoStub;
 import com.bid4win.commons.persistence.dao.resource.ResourceUsageDaoStub;
 import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
 import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstractStub;
 import com.bid4win.commons.persistence.entity.resource.ResourceStorageStub;
 import com.bid4win.commons.persistence.entity.resource.ResourceTypeStub;
 import com.bid4win.commons.persistence.entity.resource.ResourceUsageStub;
@@ -27,7 +28,8 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-commons.xml")
 public class ResourceRepositoryServiceTest
        extends ResourceRepositoryServiceTester<ResourceStorageStub, ResourceUsageStub, ResourceTypeStub,
-                                               SessionDataAbstractStub, AccountAbstractStub, EntityGeneratorStub>
+                                               SessionDataAbstractStub, AccountAbstractStub,
+                                               ConnectionAbstractStub, EntityGeneratorStub>
 {
   /** TODO A COMMENTER */
   @Autowired

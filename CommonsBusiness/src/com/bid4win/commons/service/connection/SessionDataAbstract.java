@@ -4,6 +4,7 @@ import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.reference.MessageRef.ConnectionRef;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
 import com.bid4win.commons.persistence.entity.account.security.exception.SessionException;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstract;
 import com.bid4win.commons.persistence.entity.connection.IpAddress;
 
 /**
@@ -13,14 +14,16 @@ import com.bid4win.commons.persistence.entity.connection.IpAddress;
  * <BR>
  * @author Emeric Fillâtre
  */
-public class SessionDataAbstract<ACCOUNT extends AccountAbstract<ACCOUNT>>
+public class SessionDataAbstract<ACCOUNT extends AccountAbstract<ACCOUNT>,
+                                 CONNECTION extends ConnectionAbstract<CONNECTION, ?, ACCOUNT>>
 {
   /** Identifiant de la session du conteneur de données */
   private String sessionId = null;
   /** Adresse IP liée à la session */
   private IpAddress ipAddress = null;
+  private CONNECTION connection = null;
   /** Compte utilisateur potentiellement connecté */
-  private ACCOUNT account = null;
+  //private ACCOUNT account = null;
 
   /**
    * Constructeur
@@ -51,9 +54,9 @@ public class SessionDataAbstract<ACCOUNT extends AccountAbstract<ACCOUNT>>
   private void setSessionId(String sessionId) throws SessionException
   {
     sessionId = UtilString.trimNotNull(sessionId);
-    if(sessionId.equals(""))
+    if(sessionId.equals(UtilString.EMPTY))
     {
-      throw new SessionException(ConnectionRef.CONNECTION_SESSION_UNDEFINED_ERROR);
+      throw new SessionException(ConnectionRef.SESSION_UNDEFINED_ERROR);
     }
     this.sessionId = sessionId;
   }
@@ -75,16 +78,24 @@ public class SessionDataAbstract<ACCOUNT extends AccountAbstract<ACCOUNT>>
   {
     if(ipAddress == null)
     {
-      throw new SessionException(ConnectionRef.CONNECTION_IP_MISSING_ERROR);
+      throw new SessionException(ConnectionRef.IP_MISSING_ERROR);
     }
     this.ipAddress = ipAddress;
   }
 
+  public CONNECTION getConnection()
+  {
+    return this.connection;
+  }
+  protected void setConnection(CONNECTION connection)
+  {
+    this.connection = connection;
+  }
   /**
    * Getter du compte utilisateur potentiellement connecté
    * @return Le compte utilisateur potentiellement connecté
    */
-  public ACCOUNT getAccount()
+ /* public ACCOUNT getAccount()
   {
     return this.account;
   }
@@ -92,7 +103,7 @@ public class SessionDataAbstract<ACCOUNT extends AccountAbstract<ACCOUNT>>
    * Setter du compte utilisateur potentiellement connecté
    * @param account Compte utilisateur potentiellement connecté à positionner
    */
-  protected void setAccount(ACCOUNT account)
+ /* protected void setAccount(ACCOUNT account)
   {
     this.account = account;
   }
@@ -101,7 +112,7 @@ public class SessionDataAbstract<ACCOUNT extends AccountAbstract<ACCOUNT>>
    * Getter de l'identifiant du compte utilisateur potentiellement connecté
    * @return L'identifiant du compte utilisateur potentiellement connecté
    */
-  protected String getAccountId()
+ /* protected String getAccountId()
   {
     ACCOUNT account = this.getAccount();
     if(account == null)
@@ -109,5 +120,5 @@ public class SessionDataAbstract<ACCOUNT extends AccountAbstract<ACCOUNT>>
       return null;
     }
     return account.getId();
-  }
+  }*/
 }

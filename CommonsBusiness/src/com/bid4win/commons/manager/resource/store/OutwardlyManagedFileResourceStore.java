@@ -2,8 +2,6 @@ package com.bid4win.commons.manager.resource.store;
 
 import java.io.File;
 
-import org.apache.log4j.MDC;
-
 import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.io.UtilFile;
@@ -30,8 +28,8 @@ public abstract class OutwardlyManagedFileResourceStore<RESOURCE extends Bid4Win
                                                         TYPE extends ResourceType<TYPE>>
        extends Bid4WinFileResourceStore<RESOURCE, TYPE>
 {
-  /** Clé avec laquelle est conservé l'identifiant unique de lock de la session en cours */
-  private static final String LOCK_ID = IdGenerator.generateId(16);
+  /** Identifiant unique de lock de la session en cours */
+  private static final ThreadLocal<String> LOCK_ID = new ThreadLocal<String>();
 
   /**
    * Redéfini la récupération de l'emplacement de travail du magasin pour se baser
@@ -45,9 +43,9 @@ public abstract class OutwardlyManagedFileResourceStore<RESOURCE extends Bid4Win
   protected String getWorkingPath() throws UserException
   {
     String lockId = this.getLockId();
-    if(lockId.equals(""))
+    if(lockId.equals(UtilString.EMPTY))
     {
-      throw new UserException(ResourceRef.RESOURCE_WORKING_PATH_MISSING_ERROR);
+      throw new UserException(ResourceRef.WORKING_PATH_MISSING_ERROR);
     }
     return UtilFile.concatAbsolutePath(ResourceRef.RESOURCE, this.getRootPath(), lockId);
   }
@@ -114,7 +112,7 @@ public abstract class OutwardlyManagedFileResourceStore<RESOURCE extends Bid4Win
    */
   private String getLockId()
   {
-    return UtilString.trimNotNull((String)MDC.get(OutwardlyManagedFileResourceStore.LOCK_ID));
+    return UtilString.trimNotNull(OutwardlyManagedFileResourceStore.LOCK_ID.get());
   }
   /**
    * Génère un identifiant unique de lock pour la session en cours si aucun n'est
@@ -124,10 +122,10 @@ public abstract class OutwardlyManagedFileResourceStore<RESOURCE extends Bid4Win
   private String generateLockId()
   {
     String lockId = this.getLockId();
-    if(lockId.equals(""))
+    if(lockId.equals(UtilString.EMPTY))
     {
       lockId = "." + IdGenerator.generateId(10);
-      MDC.put(OutwardlyManagedFileResourceStore.LOCK_ID, lockId);
+      OutwardlyManagedFileResourceStore.LOCK_ID.set(lockId);
     }
     return lockId;
   }
@@ -136,6 +134,6 @@ public abstract class OutwardlyManagedFileResourceStore<RESOURCE extends Bid4Win
    */
   private void removeLockId()
   {
-    MDC.remove(OutwardlyManagedFileResourceStore.LOCK_ID);
+    OutwardlyManagedFileResourceStore.LOCK_ID.remove();
   }
 }

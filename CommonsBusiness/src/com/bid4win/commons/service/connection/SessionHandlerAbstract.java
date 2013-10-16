@@ -1,13 +1,10 @@
 package com.bid4win.commons.service.connection;
 
-import org.apache.log4j.MDC;
-
-import com.bid4win.commons.core.reference.MessageRef.AccountRef;
 import com.bid4win.commons.core.reference.MessageRef.ConnectionRef;
-import com.bid4win.commons.core.security.IdGenerator;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
 import com.bid4win.commons.persistence.entity.account.security.exception.AuthenticationException;
 import com.bid4win.commons.persistence.entity.account.security.exception.SessionException;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstract;
 import com.bid4win.commons.persistence.entity.connection.DisconnectionReason;
 import com.bid4win.commons.persistence.entity.connection.IpAddress;
 
@@ -19,12 +16,23 @@ import com.bid4win.commons.persistence.entity.connection.IpAddress;
  * <BR>
  * @author Emeric Fillâtre
  */
-public abstract class SessionHandlerAbstract<DATA extends SessionDataAbstract<ACCOUNT>,
-                                             ACCOUNT extends AccountAbstract<ACCOUNT>>
+public abstract class SessionHandlerAbstract<DATA extends SessionDataAbstract<ACCOUNT, CONNECTION>,
+                                             ACCOUNT extends AccountAbstract<ACCOUNT>,
+                                             CONNECTION extends ConnectionAbstract<CONNECTION, ?, ACCOUNT>>
 {
   /** Clé avec laquelle sont conservées les données de la session courante */
-  private final static String SESSION_DATA_ID = IdGenerator.generateId(16);
+  private final ThreadLocal<DATA> SESSION_DATA = new ThreadLocal<DATA>();
 
+  /**
+   *
+   * TODO A COMMENTER
+   * @return TODO A COMMENTER
+   */
+  public boolean isConnected()
+  {
+    DATA data = this.findSessionData();
+    return data != null && data.getConnection() != null;
+  }
   /**
    * Cette méthode permet de récupérer le potentiel conteneur de données de la
    * session courante
@@ -34,7 +42,7 @@ public abstract class SessionHandlerAbstract<DATA extends SessionDataAbstract<AC
   @SuppressWarnings("unchecked")
   private DATA findSessionData()
   {
-    return (DATA)MDC.get(SessionHandlerAbstract.SESSION_DATA_ID);
+    return this.SESSION_DATA.get();
   }
   /**
    * Cette méthode permet de récupérer le conteneur de données de la session courante
@@ -46,7 +54,7 @@ public abstract class SessionHandlerAbstract<DATA extends SessionDataAbstract<AC
     DATA data = this.findSessionData();
     if(data == null)
     {
-      throw new SessionException(ConnectionRef.CONNECTION_SESSION_UNDEFINED_ERROR);
+      throw new SessionException(ConnectionRef.SESSION_UNDEFINED_ERROR);
     }
     return data;
   }
@@ -87,7 +95,16 @@ public abstract class SessionHandlerAbstract<DATA extends SessionDataAbstract<AC
    */
   public ACCOUNT getConnectedAccount() throws SessionException
   {
-    return this.getSessionData().getAccount();
+    CONNECTION connection = this.getConnection();
+    if(connection != null)
+    {
+      return connection.getAccount();
+    }
+    return null;
+  }
+  public CONNECTION getConnection() throws SessionException
+  {
+    return this.getSessionData().getConnection();
   }
 
   /**
@@ -112,11 +129,11 @@ public abstract class SessionHandlerAbstract<DATA extends SessionDataAbstract<AC
     if(data == null)
     {
       data = this.createSessionData(sessionId, ipAddress);
-      MDC.put(SessionHandlerAbstract.SESSION_DATA_ID, data);
+      this.SESSION_DATA.set(data);
     }
     else if(!data.getSessionId().equals(sessionId) || !data.getIpAddress().equals(ipAddress))
     {
-     throw new SessionException(ConnectionRef.CONNECTION_SESSION_DEFINED_ERROR);
+     throw new SessionException(ConnectionRef.SESSION_DEFINED_ERROR);
     }
     return data;
   }
@@ -126,7 +143,7 @@ public abstract class SessionHandlerAbstract<DATA extends SessionDataAbstract<AC
    */
   public void stopSession()
   {
-    MDC.remove(SessionHandlerAbstract.SESSION_DATA_ID);
+    this.SESSION_DATA.remove();
   }
 
   /**
@@ -136,20 +153,20 @@ public abstract class SessionHandlerAbstract<DATA extends SessionDataAbstract<AC
    * @throws AuthenticationException Si un compte utilisateur différent est déjà
    * défini ou si celui en paramètre est nul
    */
-  protected void connect(ACCOUNT account) throws SessionException, AuthenticationException
+  protected void connect(CONNECTION connection) throws SessionException, AuthenticationException
   {
-    if(account == null)
+    if(connection == null)
     {
-      throw new AuthenticationException(AccountRef.ACCOUNT_MISSING_ERROR,
+      throw new AuthenticationException(ConnectionRef.CONNECTION_INVALID_ERROR,
                                         DisconnectionReason.NONE);
     }
     DATA data = this.getSessionData();
-    if(data.getAccount() != null && !data.getAccount().getId().equals(account.getId()))
+    if(data.getConnection() != null && !data.getConnection().getId().equals(connection.getId()))
     {
-      throw new AuthenticationException(AccountRef.ACCOUNT_INVALID_ERROR,
+      throw new AuthenticationException(ConnectionRef.CONNECTION_INVALID_ERROR,
                                         DisconnectionReason.NONE);
     }
-    data.setAccount(account);
+    data.setConnection(connection);
   }
   /**
    * Permet de retirer le compte utilisateur connecté
@@ -157,6 +174,6 @@ public abstract class SessionHandlerAbstract<DATA extends SessionDataAbstract<AC
    */
   public void disconnect() throws SessionException
   {
-    this.getSessionData().setAccount(null);
+    this.getSessionData().setConnection(null);
   }
 }

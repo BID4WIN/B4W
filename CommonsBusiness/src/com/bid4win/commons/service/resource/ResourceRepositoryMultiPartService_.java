@@ -43,7 +43,7 @@ public abstract class ResourceRepositoryMultiPartService_<STORAGE extends Resour
                                                           TYPE extends ResourceType<TYPE>,
                                                           PART_TYPE extends Bid4WinObjectType<PART_TYPE>,
                                                           PART extends ResourcePart<PART, TYPE, PART_TYPE>,
-                                                          SESSION extends SessionDataAbstract<ACCOUNT>,
+                                                          SESSION extends SessionDataAbstract<ACCOUNT, ?>,
                                                           ACCOUNT extends AccountAbstract<ACCOUNT>,
                                                           SERVICE extends ResourceRepositoryMultiPartService_<STORAGE, USAGE, TYPE, PART_TYPE, PART, SESSION, ACCOUNT, SERVICE>>
        extends ResourceRepositoryService_<STORAGE, USAGE, TYPE, SESSION, ACCOUNT, SERVICE>

@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.collection.Bid4WinSet;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.ModelArgumentException;
@@ -37,7 +38,7 @@ import com.bid4win.commons.service.connection.SessionDataAbstract;
  */
 public abstract class PropertyAbstractService_<PROPERTY extends PropertyAbstract<PROPERTY, PROPERTY_ROOT>,
                                                PROPERTY_ROOT extends PropertyRootAbstract<PROPERTY_ROOT, PROPERTY>,
-                                               SESSION extends SessionDataAbstract<ACCOUNT>,
+                                               SESSION extends SessionDataAbstract<ACCOUNT, ?>,
                                                ACCOUNT extends AccountAbstract<ACCOUNT>,
                                                SERVICE extends PropertyAbstractService_<PROPERTY, PROPERTY_ROOT, SESSION, ACCOUNT, SERVICE>>
        extends Bid4WinService_<SESSION, ACCOUNT, SERVICE>
@@ -94,14 +95,14 @@ public abstract class PropertyAbstractService_<PROPERTY extends PropertyAbstract
    * @throws AuthorizationException Si le niveau d'habilitation du compte utilisateur
    * connecté n'est pas suffisant
    */
-  public Bid4WinSet<PROPERTY> getPropertySet()
+  public Bid4WinCollection<PROPERTY> getProperties()
          throws PersistenceException, SessionException,
                 AuthenticationException, AuthorizationException
   {
     // Retourne le set de toutes les propriétés. On ne recherche pas directement
     // les propriétés en accédant au manager afin de bénéficier du cache interne
     // au service
-    return this.getInternal().getRoot(this.getAdminRole()).getPropertySet();
+    return this.getInternal().getRoot(this.getAdminRole()).getProperties();
   }
   /**
    * Cette méthode permet de récupérer toutes les propriétés qui passent, ou dont
@@ -121,11 +122,11 @@ public abstract class PropertyAbstractService_<PROPERTY extends PropertyAbstract
    * @throws AuthorizationException Si le niveau d'habilitation du compte utilisateur
    * connecté n'est pas suffisant
    */
-  public Bid4WinSet<PROPERTY> getFilteredPropertySet(String searchString)
+  public Bid4WinSet<PROPERTY> getFilteredProperties(String searchString)
         throws PersistenceException, ModelArgumentException, UserException,
                SessionException, AuthenticationException, AuthorizationException
   {
-    return UtilProperty.getFilteredPropertySet(this.self().getPropertySet(), searchString);
+    return UtilProperty.getFilteredPropertySet(this.self().getProperties(), searchString);
   }
 
   /**

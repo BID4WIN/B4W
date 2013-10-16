@@ -20,6 +20,7 @@ import com.bid4win.commons.persistence.entity.account.AccountAbstract;
 import com.bid4win.commons.persistence.entity.account.security.Role;
 import com.bid4win.commons.persistence.entity.account.security.exception.AuthenticationException;
 import com.bid4win.commons.persistence.entity.account.security.exception.AuthorizationException;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstract;
 import com.bid4win.commons.service.connection.ConnectionAbstractService_;
 import com.bid4win.commons.service.connection.SessionDataAbstract;
 import com.bid4win.commons.service.connection.SessionHandlerAbstract;
@@ -39,15 +40,16 @@ import com.bid4win.commons.service.connection.SessionHandlerAbstract;
  */
 public abstract class Bid4WinServiceTester<ENTITY extends Bid4WinEntity<ENTITY, ID>,
                                            ID,
-                                           SESSION extends SessionDataAbstract<ACCOUNT>,
+                                           SESSION extends SessionDataAbstract<ACCOUNT, CONNECTION>,
                                            ACCOUNT extends AccountAbstract<ACCOUNT>,
+                                           CONNECTION extends ConnectionAbstract<CONNECTION, ?, ACCOUNT>,
                                            GENERATOR extends EntityGenerator<ACCOUNT>>
        extends Bid4WinBusinessTester<ENTITY, ID, ACCOUNT, GENERATOR>
 {
   /** Service de gestion des connexions */
   @Autowired
   @Qualifier("ConnectionService")
-  private ConnectionAbstractService_<?, ?, ?, SESSION, ACCOUNT, ?> connectionService;
+  private ConnectionAbstractService_<CONNECTION, ?, ?, SESSION, ACCOUNT, ?> connectionService;
 
   /**
    *
@@ -77,7 +79,7 @@ public abstract class Bid4WinServiceTester<ENTITY extends Bid4WinEntity<ENTITY, 
    */
   protected SESSION startSession(String sessionId) throws Bid4WinException
   {
-    SessionHandlerAbstract<SESSION, ACCOUNT> sessionHandler =
+    SessionHandlerAbstract<SESSION, ACCOUNT, ?> sessionHandler =
         this.getService().getConnectionService().getSessionHandler();
     if(!sessionHandler.isSessionStarted())
     {
@@ -103,7 +105,7 @@ public abstract class Bid4WinServiceTester<ENTITY extends Bid4WinEntity<ENTITY, 
    */
   protected void disconnectSessionAccount() throws Bid4WinException
   {
-    SessionHandlerAbstract<SESSION, ACCOUNT> sessionHandler =
+    SessionHandlerAbstract<SESSION, ACCOUNT, ?> sessionHandler =
         this.getService().getConnectionService().getSessionHandler();
     if(sessionHandler.isSessionStarted())
     {
@@ -339,7 +341,7 @@ public abstract class Bid4WinServiceTester<ENTITY extends Bid4WinEntity<ENTITY, 
    * Getter du service de gestion des connexions
    * @return Le service de gestion des connexions
    */
-  protected ConnectionAbstractService_<?, ?, ?, SESSION, ACCOUNT, ?> getConnectionService()
+  protected ConnectionAbstractService_<CONNECTION, ?, ?, SESSION, ACCOUNT, ?> getConnectionService()
   {
     return this.connectionService;
   }

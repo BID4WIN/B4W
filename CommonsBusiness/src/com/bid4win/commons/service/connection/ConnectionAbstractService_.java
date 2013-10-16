@@ -41,7 +41,7 @@ import com.bid4win.commons.service.Bid4WinService_;
 public class ConnectionAbstractService_<CONNECTION extends ConnectionAbstract<CONNECTION, HISTORY, ACCOUNT>,
                                         HISTORY extends ConnectionHistoryAbstract<HISTORY, ACCOUNT>,
                                         REINIT extends PasswordReinitAbstract<REINIT, ACCOUNT>,
-                                        SESSION extends SessionDataAbstract<ACCOUNT>,
+                                        SESSION extends SessionDataAbstract<ACCOUNT, CONNECTION>,
                                         ACCOUNT extends AccountAbstract<ACCOUNT>,
                                         SERVICE extends ConnectionAbstractService_<CONNECTION, HISTORY, REINIT, SESSION, ACCOUNT, SERVICE>>
        extends Bid4WinService_<SESSION, ACCOUNT, SERVICE>
@@ -49,7 +49,7 @@ public class ConnectionAbstractService_<CONNECTION extends ConnectionAbstract<CO
   /** Référence du gestionnaire des données de session */
   @Autowired
   @Qualifier("SessionHandler")
-  private SessionHandlerAbstract<SESSION, ACCOUNT> sessionHandler;
+  private SessionHandlerAbstract<SESSION, ACCOUNT, CONNECTION> sessionHandler;
   /** Manager de gestion des connexions */
   @Autowired
   @Qualifier("ConnectionManager")
@@ -83,17 +83,17 @@ public class ConnectionAbstractService_<CONNECTION extends ConnectionAbstract<CO
   /**
    * Cette méthode permet de définir le compte utilisateur connecté sur la session
    * courante
-   * @param account Compte utilisateur connecté sur la session courante
+   * @param connection Connexion du compte utilisateur sur la session courante
    * @throws SessionException Si aucune session n'est définie
    * @throws AuthorizationException Si le compte utilisateur n'a pas les habilitations
    * suffisantes pour être considéré connecté
    */
-  private void connectAccount(ACCOUNT account)
+  private void connectAccount(CONNECTION connection)
           throws SessionException, AuthenticationException, AuthorizationException
   {
     // @ Vérifie le niveau d'habilitation minimum de l'utilisateur
-    UtilSecurity.checkRole(account, Role.BASIC);
-    this.getSessionHandler().connect(account);
+    UtilSecurity.checkRole(connection.getAccount(), Role.BASIC);
+    this.getSessionHandler().connect(connection);
   }
   /**
    * Cette méthode permet de retirer le compte utilisateur connecté de la session
@@ -113,7 +113,7 @@ public class ConnectionAbstractService_<CONNECTION extends ConnectionAbstract<CO
    * @throws AuthenticationException Si aucun compte utilisateur n'est considéré
    * connecté
    */
-  private ACCOUNT authentify()
+  private CONNECTION authentify()
           throws PersistenceException, SessionException, AuthenticationException
   {
     return this.getManager().authentify(this.getSession());
@@ -136,11 +136,11 @@ public class ConnectionAbstractService_<CONNECTION extends ConnectionAbstract<CO
    * de la couche persistante
    * @throws UserException Si un problème empêche la création de la connexion
    * @throws SessionException Si une connexion existe déjà avec le même identifiant
-   * de session mais est désactivée, provient d'une adresse IP ou d'un process
-   * différent ou ne correspond pas à la connexion demandée, la session devrait
-   * alors être invalidée et la tentative de connexion réessayée
+   * de session mais est désactivée ou provient d'un process différent, la session
+   * devrait alors être invalidée et la tentative de connexion réessayée
    * @throws AuthenticationException Si le compte utilisateur n'a pu être trouvé
-   * ou si le mot de passe n'est pas celui associé au compte utilisateur
+   * ou ne correspond pas à celui connecté ou si le mot de passe n'est pas celui
+   * associé au compte utilisateur
    * @throws AuthorizationException Si le compte utilisateur n'a pas les habilitations
    * suffisantes pour être considéré connecté
    */
@@ -153,7 +153,7 @@ public class ConnectionAbstractService_<CONNECTION extends ConnectionAbstract<CO
     CONNECTION connection = this.getManager().connect(
         this.getSession(), loginOrEmail, password, remanent);
     // Défini le compte utilisateur connecté sur la session courante
-    this.connectAccount(connection.getAccount());
+    this.connectAccount(connection);
     return connection.loadRelation();
   }
   /**
@@ -185,7 +185,7 @@ public class ConnectionAbstractService_<CONNECTION extends ConnectionAbstract<CO
     CONNECTION connection = this.getManager().reconnect(
         this.getSession(), fingerPrint, accountId);
     // Défini le compte utilisateur connecté sur la session courante
-    this.connectAccount(connection.getAccount());
+    this.connectAccount(connection);
     return connection.loadRelation();
   }
 
@@ -349,7 +349,7 @@ public class ConnectionAbstractService_<CONNECTION extends ConnectionAbstract<CO
    * Getter du gestionnaire des sessions
    * @return Le gestionnaire des sessions
    */
-  public SessionHandlerAbstract<SESSION, ACCOUNT> getSessionHandler()
+  public SessionHandlerAbstract<SESSION, ACCOUNT, CONNECTION> getSessionHandler()
   {
     return this.sessionHandler;
   }

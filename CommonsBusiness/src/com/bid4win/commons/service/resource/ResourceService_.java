@@ -39,7 +39,7 @@ import com.bid4win.commons.service.connection.SessionDataAbstract;
  */
 public abstract class ResourceService_<RESOURCE extends Resource<RESOURCE, TYPE>,
                                        TYPE extends ResourceType<TYPE>,
-                                       SESSION extends SessionDataAbstract<ACCOUNT>,
+                                       SESSION extends SessionDataAbstract<ACCOUNT, ?>,
                                        ACCOUNT extends AccountAbstract<ACCOUNT>,
                                        SERVICE extends ResourceService_<RESOURCE, TYPE, SESSION, ACCOUNT, SERVICE>>
        extends Bid4WinService_<SESSION, ACCOUNT, SERVICE>

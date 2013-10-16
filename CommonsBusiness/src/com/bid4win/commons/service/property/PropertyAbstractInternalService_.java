@@ -36,7 +36,7 @@ import com.bid4win.commons.service.connection.SessionDataAbstract;
  */
 public abstract class PropertyAbstractInternalService_<PROPERTY extends PropertyAbstract<PROPERTY, PROPERTY_ROOT>,
                                                        PROPERTY_ROOT extends PropertyRootAbstract<PROPERTY_ROOT, PROPERTY>,
-                                                       SESSION extends SessionDataAbstract<ACCOUNT>,
+                                                       SESSION extends SessionDataAbstract<ACCOUNT, ?>,
                                                        ACCOUNT extends AccountAbstract<ACCOUNT>,
                                                        SERVICE extends PropertyAbstractInternalService_<PROPERTY, PROPERTY_ROOT, SESSION, ACCOUNT, SERVICE>>
        extends Bid4WinService_<SESSION, ACCOUNT, SERVICE>

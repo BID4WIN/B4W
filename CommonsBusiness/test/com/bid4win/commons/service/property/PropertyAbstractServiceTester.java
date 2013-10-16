@@ -5,8 +5,8 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.collection.Bid4WinList;
-import com.bid4win.commons.core.collection.Bid4WinSet;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.core.exception.UserException;
@@ -15,7 +15,8 @@ import com.bid4win.commons.persistence.dao.property.IPropertyRootAbstractDaoStub
 import com.bid4win.commons.persistence.entity.Bid4WinRelationNode;
 import com.bid4win.commons.persistence.entity.EntityGenerator;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
-import com.bid4win.commons.persistence.entity.comparator.Bid4WinEntitySetComparator;
+import com.bid4win.commons.persistence.entity.comparator.Bid4WinEntityCollectionComparator;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstract;
 import com.bid4win.commons.persistence.entity.property.PropertyAbstract;
 import com.bid4win.commons.persistence.entity.property.PropertyAbstract_Relations;
 import com.bid4win.commons.persistence.entity.property.PropertyRootAbstract;
@@ -30,16 +31,18 @@ import com.bid4win.commons.service.connection.SessionDataAbstract;
  * @param <PROPERTY_ROOT> TODO A COMMENTER<BR>
  * @param <SESSION> TODO A COMMENTER<BR>
  * @param <ACCOUNT> TODO A COMMENTER<BR>
+ * @param <CONNECTION> TODO A COMMENTER<BR>
  * @param <GENERATOR> TODO A COMMENTER<BR>
  * <BR>
  * @author Emeric Fillâtre
  */
 public abstract class PropertyAbstractServiceTester<PROPERTY extends PropertyAbstract<PROPERTY, PROPERTY_ROOT>,
                                                     PROPERTY_ROOT extends PropertyRootAbstract<PROPERTY_ROOT, PROPERTY>,
-                                                    SESSION extends SessionDataAbstract<ACCOUNT>,
+                                                    SESSION extends SessionDataAbstract<ACCOUNT, CONNECTION>,
                                                     ACCOUNT extends AccountAbstract<ACCOUNT>,
+                                                    CONNECTION extends ConnectionAbstract<CONNECTION, ?, ACCOUNT>,
                                                     GENERATOR extends EntityGenerator<ACCOUNT>>
-       extends Bid4WinServiceTester<PROPERTY_ROOT, Integer, SESSION, ACCOUNT, GENERATOR>
+       extends Bid4WinServiceTester<PROPERTY_ROOT, Integer, SESSION, ACCOUNT, CONNECTION, GENERATOR>
 {
   /**
    * Test of getProperty(String), of class service.
@@ -90,11 +93,11 @@ public abstract class PropertyAbstractServiceTester<PROPERTY extends PropertyAbs
   }
 
   /**
-   * Test of getPropertySet(), of class service.
+   * Test of getProperties(), of class service.
    * @throws Bid4WinException Issue not expected during this test
    */
   @Test
-  public void testGetPropertySet_0args() throws Bid4WinException
+  public void testGetProperties_0args() throws Bid4WinException
   {
     String key = "a.b.c.d";
     this.addProperty(key, "toto");
@@ -103,14 +106,14 @@ public abstract class PropertyAbstractServiceTester<PROPERTY extends PropertyAbs
     this.addProperty("a2", "test");
 
     // Validation de la vérification des droits administrateur
-    this.checkAdminRestriction("getPropertySet");
+    this.checkAdminRestriction("getProperties");
 
     try
     {
-      Bid4WinSet<PROPERTY> result = this.getService().getPropertySet();
+      Bid4WinCollection<PROPERTY> result = this.getService().getProperties();
       assertTrue("Wrong result",
-                 Bid4WinEntitySetComparator.getInstanceEntitySet().identical(
-                     this.getRoot().getPropertySet(), result));
+                 Bid4WinEntityCollectionComparator.getInstanceEntityCollection().identical(
+                     this.getRoot().getProperties(), result));
     }
     catch(Bid4WinException ex)
     {

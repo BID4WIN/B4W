@@ -2,6 +2,7 @@ package com.bid4win.commons.service.connection;
 
 import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
 import com.bid4win.commons.persistence.entity.account.security.exception.SessionException;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstractStub;
 import com.bid4win.commons.persistence.entity.connection.IpAddress;
 
 /**
@@ -10,7 +11,7 @@ import com.bid4win.commons.persistence.entity.connection.IpAddress;
  * <BR>
  * @author Emeric Fillâtre
  */
-public class SessionDataAbstractStub extends SessionDataAbstract<AccountAbstractStub>
+public class SessionDataAbstractStub extends SessionDataAbstract<AccountAbstractStub, ConnectionAbstractStub>
 {
   /**
    * Constructeur

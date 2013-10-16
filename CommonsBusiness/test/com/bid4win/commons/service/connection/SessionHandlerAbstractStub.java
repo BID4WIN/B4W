@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
 import com.bid4win.commons.persistence.entity.account.security.exception.SessionException;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstractStub;
 import com.bid4win.commons.persistence.entity.connection.IpAddress;
 
 /**
@@ -16,7 +17,7 @@ import com.bid4win.commons.persistence.entity.connection.IpAddress;
 @Component("SessionHandler")
 @Scope("singleton")
 public class SessionHandlerAbstractStub
-       extends SessionHandlerAbstract<SessionDataAbstractStub, AccountAbstractStub>
+       extends SessionHandlerAbstract<SessionDataAbstractStub, AccountAbstractStub, ConnectionAbstractStub>
 {
   /**
    *

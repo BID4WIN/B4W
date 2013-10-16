@@ -9,6 +9,7 @@ import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.persistence.dao.property.IPropertyRootAbstractDaoStub;
 import com.bid4win.commons.persistence.entity.EntityGenerator;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstract;
 import com.bid4win.commons.persistence.entity.property.PropertyAbstract;
 import com.bid4win.commons.persistence.entity.property.PropertyRootAbstract;
 import com.bid4win.commons.service.Bid4WinServiceTester;
@@ -22,16 +23,18 @@ import com.bid4win.commons.service.connection.SessionDataAbstract;
  * @param <PROPERTY_ROOT> TODO A COMMENTER<BR>
  * @param <SESSION> TODO A COMMENTER<BR>
  * @param <ACCOUNT> TODO A COMMENTER<BR>
+ * @param <CONNECTION> TODO A COMMENTER<BR>
  * @param <GENERATOR> TODO A COMMENTER<BR>
  * <BR>
  * @author Emeric Fillâtre
  */
 public abstract class PropertyAbstractInternalServiceTester<PROPERTY extends PropertyAbstract<PROPERTY, PROPERTY_ROOT>,
                                                             PROPERTY_ROOT extends PropertyRootAbstract<PROPERTY_ROOT, PROPERTY>,
-                                                            SESSION extends SessionDataAbstract<ACCOUNT>,
+                                                            SESSION extends SessionDataAbstract<ACCOUNT, CONNECTION>,
                                                             ACCOUNT extends AccountAbstract<ACCOUNT>,
+                                                            CONNECTION extends ConnectionAbstract<CONNECTION, ?, ACCOUNT>,
                                                             GENERATOR extends EntityGenerator<ACCOUNT>>
-       extends Bid4WinServiceTester<PROPERTY_ROOT, Integer, SESSION, ACCOUNT, GENERATOR>
+       extends Bid4WinServiceTester<PROPERTY_ROOT, Integer, SESSION, ACCOUNT, CONNECTION, GENERATOR>
 {
   /**
    *

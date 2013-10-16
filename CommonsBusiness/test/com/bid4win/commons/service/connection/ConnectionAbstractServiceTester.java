@@ -45,10 +45,10 @@ import com.bid4win.commons.service.Bid4WinServiceTester;
 public abstract class ConnectionAbstractServiceTester<CONNECTION extends ConnectionAbstract<CONNECTION, HISTORY, ACCOUNT>,
                                                       HISTORY extends ConnectionHistoryAbstract<HISTORY, ACCOUNT>,
                                                       REINIT extends PasswordReinitAbstract<REINIT, ACCOUNT>,
-                                                      SESSION extends SessionDataAbstract<ACCOUNT>,
+                                                      SESSION extends SessionDataAbstract<ACCOUNT, CONNECTION>,
                                                       ACCOUNT extends AccountAbstract<ACCOUNT>,
                                                       GENERATOR extends EntityGenerator<ACCOUNT>>
-       extends Bid4WinServiceTester<CONNECTION, String, SESSION, ACCOUNT, GENERATOR>
+       extends Bid4WinServiceTester<CONNECTION, String, SESSION, ACCOUNT, CONNECTION, GENERATOR>
 {
   /**
    * Test of connect(String, Password, IpAddress, String, boolean), of service.
@@ -674,9 +674,9 @@ public abstract class ConnectionAbstractServiceTester<CONNECTION extends Connect
       // La connexion doit être valide
       assertNotNull("Should not be null", connection);
       assertEquals("Wrong account ID", accountId, connection.getAccount().getId());
-      assertEquals("Wrong IP address", session.getIpAddress(), connection.getIpAddress());
+      assertEquals("Wrong IP address", session.getIpAddress(), connection.getData().getIpAddress());
       assertTrue("Wrong validity", connection.isActive());
-      assertEquals("Wrong remanence", remanent, connection.isRemanent());
+      assertEquals("Wrong remanence", remanent, connection.getData().isRemanent());
     }
   }
   /**
@@ -711,7 +711,7 @@ public abstract class ConnectionAbstractServiceTester<CONNECTION extends Connect
         {
           assertTrue("Wrong version", 0 < connection.getVersion());
           assertFalse("Wrong validity", connection.isActive());
-          assertFalse("Wrong remanence", connection.isRemanent());
+          assertFalse("Wrong remanence", connection.getData().isRemanent());
         }
       }
     }

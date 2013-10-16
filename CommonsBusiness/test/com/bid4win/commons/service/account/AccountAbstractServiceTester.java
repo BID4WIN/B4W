@@ -17,6 +17,7 @@ import com.bid4win.commons.persistence.entity.account.security.Credential;
 import com.bid4win.commons.persistence.entity.account.security.exception.AuthenticationException;
 import com.bid4win.commons.persistence.entity.account.security.exception.AuthorizationException;
 import com.bid4win.commons.persistence.entity.comparator.Bid4WinEntitySetComparator;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstract;
 import com.bid4win.commons.persistence.entity.contact.Email;
 import com.bid4win.commons.service.Bid4WinServiceTester;
 import com.bid4win.commons.service.connection.SessionDataAbstract;
@@ -27,14 +28,16 @@ import com.bid4win.commons.service.connection.SessionDataAbstract;
  * <BR>
  * @param <SESSION> TODO A COMMENTER<BR>
  * @param <ACCOUNT> TODO A COMMENTER<BR>
+ * @param <CONNECTION> TODO A COMMENTER<BR>
  * @param <GENERATOR> TODO A COMMENTER<BR>
  * <BR>
  * @author Emeric Fillâtre
  */
-public abstract class AccountAbstractServiceTester<SESSION extends SessionDataAbstract<ACCOUNT>,
+public abstract class AccountAbstractServiceTester<SESSION extends SessionDataAbstract<ACCOUNT, CONNECTION>,
                                                    ACCOUNT extends AccountAbstract<ACCOUNT>,
+                                                   CONNECTION extends ConnectionAbstract<CONNECTION, ?, ACCOUNT>,
                                                    GENERATOR extends EntityGenerator<ACCOUNT>>
-       extends Bid4WinServiceTester<ACCOUNT, String, SESSION, ACCOUNT, GENERATOR>
+       extends Bid4WinServiceTester<ACCOUNT, String, SESSION, ACCOUNT, CONNECTION, GENERATOR>
 {
   /**
    * Test of getAccountList(), of service.

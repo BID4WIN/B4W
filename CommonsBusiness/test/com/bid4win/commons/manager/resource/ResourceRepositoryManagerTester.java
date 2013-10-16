@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.core.io.resource.Bid4WinResourceStore;
@@ -49,7 +50,7 @@ public abstract class ResourceRepositoryManagerTester<STORAGE extends ResourceSt
   {
     // Création de la situation de départ
     File file1 = this.getTestFile(this.getFilename1());
-    STORAGE storage = this.createStartingResource("", "test", this.getType1(), file1.getName());
+    STORAGE storage = this.createStartingResource(UtilString.EMPTY, "test", this.getType1(), file1.getName());
     USAGE usage1 = this.createStartingUsage("usage1", storage);
     storage = this.getDao().getById(storage.getId());
 

@@ -33,7 +33,7 @@ import com.bid4win.commons.service.connection.SessionDataAbstract;
  * <BR>
  * @author Emeric Fillâtre
  */
-public class AccountAbstractService_<SESSION extends SessionDataAbstract<ACCOUNT>,
+public class AccountAbstractService_<SESSION extends SessionDataAbstract<ACCOUNT, ?>,
                                      ACCOUNT extends AccountAbstract<ACCOUNT>,
                                      SERVICE extends AccountAbstractService_<SESSION, ACCOUNT, SERVICE>>
        extends Bid4WinService_<SESSION, ACCOUNT, SERVICE>

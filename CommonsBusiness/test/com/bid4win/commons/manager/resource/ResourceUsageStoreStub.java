@@ -5,6 +5,7 @@ import java.io.File;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.io.UtilFile;
 import com.bid4win.commons.core.io.resource.Bid4WinFileResourceStore;
@@ -34,7 +35,7 @@ public class ResourceUsageStoreStub
   protected String getRootPath() throws UserException
   {
     return UtilFile.concatAbsolutePath(ResourceRef.RESOURCE,
-                                       new File("").getAbsolutePath(),
+                                       new File(UtilString.EMPTY).getAbsolutePath(),
                                        "test", "resources", "UsageStore");
   }
 }

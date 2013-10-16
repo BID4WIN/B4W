@@ -34,7 +34,7 @@ import com.bid4win.commons.service.connection.SessionDataAbstract;
 public abstract class ResourceRepositoryService_<STORAGE extends ResourceStorage<STORAGE, TYPE, USAGE>,
                                                  USAGE extends ResourceUsage<USAGE, TYPE, STORAGE>,
                                                  TYPE extends ResourceType<TYPE>,
-                                                 SESSION extends SessionDataAbstract<ACCOUNT>,
+                                                 SESSION extends SessionDataAbstract<ACCOUNT, ?>,
                                                  ACCOUNT extends AccountAbstract<ACCOUNT>,
                                                  SERVICE extends ResourceRepositoryService_<STORAGE, USAGE, TYPE, SESSION, ACCOUNT, SERVICE>>
        extends ResourceService_<STORAGE, TYPE, SESSION, ACCOUNT, SERVICE>

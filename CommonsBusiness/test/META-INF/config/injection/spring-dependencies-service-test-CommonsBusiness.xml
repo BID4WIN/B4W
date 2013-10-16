@@ -10,13 +10,13 @@
   <!-- Injection de tous les services -->
   <context:component-scan base-package="com.bid4win.commons.service">
     <context:include-filter type="regex" expression=".*Stub"/>
-    <context:exclude-filter type="regex" expression=".*Service"/>
+    <!--context:exclude-filter type="regex" expression=".*Service"/-->
     <context:exclude-filter type="regex" expression=".*SessionData.*"/>
   </context:component-scan>
   <!-- Injection de tous les managers -->
   <context:component-scan base-package="com.bid4win.commons.manager">
     <context:include-filter type="regex" expression=".*Stub"/>
-    <context:exclude-filter type="regex" expression=".*Manager"/>
+    <!--context:exclude-filter type="regex" expression=".*Manager"/-->
   </context:component-scan>
 
   <!-- Injection de la persistence -->

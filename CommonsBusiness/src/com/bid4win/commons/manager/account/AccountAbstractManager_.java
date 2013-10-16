@@ -20,6 +20,7 @@ import com.bid4win.commons.persistence.entity.account.security.Role;
 import com.bid4win.commons.persistence.entity.account.security.exception.AuthenticationException;
 import com.bid4win.commons.persistence.entity.connection.DisconnectionReason;
 import com.bid4win.commons.persistence.entity.contact.Email;
+import com.bid4win.commons.persistence.request.Bid4WinRequest;
 
 /**
  * Manager de base du projet pour la gestion métier des comptes utilisateur<BR>
@@ -45,22 +46,19 @@ public abstract class AccountAbstractManager_<ACCOUNT extends AccountAbstract<AC
    * ou à l'email en argument ou null le cas échéant
    * @throws PersistenceException Si un problème intervient lors de la manipulation
    * de la couche persistante
-   * @throws AuthenticationException Si le paramètre ne correspond ni à un login,
-   * ni à un email valide
    */
   public ACCOUNT findAccount(String loginOrEmail)
-         throws PersistenceException, AuthenticationException
+         throws PersistenceException//, AuthenticationException
   {
-    try
-    {
+    /*try
+    {*/
       loginOrEmail = UtilString.trimNotNull(loginOrEmail).toLowerCase();
       return this.getAccountDao().findOneByLoginOrEmail(loginOrEmail);
-    }
+    /*}
     catch(UserException ex)
     {
-      throw new AuthenticationException(ConnectionRef.CONNECTION_LOGIN_OR_EMAIL_UNKNOWN_ERROR,
-                                        DisconnectionReason.NONE);
-    }
+      throw new AuthenticationException(ex.getMessageRef(), DisconnectionReason.NONE);
+    }*/
   }
   /**
    * Cette méthode permet de récupérer un compte utilisateur en fonction de son
@@ -72,7 +70,6 @@ public abstract class AccountAbstractManager_<ACCOUNT extends AccountAbstract<AC
    * @throws PersistenceException Si un problème intervient lors de la manipulation
    * de la couche persistante
    * @throws AuthenticationException Si le compte utilisateur n'a pu être trouvé
-   * ou si le paramètre ne correspond ni à un login, ni à un email valide
    */
   public ACCOUNT getAccount(String loginOrEmail)
          throws PersistenceException, AuthenticationException
@@ -80,7 +77,7 @@ public abstract class AccountAbstractManager_<ACCOUNT extends AccountAbstract<AC
     ACCOUNT account = this.findAccount(loginOrEmail);
     if(account == null)
     {
-      throw new AuthenticationException(ConnectionRef.CONNECTION_LOGIN_OR_EMAIL_UNKNOWN_ERROR,
+      throw new AuthenticationException(ConnectionRef.LOGIN_OR_EMAIL_UNKNOWN_ERROR,
                                         DisconnectionReason.NONE);
     }
     return account;
@@ -93,7 +90,8 @@ public abstract class AccountAbstractManager_<ACCOUNT extends AccountAbstract<AC
    */
   public Bid4WinList<ACCOUNT> getAccountList() throws PersistenceException
   {
-    return this.getAccountDao().findAll();
+    // TODO ajouter des critères au manager !!!
+    return this.getAccountDao().findList(new Bid4WinRequest<ACCOUNT>());
   }
   /**
    * Cette méthode permet de récupérer un compte utilisateur en fonction de son
@@ -153,11 +151,11 @@ public abstract class AccountAbstractManager_<ACCOUNT extends AccountAbstract<AC
   {
     if(this.getAccountDao().findOneByLogin(account.getCredential().getLogin()) != null)
     {
-      throw new UserException(ConnectionRef.CONNECTION_LOGIN_EXISTING_ERROR);
+      throw new UserException(ConnectionRef.LOGIN_EXISTING_ERROR);
     }
     if(this.getAccountDao().findOneByEmail(account.getEmail()) != null)
     {
-      throw new UserException(ConnectionRef.CONNECTION_EMAIL_EXISTING_ERROR);
+      throw new UserException(ConnectionRef.EMAIL_EXISTING_ERROR);
     }
     return this.getAccountDao().add(account);
   }
@@ -197,7 +195,7 @@ public abstract class AccountAbstractManager_<ACCOUNT extends AccountAbstract<AC
   {
     ACCOUNT account = this.lockById(accountId);
     UtilObject.checkEquals("oldPassword", oldPassword, account.getCredential().getPassword(),
-                           ConnectionRef.CONNECTION_PASSWORD_WRONG_ERROR);
+                           ConnectionRef.PASSWORD_WRONG_ERROR);
     account.getCredential().definePassword(newPassword);
     return this.getAccountDao().update(account);
   }

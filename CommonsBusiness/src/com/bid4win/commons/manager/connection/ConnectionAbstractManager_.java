@@ -45,7 +45,7 @@ import com.bid4win.commons.service.connection.SessionDataAbstract;
 public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAbstract<CONNECTION, HISTORY, ACCOUNT>,
                                                  HISTORY extends ConnectionHistoryAbstract<HISTORY, ACCOUNT>,
                                                  REINIT extends PasswordReinitAbstract<REINIT, ACCOUNT>,
-                                                 SESSION extends SessionDataAbstract<ACCOUNT>,
+                                                 SESSION extends SessionDataAbstract<ACCOUNT, CONNECTION>,
                                                  ACCOUNT extends AccountAbstract<ACCOUNT>>
        extends Bid4WinManager_<ACCOUNT, ConnectionAbstractManager_<CONNECTION, HISTORY, REINIT, SESSION, ACCOUNT>>
 {
@@ -64,34 +64,29 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
 
   /**
    * Cette méthode permet d'identifier le compte utilisateur connecté
-   * @param session TODO A COMMENTER
+   * @param session Session contenant les information de connexion
    * @return La définition du compte utilisateur connecté
    * @throws PersistenceException Si un problème intervient lors de la manipulation
    * de la couche persistante
    * @throws AuthenticationException Si aucun compte utilisateur n'est considéré
    * connecté
    */
-  public ACCOUNT authentify(SESSION session)
+  public CONNECTION authentify(SESSION session)
           throws PersistenceException, AuthenticationException
   {
     // Récupère la connexion liée à l'identifiant de session courante
     CONNECTION connection = this.getConnectionDao().findById(session.getSessionId());
     if(connection == null || !connection.getProcessId().equals(IdProcess.ID))
     {
-      throw new AuthenticationException(ConnectionRef.CONNECTION_SESSION_UNDEFINED_ERROR,
+      throw new AuthenticationException(ConnectionRef.SESSION_UNDEFINED_ERROR,
                                         DisconnectionReason.NONE);
     }
     else if(!connection.isActive())
     {
-      throw new AuthenticationException(ConnectionRef.CONNECTION_SESSION_INVALID_ERROR,
-                                        connection.getDisconnectionReason());
+      throw new AuthenticationException(ConnectionRef.SESSION_INVALID_ERROR,
+                                        connection.getData().getDisconnectionReason());
     }
-    else if(!connection.getIpAddress().equals(session.getIpAddress()))
-    {
-      throw new AuthenticationException(ConnectionRef.CONNECTION_SESSION_INVALID_ERROR,
-                                        DisconnectionReason.IP);
-    }
-    return connection.getAccount();
+    return connection;
   }
 
   /**
@@ -100,7 +95,7 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
    * considéré comme perpétuellement connecté. Toute demande de ré-initialisation
    * de mot de passe en attente sera annulée. La connexion sera potentiellement
    * récupérée d'une connexion active si elles correspondent
-   * @param session TODO A COMMENTER
+   * @param session Session contenant les information de connexion
    * @param loginOrEmail Identifiant de connexion ou adresse email du compte utilisateur
    * à connecter
    * @param password Mot de passe de connexion du compte utilisateur à connecter
@@ -110,17 +105,18 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
    * de la couche persistante
    * @throws UserException Si un problème empêche la création de la connexion
    * @throws SessionException Si une connexion existe déjà avec le même identifiant
-   * de session mais est désactivée, provient d'une adresse IP ou d'un process
-   * différent ou ne correspond pas à la connexion demandée, la session devrait
-   * alors être invalidée et la tentative de connexion réessayée
+   * de session mais est désactivée ou provient d'un process différent, la session
+   * devrait alors être invalidée et la tentative de connexion réessayée
    * @throws AuthenticationException Si le compte utilisateur n'a pu être trouvé
-   * ou si le mot de passe n'est pas celui associé au compte utilisateur
+   * ou ne correspond pas à celui connecté ou si le mot de passe n'est pas celui
+   * associé au compte utilisateur
    */
   public CONNECTION connect(SESSION session, String loginOrEmail,
                             Password password, boolean remanent)
          throws PersistenceException, UserException,
                 SessionException, AuthenticationException
   {
+
     // TODO vérifier si l'IP est bloquée
 
     // Recherche si la connexion est déjà activée
@@ -133,9 +129,10 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
     else
     {
       // On valide l'utilisation de la connexion trouvée
-      this.useConnection(session, connection, loginOrEmail, password);
+      this.useConnection(connection, loginOrEmail, password);
     }
-    // TODO bloquer l'ip si nécessaire (peut être pas si utilisation d'une nouvelle ip ...)
+
+    // TODO bloquer l'ip si nécessaire
 
     // Annule toute demande de ré-initialisation de mot de passe
     REINIT reinit = this.getPasswordReinitDao().findOneByAccount(connection.getAccount());
@@ -148,7 +145,7 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
   }
   /**
    * Cette fonction permet de valider et de créer la connexion demandée
-   * @param session TODO A COMMENTER
+   * @param session Session contenant les information de connexion
    * @param loginOrEmail Identifiant de connexion ou adresse email du compte utilisateur
    * à connecter
    * @param password Mot de passe de connexion du compte utilisateur à connecter
@@ -170,7 +167,7 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
     // Valide le mot de passe
     if(!account.getCredential().getPassword().equals(password))
     {
-      throw new AuthenticationException(ConnectionRef.CONNECTION_PASSWORD_WRONG_ERROR,
+      throw new AuthenticationException(ConnectionRef.PASSWORD_WRONG_ERROR,
                                         DisconnectionReason.NONE);
     }
     // Crée et démarre la connexion
@@ -179,29 +176,23 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
   }
   /**
    * Cette fonction permet de valider l'utilisation d'une connexion existante
-   * @param session TODO A COMMENTER
    * @param connection Connexion dont l'utilisation doit être validée
    * @param loginOrEmail Identifiant de connexion ou adresse email du compte utilisateur
    * à valider
    * @param password Mot de passe de connexion du compte utilisateur à valider
-   * @throws SessionException Si la connexion est désactivée, provient d'une
-   * dresse IP ou d'un process différent ou ne correspond pas à la connexion demandée
+   * @throws SessionException Si la connexion est désactivée ou provient d'un process
+   * différent
+   * @throws AuthenticationException Si la connexion existant ne correspond pas
+   * à la connexion demandée
    */
-  private void useConnection(SESSION session, CONNECTION connection,
-                             String loginOrEmail, Password password)
-          throws SessionException
+  private void useConnection(CONNECTION connection, String loginOrEmail, Password password)
+          throws SessionException, AuthenticationException
   {
     // Une ancienne connexion ou une connexion d'un autre process utilise le même
     // identifiant de session, il faut utiliser une nouvelle session
     if(!connection.isActive() || !connection.getProcessId().equals(IdProcess.ID))
     {
-      throw new SessionException(ConnectionRef.CONNECTION_SESSION_INVALID_ERROR);
-    }
-    // L'utilisation de la connexion se fait à partir d'une autre adresse IP, il
-    // faut utiliser une nouvelle session
-    if(!connection.getIpAddress().equals(session.getIpAddress()))
-    {
-      throw new SessionException(ConnectionRef.CONNECTION_IP_INVALID_ERROR);
+      throw new SessionException(ConnectionRef.SESSION_INVALID_ERROR);
     }
     // Si la connexion demandée ne correspond pas à la connexion existante, une
     // tentative de vol de connexion pourrait intervenir
@@ -216,6 +207,10 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
     }
     catch(UserException ex1)
     {
+      //
+    }
+    if(!loginOrEmailValid)
+    {
       try
       {
         if(account.getEmail().equals(new Email(loginOrEmail)))
@@ -225,19 +220,25 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
       }
       catch(UserException ex2)
       {
-        throw new SessionException(ConnectionRef.CONNECTION_LOGIN_OR_EMAIL_UNKNOWN_ERROR);
+        //
       }
     }
-    if(!loginOrEmailValid || !account.getCredential().getPassword().equals(password))
+    if(!loginOrEmailValid)
     {
-      throw new SessionException(ConnectionRef.CONNECTION_PASSWORD_WRONG_ERROR);
+      throw new AuthenticationException(ConnectionRef.LOGIN_OR_EMAIL_UNKNOWN_ERROR,
+                                        DisconnectionReason.NONE);
+    }
+    if(!account.getCredential().getPassword().equals(password))
+    {
+      throw new AuthenticationException(ConnectionRef.PASSWORD_WRONG_ERROR,
+                                        DisconnectionReason.NONE);
     }
   }
 
   /**
    * Cette méthode permet de re-connecter un compte utilisateur au système à partir
    * d'un appareil sur lequel la rémanence d'une connexion a été activée
-   * @param session TODO A COMMENTER
+   * @param session Session contenant les information de connexion
    * @param fingerPrint Empreinte unique de la dernière rémanence de connexion
    * @param accountId Identifiant du compte utilisateur à re-connecter
    * @return La connection effectuée
@@ -263,26 +264,20 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
     // TODO bloquer l'IP si nécessaire
 
     // On valide la réutilisation de l'identifiant de session
-    if(session.getSessionId().equals(fingerPrint))
+    if(session.getSessionId().equals(fingerPrint) && connection.isActive())
     {
       // On ne peut pas réutiliser cette identifiant de session
-      if(connection.isActive() &&
-         (!connection.getIpAddress().equals(session.getIpAddress()) ||
-          !connection.getProcessId().equals(IdProcess.ID)))
+      if(!connection.getProcessId().equals(IdProcess.ID))
       {
-        throw new SessionException(ConnectionRef.CONNECTION_SESSION_DEFINED_ERROR);
+        throw new SessionException(ConnectionRef.SESSION_DEFINED_ERROR);
       }
-      if(!connection.isActive())
-      {
-        this.getConnectionDao().update(connection.stopConnection(DisconnectionReason.NONE));
-      }
-      // On réutilise la connection courante
+      // On réutilise directement la connection courante
       return connection;
     }
     // On utilise la rémanence en invalidant la dernière
     if(!connection.isActive())
     {
-      this.getConnectionDao().update(connection.invalidate(DisconnectionReason.NONE));
+      this.getConnectionDao().update(connection.stopConnection(DisconnectionReason.NONE));
     }
     // Crée et démarre la connexion
     return this.getConnectionDao().add(
@@ -290,7 +285,7 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
   }
   /**
    * Cette fonction permet de valider la ré-utilisation d'une connexion rémanente
-   * @param session TODO A COMMENTER
+   * @param session Session contenant les information de connexion
    * @param connection Connexion dont la réutilisation doit être validée
    * @param fingerPrint Empreinte unique utilisée pour recherche la connexion
    * @param accountId Identifiant du compte utilisateur à re-connecter
@@ -315,44 +310,38 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
         // une tentative de vol de connexion. La première fois, on invalide toutes
         // les connexions de cet utilisateur pour sécuriser son compte et lui permettre
         // de reprendre la main
-        if(history.getAccount().getId().equals(accountId) &&
-           history.isRemanent() && !history.isReuseAttempted())
+        if(history.getData().isRemanent() && history.getAccount().getId().equals(accountId) &&
+           (!history.getData().getDisconnectionReason().equals(DisconnectionReason.REMANENCE) &&
+            !history.getData().getDisconnectionReason().equals(DisconnectionReason.PASSWORD)))
         {
           for(CONNECTION toUnvalidate : this.getConnectionDao().findListByAccountId(accountId))
           {
-            this.getConnectionDao().update(toUnvalidate.invalidate(DisconnectionReason.REMANENCE));
+            this.getConnectionDao().update(toUnvalidate.stopConnection(DisconnectionReason.REMANENCE));
           }
-          this.getHistoryDao().update(history.reuse());
-          throw new AuthenticationException(ConnectionRef.CONNECTION_SESSION_UNDEFINED_ERROR,
+          throw new AuthenticationException(ConnectionRef.SESSION_UNDEFINED_ERROR,
                                             DisconnectionReason.REMANENCE);
         }
       }
-      // La connexion n'a jamais existé
-      throw new AuthenticationException(ConnectionRef.CONNECTION_SESSION_UNDEFINED_ERROR,
+      // La connexion n'a jamais existé ou a déjà été invalidée suite à une tentative
+      // de re-connexion en échec ou de modification de mot de passe
+      throw new AuthenticationException(ConnectionRef.SESSION_UNDEFINED_ERROR,
                                         DisconnectionReason.NONE);
     }
-    // La rémanence n'a pas été activé su cette connexion
-    if(!connection.isRemanent())
+    // La rémanence n'a pas été activée sur cette connexion
+    if(!connection.getData().isRemanent())
     {
-      // Si la connexion n'est ni rémanente, ni active, on se trouve sur une ancienne
-      // connexion invalidée
-      if(!connection.isActive())
-      {
-        this.getConnectionDao().update(connection);
-        throw new AuthenticationException(ConnectionRef.CONNECTION_SESSION_INVALID_ERROR,
-                                          connection.getDisconnectionReason());
-      }
-      // On parle bien d'une nouvelle connexion
+      // On parle bien d'une nouvelle connexion et non d'un rattachement à une
+      // connexion existante
       if(!session.getSessionId().equals(fingerPrint))
       {
-        throw new AuthenticationException(ConnectionRef.CONNECTION_SESSION_UNDEFINED_ERROR,
+        throw new AuthenticationException(ConnectionRef.SESSION_UNDEFINED_ERROR,
                                           DisconnectionReason.NONE);
       }
     }
     // La connexion n'est pas liée au compte utilisateur demandé
     if(!connection.getAccount().getId().equals(accountId))
     {
-      throw new AuthenticationException(ConnectionRef.CONNECTION_SESSION_UNDEFINED_ERROR,
+      throw new AuthenticationException(ConnectionRef.SESSION_UNDEFINED_ERROR,
                                         DisconnectionReason.NONE);
     }
   }
@@ -360,7 +349,7 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
   /**
    * Cette méthode permet de terminer la connexion d'un compte utilisateur au système
    * tout en gardant sa rémanence si celle-ci avait été activée
-   * @param session TODO A COMMENTER
+   * @param session Session contenant les information de connexion
    * @return TODO A COMMENTER
    * @throws PersistenceException Si un problème intervient lors de la manipulation
    * de la couche persistante
@@ -370,9 +359,7 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
     // Recherche la connexion demandée
     CONNECTION connection = this.getConnectionDao().findById(session.getSessionId());
     // On peut bien stopper la connexion
-    if(connection != null &&
-       connection.getIpAddress().equals(session.getIpAddress()) &&
-       connection.getProcessId().equals(IdProcess.ID))
+    if(connection != null && connection.getProcessId().equals(IdProcess.ID))
     {
       connection.endConnection(DisconnectionReason.AUTO);
       this.getConnectionDao().update(connection);
@@ -383,7 +370,7 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
   /**
    * Cette méthode permet de déconnecter un compte utilisateur du système et d'
    * arrêter la rémanence de sa connexion si celle-ci avait été activée
-   * @param session TODO A COMMENTER
+   * @param session Session contenant les information de connexion
    * @return TODO A COMMENTER
    * @throws PersistenceException Si un problème intervient lors de la manipulation
    * de la couche persistante
@@ -393,9 +380,7 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
     // Recherche la connexion demandée
     CONNECTION connection = this.getConnectionDao().findById(session.getSessionId());
     // On peut bien stopper la connexion
-    if(connection != null &&
-       connection.getIpAddress().equals(session.getIpAddress()) &&
-       connection.getProcessId().equals(IdProcess.ID))
+    if(connection != null && connection.getProcessId().equals(IdProcess.ID))
     {
       connection.stopConnection(DisconnectionReason.MANUAL);
       this.getConnectionDao().update(connection);
@@ -435,7 +420,7 @@ public abstract class ConnectionAbstractManager_<CONNECTION extends ConnectionAb
     {
       if(!connection.getFingerPrint().equals(session.getSessionId()))
       {
-        connection.invalidate(DisconnectionReason.PASSWORD);
+        connection.stopConnection(DisconnectionReason.PASSWORD);
         this.getConnectionDao().update(connection);
       }
     }

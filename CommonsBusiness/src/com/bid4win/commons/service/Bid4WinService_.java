@@ -44,7 +44,7 @@ import com.bid4win.commons.service.connection.SessionDataAbstract;
  * <BR>
  * @author Emeric Fillâtre
  */
-public abstract class Bid4WinService_<SESSION extends SessionDataAbstract<ACCOUNT>,
+public abstract class Bid4WinService_<SESSION extends SessionDataAbstract<ACCOUNT, ?>,
                                       ACCOUNT extends AccountAbstract<ACCOUNT>,
                                       SERVICE extends Bid4WinService_<SESSION, ACCOUNT, SERVICE>>
        extends Bid4WinSelfReferencedBean<SERVICE>

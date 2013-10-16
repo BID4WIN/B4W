@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.collection.Bid4WinStringRecursiveMap;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.core.exception.UserException;
@@ -27,6 +28,7 @@ import com.bid4win.commons.persistence.dao.resource.IResourceDaoStub;
 import com.bid4win.commons.persistence.entity.EntityGenerator;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
 import com.bid4win.commons.persistence.entity.account.security.Role;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstract;
 import com.bid4win.commons.persistence.entity.resource.Resource;
 import com.bid4win.commons.persistence.entity.resource.ResourceType;
 import com.bid4win.commons.service.Bid4WinServiceTester;
@@ -40,16 +42,18 @@ import com.bid4win.commons.service.connection.SessionDataAbstract;
  * @param <TYPE> TODO A COMMENTER<BR>
  * @param <SESSION> TODO A COMMENTER<BR>
  * @param <ACCOUNT> TODO A COMMENTER<BR>
+ * @param <CONNECTION> TODO A COMMENTER<BR>
  * @param <GENERATOR> TODO A COMMENTER<BR>
  * <BR>
  * @author Emeric Fillâtre
  */
 public abstract class ResourceServiceTester<RESOURCE extends Resource<RESOURCE, TYPE>,
                                             TYPE extends ResourceType<TYPE>,
-                                            SESSION extends SessionDataAbstract<ACCOUNT>,
+                                            SESSION extends SessionDataAbstract<ACCOUNT, CONNECTION>,
                                             ACCOUNT extends AccountAbstract<ACCOUNT>,
+                                            CONNECTION extends ConnectionAbstract<CONNECTION, ?, ACCOUNT>,
                                             GENERATOR extends EntityGenerator<ACCOUNT>>
-       extends Bid4WinServiceTester<RESOURCE, Long, SESSION, ACCOUNT, GENERATOR>
+       extends Bid4WinServiceTester<RESOURCE, Long, SESSION, ACCOUNT, CONNECTION, GENERATOR>
 {
   /**
    * Test of createResource(String, String, TYPE, InputStream), of class ResourceManager
@@ -68,7 +72,7 @@ public abstract class ResourceServiceTester<RESOURCE extends Resource<RESOURCE, 
     try
     {
       // Creation d'une ressource
-      resource1 = this.getService().createResource("", "test1", this.getType1(), inputStream);
+      resource1 = this.getService().createResource(UtilString.EMPTY, "test1", this.getType1(), inputStream);
       assertTrue("Bad ID", 0 <= resource1.getId());
       assertEquals("Bad version", 0, resource1.getVersion());
       RESOURCE result = this.getDao().findOneByFullPath(resource1.getFullPath());
@@ -141,7 +145,7 @@ public abstract class ResourceServiceTester<RESOURCE extends Resource<RESOURCE, 
     this.checkAdminRestriction("deleteResource", long.class);
 
     // Création de la situation de départ
-    RESOURCE resource = this.createStartingResource("", "test", this.getType1(), this.getFilename1());
+    RESOURCE resource = this.createStartingResource(UtilString.EMPTY, "test", this.getType1(), this.getFilename1());
 
     // Supprime la ressource
     this.getService().deleteResource(resource.getId());
@@ -203,7 +207,7 @@ public abstract class ResourceServiceTester<RESOURCE extends Resource<RESOURCE, 
     // Validation de la vérification des droits administrateur
     this.checkAdminRestriction("getSubdirectories", String.class);
 
-    Bid4WinStringRecursiveMap result = this.getService().getSubdirectories("");
+    Bid4WinStringRecursiveMap result = this.getService().getSubdirectories(UtilString.EMPTY);
     assertEquals("Wrong directories", new Bid4WinStringRecursiveMap(), result);
     result = this.getService().getSubdirectories("1");
     assertEquals("Wrong directories", new Bid4WinStringRecursiveMap(), result);
@@ -215,7 +219,7 @@ public abstract class ResourceServiceTester<RESOURCE extends Resource<RESOURCE, 
     try
     {
       this.getService().createResource(
-          this.concatRelativePath("1", "1_1", "1_1_1"), "" + i++, this.getType1(), inputStream);
+          this.concatRelativePath("1", "1_1", "1_1_1"), UtilString.EMPTY + i++, this.getType1(), inputStream);
     }
     finally
     {
@@ -232,7 +236,7 @@ public abstract class ResourceServiceTester<RESOURCE extends Resource<RESOURCE, 
     try
     {
       this.getService().createResource(
-          this.concatRelativePath("1", "1_1", "1_1_1"), "" + i++, this.getType1(), inputStream);
+          this.concatRelativePath("1", "1_1", "1_1_1"), UtilString.EMPTY + i++, this.getType1(), inputStream);
     }
     finally
     {
@@ -242,7 +246,7 @@ public abstract class ResourceServiceTester<RESOURCE extends Resource<RESOURCE, 
     try
     {
       this.getService().createResource(
-          this.concatRelativePath("1", "1_1", "1_1_2"), "" + i++, this.getType1(), inputStream);
+          this.concatRelativePath("1", "1_1", "1_1_2"), UtilString.EMPTY + i++, this.getType1(), inputStream);
     }
     finally
     {
@@ -255,7 +259,7 @@ public abstract class ResourceServiceTester<RESOURCE extends Resource<RESOURCE, 
     try
     {
       this.getService().createResource(
-          this.concatRelativePath("1", "1_1"), "" + i++, this.getType1(), inputStream);
+          this.concatRelativePath("1", "1_1"), UtilString.EMPTY + i++, this.getType1(), inputStream);
     }
     finally
     {
@@ -265,7 +269,7 @@ public abstract class ResourceServiceTester<RESOURCE extends Resource<RESOURCE, 
     try
     {
       this.getService().createResource(
-          this.concatRelativePath("2", "2_1"), "" + i++, this.getType1(), inputStream);
+          this.concatRelativePath("2", "2_1"), UtilString.EMPTY + i++, this.getType1(), inputStream);
     }
     finally
     {
@@ -276,7 +280,7 @@ public abstract class ResourceServiceTester<RESOURCE extends Resource<RESOURCE, 
     Bid4WinStringRecursiveMap root_2_1 = new Bid4WinStringRecursiveMap();
     root_2.put("2_1", root_2_1);
 
-    result = this.getService().getSubdirectories("");
+    result = this.getService().getSubdirectories(UtilString.EMPTY);
     assertEquals("Wrong directories", root, result);
     result = this.getService().getSubdirectories("1");
     assertEquals("Wrong directories", root_1, result);

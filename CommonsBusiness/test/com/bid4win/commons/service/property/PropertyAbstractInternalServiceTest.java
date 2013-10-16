@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import com.bid4win.commons.persistence.dao.property.PropertyRootAbstractDaoStub;
 import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
 import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstractStub;
 import com.bid4win.commons.persistence.entity.property.PropertyAbstractStub;
 import com.bid4win.commons.persistence.entity.property.PropertyRootAbstractStub;
 import com.bid4win.commons.service.connection.SessionDataAbstractStub;
@@ -26,6 +27,7 @@ public class PropertyAbstractInternalServiceTest
                                                      PropertyRootAbstractStub,
                                                      SessionDataAbstractStub,
                                                      AccountAbstractStub,
+                                                     ConnectionAbstractStub,
                                                      EntityGeneratorStub>
 {
   /** Référence TODO */

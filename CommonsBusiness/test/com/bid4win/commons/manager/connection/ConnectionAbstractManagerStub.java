@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
 import com.bid4win.commons.persistence.entity.connection.ConnectionAbstractStub;
+import com.bid4win.commons.persistence.entity.connection.ConnectionData;
 import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractStub;
 import com.bid4win.commons.persistence.entity.connection.PasswordReinitAbstractStub;
 import com.bid4win.commons.service.connection.SessionDataAbstractStub;
@@ -42,8 +43,8 @@ public class ConnectionAbstractManagerStub
                                                           boolean remanent)
             throws UserException
   {
-    return new ConnectionAbstractStub(
-        session.getSessionId(), account, session.getIpAddress(), remanent);
+    ConnectionData data = new ConnectionData(session.getSessionId(), session.getIpAddress(), remanent);
+    return new ConnectionAbstractStub(data, account);
   }
   /**
    *

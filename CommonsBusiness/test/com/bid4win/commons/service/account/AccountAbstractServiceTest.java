@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import com.bid4win.commons.persistence.dao.account.AccountAbstractDaoStub;
 import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
 import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
+import com.bid4win.commons.persistence.entity.connection.ConnectionAbstractStub;
 import com.bid4win.commons.service.connection.SessionDataAbstractStub;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
@@ -20,7 +21,8 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 @RunWith(Bid4WinJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-commons.xml")
 public class AccountAbstractServiceTest
-       extends AccountAbstractServiceTester<SessionDataAbstractStub, AccountAbstractStub, EntityGeneratorStub>
+       extends AccountAbstractServiceTester<SessionDataAbstractStub, AccountAbstractStub,
+                                            ConnectionAbstractStub, EntityGeneratorStub>
 {
   /** Référence du DAO de gestion des comptes utilisateur */
   @Autowired
