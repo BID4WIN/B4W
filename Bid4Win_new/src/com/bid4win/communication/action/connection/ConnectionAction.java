@@ -8,20 +8,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import com.bid4win.commons.core.exception.BusinessException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.reference.MessageRef.ConnectionRef;
-import com.bid4win.commons.core.reference.PropertyRef;
 import com.bid4win.commons.mail.Bid4WinMailManager;
 import com.bid4win.commons.persistence.entity.account.security.Credential;
 import com.bid4win.commons.persistence.entity.account.security.Password;
-import com.bid4win.commons.persistence.entity.connection.IpAddress;
 import com.bid4win.commons.persistence.entity.contact.Email;
 import com.bid4win.communication.action.json.JSONAction;
-import com.bid4win.communication.cookie.CookieManager;
 import com.bid4win.communication.json.factory.JSONAccountFactory;
 import com.bid4win.communication.json.factory.account.security.JSONCredentialFactory;
 import com.bid4win.communication.json.factory.contact.JSONEmailFactory;
 import com.bid4win.communication.json.model.JSONMessage.Type;
 import com.bid4win.manager.account.AccountManager;
 import com.bid4win.persistence.entity.account.Account;
+import com.bid4win.persistence.entity.connection.Connection;
 import com.bid4win.persistence.entity.connection.PasswordReinit;
 import com.bid4win.persistence.entity.connection.Subscription;
 import com.bid4win.persistence.entity.locale.Language;
@@ -35,6 +33,9 @@ import com.bid4win.service.property.PropertyService;
  */
 public class ConnectionAction extends JSONAction
 {
+  public static final String CONNECT = "ConnectAction";
+  public static final String DISCONNECT = "DisconnectAction";
+
   /** Serial */
   private static final long serialVersionUID = -6566305749815622031L;
 
@@ -67,44 +68,34 @@ public class ConnectionAction extends JSONAction
    * @throws UserException si une erreur utilisateur se produit.
    * @throws Throwable si une erreur technique se produit.
    */
-  @Action(value = "ConnectAction", results = {@Result(name = "refresh", type = "tile", params = {"location", "baseLayout.tile"}), @Result(name = "success", type = "json", params = {"root", "jsonResult"})})
+  @Action(value = CONNECT, results = {@Result(name = REFRESH, type = TYPE_TILE, params = {"location", "baseLayout.tile"}),
+                                      @Result(name = SUCCESS, type = TYPE_JSON, params = {"root", "jsonResult"})})
   public String ConnectAction() throws UserException, Throwable
   {
-    if(this.getSession().hasAccountId())
+  /*  if(this.getSession().isConnected())
     {
       throw new BusinessException("Account already registered in session");
-    }
-    String loginOrEmail = this.getParameter("loginOrEmail", ConnectionRef.CONNECTION_EMAIL_MISSING_ERROR);
-    Password password = new Password(this.getParameter("password", ConnectionRef.CONNECTION_PASSWORD_MISSING_ERROR));
+    }*/
+    String loginOrEmail = this.getParameter("loginOrEmail", ConnectionRef.EMAIL_MISSING_ERROR);
+    Password password = new Password(this.getParameter("password", ConnectionRef.PASSWORD_MISSING_ERROR));
     boolean rememberMe = this.getParameterBool("rememberMe");
     boolean reconnect = this.getParameterBool("reconnect");
-    IpAddress ipAddress = new IpAddress(this.getRequest().getRemoteAddr());
-    String sessionId = this.getSession().getId();
 
-    // Connexion et mise en session du compte utilisateur connecté
-    Account account = this.getConnectionService().connect(loginOrEmail, password, ipAddress, sessionId, reconnect);
-    this.getSession().setAccountId(account.getId());
+    // Connexion
+    Connection connection = this.getConnectionService().connect(loginOrEmail, password, reconnect);
 
     // Gestion des cookies de connexion
-    if(reconnect)
+    if(rememberMe)
     {
-      this.getCookieManager().putCookie(CookieManager.ACCOUNT_ID_COOKIE_NAME, account.getId());
-      this.getCookieManager().putCookie(CookieManager.FINGERPRINT_COOKIE_NAME, sessionId);
+      this.getCookieManager().putLogin(
+          connection.getAccount().getCredential().getLogin().getValue());
     }
     else
     {
-      if(rememberMe)
-      {
-        this.getCookieManager().putCookie(CookieManager.LOGIN_COOKIE_NAME, account.getCredential().getLogin().getValue());
-      }
-      else
-      {
-        this.getCookieManager().removeCookie(CookieManager.LOGIN_COOKIE_NAME);
-      }
-      this.getCookieManager().removeCookie(CookieManager.FINGERPRINT_COOKIE_NAME);
+      this.getCookieManager().removeLogin();
     }
-
-    this.putJSONObject(JSONAccountFactory.getInstance().getJSONAccount(account));
+    this.getSession().connect();
+    this.putJSONObject(JSONAccountFactory.getInstance().getJSONAccount(connection.getAccount()));
     this.setSuccess(true);
 
     // Le langage du compte est sauvegardé en session. Si le langage de
@@ -118,6 +109,21 @@ public class ConnectionAction extends JSONAction
     }
     return SUCCESS;
   }
+  /**
+   * Effectue la déconnexion d'un éventuel compte utilisateur connecté. Mise à
+   * jour de la base de données ainsi que déréférencement du compte de la
+   * session et invalidation de cette dernière.
+   *
+   * @return SUCCESS
+   * @throws Throwable si une erreur technique se produit.
+   */
+  @Action(DISCONNECT)
+  public String DisconnectAction() throws Throwable
+  {
+
+    this.setSuccess(true);
+    return SUCCESS;
+  }
 
   /**
    * Reconnecte l'utilisateur au compte utilisateur en session. Si aucun compte
@@ -129,13 +135,11 @@ public class ConnectionAction extends JSONAction
    * @return refresh si la page doit être rechargée. Sinon, SUCCESS
    * @throws Throwable si une erreur technique se produit.
    */
-  @Action(value = "ReconnectAction", results = {@Result(name = "refresh", type = "tile", params = {"location", "baseLayout.tile"}), @Result(name = "success", type = "json", params = {"root", "jsonResult"})})
+  @Action(value = "ReconnectAction", results = {@Result(name = REFRESH, type = TYPE_TILE, params = {"location", "baseLayout.tile"}), @Result(name = "success", type = "json", params = {"root", "jsonResult"})})
   public String ReconnectAction() throws Throwable
   {
-    try
-    {
-      Account account = null;
-      if(this.getSession().hasAccountId())
+      Account account = this.getConnectionService().getConnectedAccount();
+      /*if(this.getSession().hasAccountId())
       {
         String accountId = this.getSession().getAccountId();
         account = this.getAccountManager().getById(accountId);
@@ -159,14 +163,9 @@ public class ConnectionAction extends JSONAction
           String sessionId = this.getSession().getId();
           account = this.getConnectionService().reconnect(accountId, ipAddress, sessionId, fingerPrint);
         }
-      }
+      }*/
       if(account != null)
       {
-        // Le compte utilisateur est ajouté à la session
-        this.getSession().setAccountId(account.getId());
-        // L'ID de la session est ajouté aux cookie en tant que fingerPrint
-        // pour prochaine reconnection
-        this.getCookieManager().putCookie(CookieManager.FINGERPRINT_COOKIE_NAME, this.getSession().getId());
         // Le langage du compte est sauvegardé en session. Si le langage de
         // session a été mis à jour, la page est rafraîchie.
         // TODO Gestion des préférences
@@ -178,35 +177,6 @@ public class ConnectionAction extends JSONAction
         this.putJSONObject(JSONAccountFactory.getInstance().getJSONAccount(account));
         this.setSuccess(true);
       }
-    }
-    catch(UserException e)
-    {
-      this.putInfoMessage(e);
-    }
-    return SUCCESS;
-  }
-
-  /**
-   * Effectue la déconnexion d'un éventuel compte utilisateur connecté. Mise à
-   * jour de la base de données ainsi que déréférencement du compte de la
-   * session et invalidation de cette dernière.
-   *
-   * @return SUCCESS
-   * @throws Throwable si une erreur technique se produit.
-   */
-  @Action("DisconnectAction")
-  public String DisconnectAction() throws Throwable
-  {
-    String sessionId = this.getSession().getId();
-
-    this.getConnectionService().disconnect(sessionId);
-    this.getSession().removeAccountId();
-    this.getSession().invalidate();
-
-    this.getCookieManager().removeCookie(CookieManager.ACCOUNT_ID_COOKIE_NAME);
-    this.getCookieManager().removeCookie(CookieManager.FINGERPRINT_COOKIE_NAME);
-
-    this.setSuccess(true);
     return SUCCESS;
   }
 
@@ -223,13 +193,13 @@ public class ConnectionAction extends JSONAction
   @Action("PasswordReinitAction")
   public String PasswordReinitAction() throws UserException, Throwable
   {
-    if(this.getSession().hasAccountId())
+    if(this.getSession().isConnected())
     {
       throw new BusinessException("Account already registered in session");
     }
     String reinitKey = this.getParameter("reinitKey");
-    String accountId = this.getParameter("accountId", ConnectionRef.CONNECTION_LOGIN_MISSING_ERROR);
-    Password password = new Password(this.getParameter("password", ConnectionRef.CONNECTION_PASSWORD_MISSING_ERROR));
+    String accountId = this.getParameter("accountId", ConnectionRef.LOGIN_MISSING_ERROR);
+    Password password = new Password(this.getParameter("password", ConnectionRef.PASSWORD_MISSING_ERROR));
 
     Account account = this.getConnectionService().reinitPassword(reinitKey, accountId, password);
     this.putJSONObject(JSONAccountFactory.getInstance().getJSONAccount(account));
@@ -251,11 +221,11 @@ public class ConnectionAction extends JSONAction
   @Action("PasswordReinitMailAction")
   public String PasswordReinitMailAction() throws UserException, Throwable
   {
-    if(this.getSession().hasAccountId())
+    if(this.getSession().isConnected())
     {
       throw new BusinessException("Account already registered in session");
     }
-    String loginOrEmail = this.getParameter("loginOrEmail", ConnectionRef.CONNECTION_EMAIL_MISSING_ERROR);
+    String loginOrEmail = this.getParameter("loginOrEmail", ConnectionRef.EMAIL_MISSING_ERROR);
     PasswordReinit passwordReinit = this.getConnectionService().reinitPassword(loginOrEmail);
     this.getMailManager().sendPasswordReinitMail(passwordReinit);
     this.setSuccess(true);
@@ -271,13 +241,13 @@ public class ConnectionAction extends JSONAction
    * @return refresh
    * @throws Throwable si une erreur technique se produit.
    */
-  @Action(value = "PasswordReinitPromptAction", results = {@Result(name = "refresh", type = "tile", params = {"location", "baseLayout.tile"})})
+  @Action(value = "PasswordReinitPromptAction", results = {@Result(name = REFRESH, type = TYPE_TILE, params = {"location", "baseLayout.tile"})})
   public String PasswordReinitPromptAction() throws Throwable
   {
-    if(!this.getSession().hasAccountId())
+    if(!this.getSession().isConnected())
     {
       String reinitKey = this.getParameter("reinitKey");
-      String accountId = this.getParameter("accountId", ConnectionRef.CONNECTION_LOGIN_MISSING_ERROR);
+      String accountId = this.getParameter("accountId", ConnectionRef.LOGIN_MISSING_ERROR);
       this.getConnectionService().getPasswordReinit(reinitKey, accountId);
     }
     return "refresh";

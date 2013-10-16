@@ -49,7 +49,7 @@ public class ProductAction extends JSONAction
     if(!UtilString.trimNotNull(id).equals(""))
     {
       Bid4WinList<Product> productList = new Bid4WinList<Product>();
-      productList.add(this.getProductService().getProduct(id));
+      productList.add(this.getProductService().loadProduct(id));
       this.putJSONObject(JSONProductFactory.getInstance().getComplete(productList));
     }
     else if(!UtilString.trimNotNull(searchString).equals(""))
@@ -117,7 +117,7 @@ public class ProductAction extends JSONAction
     }
     catch(NumberFormatException e)
     {
-      this.putWarnMessage(MessageRef.CurrencyRef.CURRENCY_AMOUNT_INVALID_ERROR);
+      this.putWarnMessage(MessageRef.CurrencyRef.AMOUNT_INVALID_ERROR);
     }
     Price price = new Price(defaultPrice);
     for(Currency currency : Currency.getCurrencySet())
@@ -134,7 +134,7 @@ public class ProductAction extends JSONAction
           }
           catch(NumberFormatException e)
           {
-            this.putWarnMessage(MessageRef.CurrencyRef.CURRENCY_AMOUNT_INVALID_ERROR);
+            this.putWarnMessage(MessageRef.CurrencyRef.AMOUNT_INVALID_ERROR);
           }
           price.addAmout(currency, currentPrice);
         }
@@ -143,7 +143,7 @@ public class ProductAction extends JSONAction
     Bid4WinList<Product> productList = new Bid4WinList<Product>();
     if(!UtilString.trimNotNull(id).equals(""))
     {
-      productList.add(this.getProductService().updateProduct(id, reference, names, summaries, price));
+      productList.add(this.getProductService().updateProductWithResult(id, reference, names, summaries, price));
     }
     else
     {
@@ -167,7 +167,7 @@ public class ProductAction extends JSONAction
     String id = UtilString.trimNotNull(this.findParameter("id"));
     String imageStorageId = UtilString.trimNotNull(this.findParameter("imageStorageId"));
     Bid4WinList<Product> productList = new Bid4WinList<Product>();
-    productList.add(this.getProductService().addImage(id, Long.parseLong(imageStorageId)));
+    productList.add(this.getProductService().addImageWithResult(id, Long.parseLong(imageStorageId)));
     this.putJSONObject(JSONProductFactory.getInstance().getComplete(productList));
     this.setSuccess(true);
     return SUCCESS;
@@ -186,7 +186,7 @@ public class ProductAction extends JSONAction
     String id = UtilString.trimNotNull(this.findParameter("id"));
     String imageUsageId = UtilString.trimNotNull(this.findParameter("imageUsageId"));
     Bid4WinList<Product> productList = new Bid4WinList<Product>();
-    productList.add(this.getProductService().removeImage(id, Long.parseLong(imageUsageId)));
+    productList.add(this.getProductService().removeImageWithResult(id, Long.parseLong(imageUsageId)));
     this.putJSONObject(JSONProductFactory.getInstance().getComplete(productList));
     this.setSuccess(true);
     return SUCCESS;
@@ -206,7 +206,7 @@ public class ProductAction extends JSONAction
     String oldPosition = UtilString.trimNotNull(this.findParameter("oldPosition"));
     String newPosition = UtilString.trimNotNull(this.findParameter("newPosition"));
     Bid4WinList<Product> productList = new Bid4WinList<Product>();
-    productList.add(this.getProductService().moveImage(id, Integer.parseInt(oldPosition), Integer.parseInt(newPosition)));
+    productList.add(this.getProductService().moveImageWithResult(id, Integer.parseInt(oldPosition), Integer.parseInt(newPosition)));
     this.putJSONObject(JSONProductFactory.getInstance().getComplete(productList));
     this.setSuccess(true);
     return SUCCESS;

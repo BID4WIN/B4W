@@ -12,12 +12,11 @@ import com.bid4win.commons.core.reference.MessageRef.LanguageRef;
 import com.bid4win.commons.core.reference.MessageRef.PropertyRef;
 import com.bid4win.commons.persistence.entity.property.UtilProperty;
 import com.bid4win.communication.action.json.JSONAction;
-import com.bid4win.communication.cookie.CookieManager;
 import com.bid4win.communication.json.factory.property.JSONPropertyFactory;
 import com.bid4win.communication.json.model.JSONMessage.Type;
 import com.bid4win.persistence.entity.locale.I18n;
 import com.bid4win.persistence.entity.locale.Language;
-import com.bid4win.service.i18n.I18nService;
+import com.bid4win.service.locale.I18nService;
 
 /**
  * Classe d'actions relatives aux propriétés d'i18n.
@@ -75,7 +74,7 @@ public class I18nAction extends JSONAction
       // Le langage déterminé est ajouté dans la session
       this.getSession().setLanguage(language);
       // Le langage déterminé est ajouté aux cookies
-      this.getCookieManager().putCookie(CookieManager.LANGUAGE_COOKIE_NAME, language.getCode());
+      this.getCookieManager().putLanguage(language);
       // Récupération des i18n du langage concerné
       Bid4WinSet<I18n> i18nSet = this.getI18nService().getLanguage(language).getPropertySet();
       this.putJSONObject(JSONPropertyFactory.getInstance().get(i18nSet));

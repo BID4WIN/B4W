@@ -11,6 +11,8 @@ import com.bid4win.communication.action.tiles.TilesAction;
  */
 public class InitAction extends TilesAction
 {
+  public static final String INIT = "InitAction";
+
   /** Serial */
   private static final long serialVersionUID = 4298114599841866736L;
 
@@ -20,7 +22,7 @@ public class InitAction extends TilesAction
    * @return {@inheritDoc}
    * @see com.opensymphony.xwork2.ActionSupport#execute()
    */
-  @Action("InitAction")
+  @Action(INIT)
   @Override
   public String execute()
   {

@@ -106,7 +106,7 @@ public class JSONEmailFactory
   public String getAddress(JSONAction action, Type type)
   {
     return action.getParameter(JSONEmailFactory.EMAIL,
-                               ConnectionRef.CONNECTION_EMAIL_MISSING_ERROR,
+                               ConnectionRef.EMAIL_MISSING_ERROR,
                                type);
   }
 }

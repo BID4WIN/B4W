@@ -102,7 +102,8 @@ ConnectionFormContent.prototype.postBuild = function()
 ConnectionFormContent.prototype.connection = function()
 {
     var loginOrEmail = this.getContent().find('.login .input').val();
-    var password = this.getContent().find('.password .input').val().hash();
+    var password = this.getContent().find('.password .input').val();
+    	//this.getContent().find('.password .input').val().hash();
     
     if(Util.checkStringEmpty(password))
     {

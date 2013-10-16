@@ -97,6 +97,6 @@ public class JSONLoginFactory extends JSONFactory<Login>
    */
   public String getValue(JSONAction action, Type type)
   {
-    return action.getParameter(JSONLoginFactory.LOGIN, ConnectionRef.CONNECTION_LOGIN_MISSING_ERROR, type);
+    return action.getParameter(JSONLoginFactory.LOGIN, ConnectionRef.LOGIN_MISSING_ERROR, type);
   }
 }

@@ -41,6 +41,9 @@ public class BaseAction extends ActionSupport
   /** Serial */
   private static final long serialVersionUID = -2026138582001695392L;
 
+  public static final String TYPE_TILE = "tile";
+  public static final String TYPE_JSON = "json";
+  public static final String REFRESH = "refresh";
   /** JSON result type */
   public static final String JSON_RESULT = "success";
 
@@ -195,7 +198,7 @@ public class BaseAction extends ActionSupport
    */
   public Bid4WinSession getSession()
   {
-    return new Bid4WinSession(this.getRequest().getSession());
+    return Bid4WinSession.getSession();
   }
 
   /**
@@ -387,7 +390,7 @@ public class BaseAction extends ActionSupport
     if(sessionLanguage == null)
     {
       // Récupération du langage des cookies
-      String cookieLanguageCode = this.getCookieManager().findCookieValue(CookieManager.LANGUAGE_COOKIE_NAME);
+      String cookieLanguageCode = this.getCookieManager().findLanguage();
       if(!UtilString.trimNotNull(cookieLanguageCode).equals(""))
       {
         try

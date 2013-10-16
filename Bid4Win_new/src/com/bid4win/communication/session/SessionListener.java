@@ -1,18 +1,17 @@
 package com.bid4win.communication.session;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
+import com.bid4win.commons.core.reference.PropertyRef;
 import com.bid4win.service.connection.ConnectionService;
+import com.bid4win.service.connection.SessionHandler;
+import com.bid4win.service.property.PropertyInternalService;
 
 
 /**
  * Classe d'écoute de modification de session
- * 
+ *
  * @author Maxime Ollagnier
  */
 public class SessionListener implements HttpSessionListener
@@ -39,7 +38,7 @@ public class SessionListener implements HttpSessionListener
   }
 
   /**
-   * Méthode appelé à la création d'une nouvelle session
+   * Méthode appelé à la création d'une nouvelle session afin de définir ses propriétés
    * @param sessionEvent {@inheritDoc}
    * @see javax.servlet.http.HttpSessionListener#sessionCreated(javax.servlet.http.HttpSessionEvent)
    */
@@ -47,44 +46,56 @@ public class SessionListener implements HttpSessionListener
   public void sessionCreated(HttpSessionEvent sessionEvent)
   {
     // A new session is created
-    //System.out.println("NEW [ " + sessionEvent.getSession().getId() + " ]");
+    System.out.println("NEW [ " + sessionEvent.getSession().getId() + " ]");
+
+    try
+    {
+      Bid4WinSession session = new Bid4WinSession(sessionEvent.getSession());
+      // Positionne le timeout de session
+      session.setMaxInactiveInterval(PropertyInternalService.getInstance().getProperty(
+          PropertyRef.SERVER_SESSION_TIMEOUT.getCode()).getIntValue());
+    }
+    catch(Throwable th)
+    {
+      th.printStackTrace();
+    }
   }
 
   /**
-   * Méthode appelé à la destruction d'une session existante
+   * Méthode appelé à la destruction d'une session existante afin de relâcher les
+   * ressources nécessaires
    * @param sessionEvent {@inheritDoc}
    * @see javax.servlet.http.HttpSessionListener#sessionDestroyed(javax.servlet.http.HttpSessionEvent)
    */
   @Override
   public void sessionDestroyed(HttpSessionEvent sessionEvent)
   {
-    try
+    Bid4WinSession session = new Bid4WinSession(sessionEvent.getSession());
+    // Si un compte utilisateur était connecté sur la session, il faut terminer cette connexion
+    if(session.isConnected())
     {
-      Bid4WinSession session = new Bid4WinSession(sessionEvent.getSession());
-      if(session.hasAccountId())
+      boolean sessionStarted = SessionHandler.getInstance().isSessionStarted();
+      try
       {
-        this.getConnectionService(sessionEvent).endConnection(sessionEvent.getSession().getId());
+        // Démarre une nouvelle session métier si nécessaire
+        if(!sessionStarted)
+        {
+          SessionHandler.getInstance().startSession(session.getId(), session.getIpAddress());
+        }
+        ConnectionService.getInstance().endConnection();
+      }
+      catch(Throwable th)
+      {
+        th.printStackTrace();
+      }
+      finally
+      {
+        // Termine la session métier si elle venait d'être créée
+        if(!sessionStarted)
+        {
+          SessionHandler.getInstance().stopSession();
+        }
       }
     }
-    catch(Throwable e)
-    {
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * Renvoi le ConnectionService du contexte Spring
-   * @param sessionEvent l'évennement de session dont on extrait le contexte
-   * @return Le ConnectionService du contexte Spring
-   */
-  private ConnectionService getConnectionService(HttpSessionEvent sessionEvent)
-  {
-    // Récupération du ServletContext de la session
-    ServletContext servletContext = sessionEvent.getSession().getServletContext();
-    // Récupération du contexte Spring
-    ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-    // Récupération et renvoi du bean nommé "ConnectionService"
-    ConnectionService connectionService = (ConnectionService)ctx.getBean("ConnectionService");
-    return connectionService;
   }
 }

@@ -10,8 +10,9 @@ import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.reference.MessageRef;
 import com.bid4win.communication.action.BaseAction;
 import com.bid4win.communication.json.model.JSONMessage;
-import com.bid4win.communication.json.model.JSONResult;
 import com.bid4win.communication.json.model.JSONMessage.Type;
+import com.bid4win.communication.json.model.JSONResult;
+import com.opensymphony.xwork2.Action;
 
 /**
  * Classe d'action de renvoyant un objet de type JSONResult
@@ -19,7 +20,7 @@ import com.bid4win.communication.json.model.JSONMessage.Type;
  * @author Maxime Ollagnier
  */
 @InterceptorRefs({@InterceptorRef("jsonInterceptor"), @InterceptorRef("accessInterceptor")})
-@Result(name = "success", type = "json", params = {"root", "jsonResult"})
+@Result(name = Action.SUCCESS, type = BaseAction.TYPE_JSON, params = {"root", "jsonResult"})
 public class JSONAction extends BaseAction
 {
   /** Serial */
@@ -61,7 +62,7 @@ public class JSONAction extends BaseAction
    * @return La valeur du cookie de la requête dont le nom est donné en argument
    * ou null si non présent
    */
-  public String getCookieValue(String cookieName, MessageRef messageRef, Type type)
+ /* public String getCookieValue(String cookieName, MessageRef messageRef, Type type)
   {
     try
     {
@@ -72,7 +73,7 @@ public class JSONAction extends BaseAction
       this.putMessage(ex, type);
       return null;
     }
-  }
+  }*/
 
   /**
    * Retourne l'objet JSON resultant de l'action

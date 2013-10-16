@@ -19,6 +19,21 @@ ConnectionManager.prototype.init = function(callback)
     this.reconnectAJAX(callback);
 };
 
+// Hash à la manière de java.lang.String.hashCode()
+ConnectionManager.prototype.hashPassword = function(password)
+{
+    var hash = 0;
+    if (password.length == 0) return hash;
+    for(var i = 0; i < password.length; i++)
+    {
+        char = password.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+};
+
+
 /**
  * Tries to reconnect.
  * If a login/fingerPrint is given, the server will try to recover a former
@@ -44,6 +59,7 @@ ConnectionManager.prototype.reconnectAJAX = function(callback)
  */
 ConnectionManager.prototype.connectAJAX = function(loginOrEmail, password, rememberMe, reconnect, callback)
 {
+	password = this.hashPassword(password);
     callback = Function.getFunction(callback);
     var parameters = 
     {

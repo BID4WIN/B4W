@@ -97,6 +97,6 @@ public class JSONPasswordFactory extends JSONFactory<Password>
    */
   public String getValue(JSONAction action, Type type)
   {
-    return action.getParameter(JSONPasswordFactory.PASSWORD, ConnectionRef.CONNECTION_PASSWORD_MISSING_ERROR, type);
+    return action.getParameter(JSONPasswordFactory.PASSWORD, ConnectionRef.PASSWORD_MISSING_ERROR, type);
   }
 }

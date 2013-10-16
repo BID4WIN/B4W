@@ -11,21 +11,11 @@
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-  <!-- ####################################################################### -->
-  <!-- Logging definition -->
-  <bean id="log4jInitialization"
-        class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-    <property name="targetClass" value="org.springframework.util.Log4jConfigurer" />
-    <property name="targetMethod" value="initLogging" />
-    <property name="arguments">
-      <list>
-        <value>classpath:/logging/log4j.properties</value>
-      </list>
-    </property>
-  </bean>
-
   <!-- ####################### DATA SOURCE DEFINITION ###################### -->
   <import resource="classpath:persistence/spring-data-source-b4w.xml"/>
+
+  <!-- ######################### LOGGING DEFINITION ######################## -->
+  <import resource="classpath:META-INF/config/logging/spring-logging-b4w.xml"/>
 
   <!-- ########################### AOP DEFINITION ########################## -->
   <import resource="classpath:META-INF/config/aop/spring-aop-b4w.xml"/>
@@ -40,7 +30,18 @@
   <!-- Enable the annotation usage for bean injection -->
   <context:annotation-config/>
   <!-- Define bean injection -->
-  <import resource="classpath:META-INF/config/injection/spring-dependencies-service-b4w.xml"/>
+
+
+  <!-- Injection de tous les stubs -->
+  <context:component-scan base-package="com.bid4win.persistence.entity">
+    <context:include-filter type="regex" expression=".*Generator"/>
+  </context:component-scan>
+
+  <import resource="classpath:META-INF/config/injection/spring-dependencies-business-b4w.xml"/>
+  
+  
+
+
 
   <context:component-scan base-package="com.bid4win.communication.action"/>
   

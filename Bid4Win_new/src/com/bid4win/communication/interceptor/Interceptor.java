@@ -21,6 +21,27 @@ public abstract class Interceptor implements com.opensymphony.xwork2.interceptor
   {
     return (BaseAction)actionInvocation.getAction();
   }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param invocation TODO A COMMENTER
+   * @return TODO A COMMENTER
+   */
+  public String getActionName(ActionInvocation invocation)
+  {
+    return (String)invocation.getInvocationContext().getContextMap().get("com.opensymphony.xwork2.ActionContext.name");
+  }
+
+/*  public HttpServletRequest getRequest(ActionInvocation actionInvocation)
+  {
+    return (HttpServletRequest)actionInvocation.getInvocationContext().get(
+        StrutsStatics.HTTP_REQUEST);
+  }
+  public HttpServletResponse getResponse(ActionInvocation actionInvocation)
+  {
+    return (HttpServletResponse)actionInvocation.getInvocationContext().get(
+        StrutsStatics.HTTP_RESPONSE);
+  }*/
 
   /**
    * {@inheritDoc}
