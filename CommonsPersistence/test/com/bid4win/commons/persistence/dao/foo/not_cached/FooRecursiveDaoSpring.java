@@ -1,16 +1,13 @@
 package com.bid4win.commons.persistence.dao.foo.not_cached;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.persistence.entity.foo.not_cached.FooRecursive;
-import com.bid4win.commons.persistence.entity.foo.not_cached.FooRecursive_;
+import com.bid4win.commons.persistence.entity.foo.not_cached.FooRecursive_Fields;
+import com.bid4win.commons.persistence.request.Bid4WinCriteria;
+import com.bid4win.commons.persistence.request.data.Bid4WinDataNullable;
 
 /**
  * DAO pour les entités de la classe FooRecursive<BR>
@@ -85,20 +82,33 @@ public class FooRecursiveDaoSpring extends FooDaoSpring<FooRecursive>
   }
 
   /**
-   * Cette fonction permet d'ajouter des conditions pour la récupération de la
-   * liste complète des entités
-   * @param criteria {@inheritDoc}
+   *
+   * TODO A COMMENTER
    * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#addConditionForAll(javax.persistence.criteria.CriteriaQuery)
+   * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#getCriteriaForAll()
    */
   @Override
-  protected Root<FooRecursive> addConditionForAll(CriteriaQuery<FooRecursive> criteria)
+  protected Bid4WinCriteria<FooRecursive> getCriteriaForAll()
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-
-    Root<FooRecursive> foo_ = super.addConditionForAll(criteria);
-    Predicate condition = builder.isNull(foo_.get(FooRecursive_.parent));
-    criteria.where(condition);
-    return foo_;
+    return new Bid4WinDataNullable<FooRecursive, FooRecursive>(FooRecursive_Fields.PARENT);
   }
+
+  /**
+   * Cette fonction permet d'ajouter des conditions pour la récupération de la
+   * liste complète des entités
+   * @return {@inheritDoc}
+   * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#getRequestForAll()
+   */
+/*  @SuppressWarnings("unchecked")
+  @Override
+  protected Bid4WinRequest<FooRecursive> getRequestForAll()
+  {
+/*    Bid4WinRequest<FooRecursive> request = super.getRequestForAll();
+    Bid4WinCriteria<FooRecursive> data[] = new Bid4WinCriteria[request.getCriteriaSet().size() + 1];
+    request.getCriteriaSet().toArray(data);
+    data[data.length - 1] = new FooRecursiveParentNullData();*/
+  /*  return Bid4WinRequest.copyRequest(super.getRequestForAll(),
+                                      new Bid4WinData<FooRecursive, FooRecursive>(FooRecursive_.PARENT));
+        //new FooRecursiveParentNullData());
+  }*/
 }

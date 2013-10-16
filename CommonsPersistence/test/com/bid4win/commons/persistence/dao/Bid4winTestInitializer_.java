@@ -167,6 +167,18 @@ public abstract class Bid4winTestInitializer_<ENTITY extends Bid4WinEntity<ENTIT
   /**
    *
    * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.core.security.ProtectableObjectTester#testCheckProtection()
+   */
+  @Override
+  public void testCheckProtection() throws Bid4WinException
+  {
+    // TODO Auto-generated method stub
+  }
+
+  /**
+   *
+   * TODO A COMMENTER
    * @param nb TODO A COMMENTER
    * @throws Exception TODO A COMMENTER
    */

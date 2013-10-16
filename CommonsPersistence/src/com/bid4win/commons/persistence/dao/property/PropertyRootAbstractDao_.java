@@ -1,17 +1,13 @@
 package com.bid4win.commons.persistence.dao.property;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.persistence.dao.Bid4WinDao_;
 import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
 import com.bid4win.commons.persistence.entity.property.PropertyAbstract;
 import com.bid4win.commons.persistence.entity.property.PropertyRootAbstract;
-import com.bid4win.commons.persistence.entity.property.PropertyRootAbstract_;
+import com.bid4win.commons.persistence.entity.property.PropertyRootAbstract_Fields;
+import com.bid4win.commons.persistence.request.Bid4WinCriteria;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 
 /**
  * DAO générique pour les entités de la classe PropertyRootAbstract<BR>
@@ -22,7 +18,7 @@ import com.bid4win.commons.persistence.entity.property.PropertyRootAbstract_;
  * @author Emeric Fillâtre
  */
 public abstract class PropertyRootAbstractDao_<PROPERTY_ROOT extends PropertyRootAbstract<PROPERTY_ROOT, PROPERTY>,
-                                              PROPERTY extends PropertyAbstract<PROPERTY, PROPERTY_ROOT>>
+                                               PROPERTY extends PropertyAbstract<PROPERTY, PROPERTY_ROOT>>
        extends Bid4WinDao_<PROPERTY_ROOT, Integer>
 {
   /**
@@ -68,13 +64,26 @@ public abstract class PropertyRootAbstractDao_<PROPERTY_ROOT extends PropertyRoo
   }
 
   /**
+  *
+  * TODO A COMMENTER
+  * @return {@inheritDoc}
+  * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#getCriteriaForAll()
+  */
+ @Override
+ protected Bid4WinCriteria<PROPERTY_ROOT> getCriteriaForAll()
+ {
+   return new Bid4WinData<PROPERTY_ROOT, Integer>(PropertyRootAbstract_Fields.ID,
+                                                  this.getUniqueId());
+ }
+
+  /**
    *
    * TODO A COMMENTER
    * @param criteria {@inheritDoc}
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#addConditionForAll(javax.persistence.criteria.CriteriaQuery)
    */
-  @Override
+/*  @Override
   protected Root<PROPERTY_ROOT> addConditionForAll(CriteriaQuery<PROPERTY_ROOT> criteria)
   {
     CriteriaBuilder builder = this.getCriteriaBuilder();
@@ -84,7 +93,7 @@ public abstract class PropertyRootAbstractDao_<PROPERTY_ROOT extends PropertyRoo
     Predicate condition = builder.equal(id_, this.getUniqueId());
     criteria.where(condition);
     return propertyRoot_;
-  }
+  }*/
   /**
    * Cette fonction doit définie la clé unique de la racine des propriétés gérées
    * @return La clé unique de la racine des propriétés gérées

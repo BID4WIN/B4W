@@ -16,4 +16,5 @@ public class FooStubDaoSpring extends FooDaoSpring<FooStub>
   {
     super(FooStub.class);
   }
+
 }

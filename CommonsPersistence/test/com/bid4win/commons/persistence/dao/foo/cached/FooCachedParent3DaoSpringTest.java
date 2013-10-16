@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.bid4win.commons.core.Bid4WinDate;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.persistence.dao.foo.FooParentAbstractDaoSpringTester;
 import com.bid4win.commons.persistence.entity.foo.cached.FooCachedChild3;
@@ -44,7 +45,7 @@ public class FooCachedParent3DaoSpringTest extends FooParentAbstractDaoSpringTes
   @Override
   public void addChild(FooCachedParent3 parent, int index) throws ModelArgumentException
   {
-    parent.putChild(new FooCachedChild3("" + index, "value " + index));
+    parent.putChild(new FooCachedChild3(UtilString.EMPTY + index, "value " + index));
   }
   /**
    *
@@ -60,7 +61,7 @@ public class FooCachedParent3DaoSpringTest extends FooParentAbstractDaoSpringTes
   {
     for(int i = 0 ; i < nb ; i++)
     {
-      parent.putChild(new FooCachedChild3("" + index + "_" + i, "value " + index + "_" + i));
+      parent.putChild(new FooCachedChild3(UtilString.EMPTY + index + "_" + i, "value " + index + "_" + i));
     }
   }
   /**

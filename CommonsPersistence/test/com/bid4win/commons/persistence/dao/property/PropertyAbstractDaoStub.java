@@ -1,11 +1,5 @@
 package com.bid4win.commons.persistence.dao.property;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -20,8 +14,9 @@ import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
 import com.bid4win.commons.persistence.entity.Bid4WinEntityLoader;
 import com.bid4win.commons.persistence.entity.property.PropertyAbstractStub;
-import com.bid4win.commons.persistence.entity.property.PropertyAbstract_;
+import com.bid4win.commons.persistence.entity.property.PropertyAbstract_Fields;
 import com.bid4win.commons.persistence.entity.property.PropertyRootAbstractStub;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 
 /**
  * Stub du DAO pour les entités de la classe PropertyAbstractStub<BR>
@@ -130,7 +125,7 @@ public class PropertyAbstractDaoStub
   @Transactional(readOnly = false, rollbackFor = {Bid4WinException.class})
   public PropertyAbstractStub findOneByKey(String key) throws PersistenceException
   {
-    PropertyAbstractStub property = super.findOne(this.getCriteriaForKey(key));
+    PropertyAbstractStub property = super.findOne(this.getKeyData(key));
     return Bid4WinEntityLoader.getInstance().loadRelation(property);
   }
   /**
@@ -140,16 +135,18 @@ public class PropertyAbstractDaoStub
    * @return Les critères permettant de rechercher la propriété unique correspondant
    * à la clé en paramètre
    */
-  protected CriteriaQuery<PropertyAbstractStub> getCriteriaForKey(String key)
+  protected Bid4WinData<PropertyAbstractStub, String> getKeyData(String key)
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
+    return new Bid4WinData<PropertyAbstractStub, String>(PropertyAbstract_Fields.KEY,
+                                                         key);
+    /*CriteriaBuilder builder = this.getCriteriaBuilder();
 
     CriteriaQuery<PropertyAbstractStub> criteria = this.createCriteria();
     Root<PropertyAbstractStub> property_ = criteria.from(this.getEntityClass());
     Path<String> key_ = property_.get(PropertyAbstract_.key);
     Predicate condition = builder.equal(key_, key);
     criteria.where(condition);
-    return criteria;
+    return criteria;*/
   }
   /**
    * Cette fonction permet de récupérer le set d'entités dont les identifiants

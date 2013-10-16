@@ -1,14 +1,11 @@
 package com.bid4win.commons.persistence.dao.account;
 
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
-
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.exception.PersistenceException;
+import com.bid4win.commons.persistence.entity.Bid4WinField.Bid4WinFieldSimple;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
-import com.bid4win.commons.persistence.entity.account.AccountAbstract_;
 import com.bid4win.commons.persistence.entity.account.AccountBasedEntityMultiple;
-import com.bid4win.commons.persistence.entity.account.AccountBasedEntityMultiple_;
+import com.bid4win.commons.persistence.entity.account.AccountBasedEntityMultiple_Fields;
 
 /**
  * DAO générique pour les entités de la classe AccountBasedEntityMultiple<BR>
@@ -21,8 +18,8 @@ import com.bid4win.commons.persistence.entity.account.AccountBasedEntityMultiple
  * @author Emeric Fillâtre
  */
 public class AccountBasedEntityMultipleDao_<ENTITY extends AccountBasedEntityMultiple<ENTITY, ID, ACCOUNT>,
-                                           ID,
-                                           ACCOUNT extends AccountAbstract<ACCOUNT>>
+                                            ID,
+                                            ACCOUNT extends AccountAbstract<ACCOUNT>>
        extends AccountBasedEntityDao_<ENTITY, ID, ACCOUNT>
 {
   /**
@@ -48,7 +45,7 @@ public class AccountBasedEntityMultipleDao_<ENTITY extends AccountBasedEntityMul
     {
       return new Bid4WinList<ENTITY>(0);
     }
-    return super.findList(this.getCriteriaForAccount(account));
+    return super.findList(this.getAccountIdData(account.getId()), null);
   }
   /**
    * Cette fonction permet de récupérer la liste d'entités en fonction de l'identifiant
@@ -60,8 +57,22 @@ public class AccountBasedEntityMultipleDao_<ENTITY extends AccountBasedEntityMul
    */
   public Bid4WinList<ENTITY> findListByAccountId(String accountId) throws PersistenceException
   {
-    return super.findList(this.getCriteriaForAccountId(accountId));
+    return super.findList(this.getAccountIdData(accountId), null);
   }
+
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @return {@inheritDoc}
+   * @see com.bid4win.commons.persistence.dao.account.AccountBasedEntityDao_#getAccountFied()
+   */
+  @Override
+  protected Bid4WinFieldSimple<? super ENTITY, ? super ACCOUNT> getAccountFied()
+  {
+    return AccountBasedEntityMultiple_Fields.ACCOUNT;
+  }
+
 
   /**
    *
@@ -70,9 +81,9 @@ public class AccountBasedEntityMultipleDao_<ENTITY extends AccountBasedEntityMul
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.dao.account.AccountBasedEntityDao_#getAccountIdPath(javax.persistence.criteria.Root)
    */
-  @Override
+/*  @Override
   protected Path<String> getAccountIdPath(Root<ENTITY> root)
   {
     return root.get(AccountBasedEntityMultiple_.account).get(AccountAbstract_.id);
-  }
+  }*/
 }

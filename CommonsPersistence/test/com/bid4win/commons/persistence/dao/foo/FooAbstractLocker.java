@@ -25,7 +25,7 @@ public class FooAbstractLocker<FOO extends FooAbstract<FOO>>
    * @throws PersistenceException TODO A COMMENTER
    */
   @Transactional(readOnly = true)
-  public void lock(FooAbstractLockerThread<FOO> thread, int id, Object wait) throws PersistenceException
+  public void lock(FooAbstractLockerThread<FOO> thread, long id, Object wait) throws PersistenceException
   {
     thread.getTest().getDao().lockById(id);
     thread.setLockDone();

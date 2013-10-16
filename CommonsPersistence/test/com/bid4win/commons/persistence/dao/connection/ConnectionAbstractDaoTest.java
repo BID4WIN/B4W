@@ -7,10 +7,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import com.bid4win.commons.core.exception.Bid4WinException;
+import com.bid4win.commons.core.security.IdGenerator;
 import com.bid4win.commons.persistence.dao.account.AccountInitializerStub;
 import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
 import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
 import com.bid4win.commons.persistence.entity.connection.ConnectionAbstractStub;
+import com.bid4win.commons.persistence.entity.connection.ConnectionData;
 import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractStub;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
@@ -69,6 +71,8 @@ public class ConnectionAbstractDaoTest
   protected ConnectionAbstractStub create(AccountAbstractStub account, String sessionId, boolean remanent)
             throws Bid4WinException
   {
-    return new ConnectionAbstractStub(sessionId, account, this.getGenerator().createIpAddress(true), remanent);
+    ConnectionData data = new ConnectionData(IdGenerator.generateId(32),
+        this.getGenerator().createIpAddress(true), remanent);
+    return new ConnectionAbstractStub(data, account);
   }
 }

@@ -1,12 +1,5 @@
 package com.bid4win.commons.persistence.dao.foo;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bid4win.commons.core.Bid4WinDate;
@@ -14,14 +7,19 @@ import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.collection.Bid4WinMap;
 import com.bid4win.commons.core.collection.Bid4WinSet;
 import com.bid4win.commons.core.exception.Bid4WinException;
-import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.PersistenceException;
-import com.bid4win.commons.persistence.dao.Bid4WinDao_;
+import com.bid4win.commons.persistence.dao.Bid4WinDaoAutoID_;
 import com.bid4win.commons.persistence.dao.IBid4WinDaoStub;
 import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
-import com.bid4win.commons.persistence.entity.core.EmbeddableDate;
+import com.bid4win.commons.persistence.entity.account.security.Role;
 import com.bid4win.commons.persistence.entity.foo.FooAbstract;
-import com.bid4win.commons.persistence.entity.foo.FooAbstract_;
+import com.bid4win.commons.persistence.entity.foo.FooAbstract_Fields;
+import com.bid4win.commons.persistence.request.Bid4WinCriteria;
+import com.bid4win.commons.persistence.request.Bid4WinPagination;
+import com.bid4win.commons.persistence.request.Bid4WinResult;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
+import com.bid4win.commons.persistence.request.data.Bid4WinDataComparable;
+import com.bid4win.commons.persistence.request.data.Bid4WinDataComparableDate;
 
 /**
  * DAO pour les entités de la classe FooAbstract<BR>
@@ -32,7 +30,7 @@ import com.bid4win.commons.persistence.entity.foo.FooAbstract_;
  */
 @Transactional(readOnly = true, rollbackFor = {Bid4WinException.class})
 public abstract class FooAbstractDaoSpring<FOO extends FooAbstract<FOO>>
-       extends Bid4WinDao_<FOO, Integer> implements IBid4WinDaoStub<FOO, Integer>
+       extends Bid4WinDaoAutoID_<FOO> implements IBid4WinDaoStub<FOO, Long>
 {
   /**
    * Constructeur pour spécialisation
@@ -64,7 +62,7 @@ public abstract class FooAbstractDaoSpring<FOO extends FooAbstract<FOO>>
    * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#lockById(java.lang.Object)
    */
   @Override
-  public FOO lockById(Integer id) throws PersistenceException
+  public FOO lockById(Long id) throws PersistenceException
   {
     return super.lockById(id);
   }
@@ -77,7 +75,7 @@ public abstract class FooAbstractDaoSpring<FOO extends FooAbstract<FOO>>
    * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#getById(java.lang.Object)
    */
   @Override
-  public FOO getById(Integer id) throws PersistenceException
+  public FOO getById(Long id) throws PersistenceException
   {
     return super.getById(id);
   }
@@ -90,7 +88,7 @@ public abstract class FooAbstractDaoSpring<FOO extends FooAbstract<FOO>>
    * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#findById(java.lang.Object)
    */
   @Override
-  public FOO findById(Integer id) throws PersistenceException
+  public FOO findById(Long id) throws PersistenceException
   {
     return super.findById(id);
   }
@@ -104,7 +102,7 @@ public abstract class FooAbstractDaoSpring<FOO extends FooAbstract<FOO>>
    * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#getById(com.bid4win.commons.core.collection.Bid4WinSet)
    */
   @Override
-  public Bid4WinMap<Integer, FOO> getById(Bid4WinSet<Integer> idSet) throws PersistenceException, NotFoundEntityException
+  public Bid4WinMap<Long, FOO> getById(Bid4WinSet<Long> idSet) throws PersistenceException, NotFoundEntityException
   {
     return super.getById(idSet);
   }
@@ -117,18 +115,33 @@ public abstract class FooAbstractDaoSpring<FOO extends FooAbstract<FOO>>
    */
   public FOO findOneByValue(String value) throws PersistenceException
   {
-    return super.findOne(this.getCriteriaForValue(value));
+    return super.findOne(this.getValueData(value));
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param criteria {@inheritDoc}
+   * @param pagination {@inheritDoc}
+   * @return {@inheritDoc}
+   * @throws PersistenceException {@inheritDoc}
+   * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#findList(com.bid4win.commons.persistence.request.Bid4WinCriteria, com.bid4win.commons.persistence.request.Bid4WinPagination)
+   */
+  @Override
+  public Bid4WinResult<FOO> findList(Bid4WinCriteria<FOO> criteria, Bid4WinPagination<FOO> pagination) throws PersistenceException
+  {
+    return super.findList(criteria, pagination);
   }
   /**
    * Cette fonction permet de récupérer la liste d'entités correspondant à la valeur
    * en argument
    * @param value Valeur des entités à récupérer
+   * @param pagination TODO A COMMENTER
    * @return La liste d'entités récupérées
    * @throws PersistenceException Si une exception non attendue est levée
    */
-  public Bid4WinList<FOO> findListByValue(String value) throws PersistenceException
+  public Bid4WinResult<FOO> findListByValue(String value, Bid4WinPagination<FOO> pagination) throws PersistenceException
   {
-    return super.findList(this.getCriteriaForValue(value));
+    return super.findList(this.getValueData(value), pagination);
   }
   /**
    * Cette méthode permet de construire les critères permettant de rechercher des
@@ -137,80 +150,57 @@ public abstract class FooAbstractDaoSpring<FOO extends FooAbstract<FOO>>
    * @return Les critères permettant de rechercher des entités en fonction de leur
    * valeur
    */
-  protected CriteriaQuery<FOO> getCriteriaForValue(String value)
+  protected Bid4WinData<FOO, String> getValueData(String value)
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
+    return new Bid4WinData<FOO, String>(FooAbstract_Fields.VALUE, value);
+  }
 
-    CriteriaQuery<FOO> criteria = this.createCriteria();
-    Root<FOO> foo_ = criteria.from(this.getEntityClass());
-    Path<String> value_ = foo_.get(FooAbstract_.value);
-    Predicate condition = builder.equal(value_, value);
-    criteria.where(condition);
-    Path<Bid4WinDate> date_ = foo_.get(FooAbstract_.date);
-    Order order = builder.asc(date_);
-    criteria.orderBy(order);
-    return criteria;
+  /**
+   * Cette fonction permet de récupérer la liste d'entités correspondant au rôle
+   * en argument
+   * @param role Rôle des entités à récupérer
+   * @return La liste d'entités récupérées
+   * @throws PersistenceException Si une exception non attendue est levée
+   */
+  public Bid4WinResult<FOO> findListByRole(Role role) throws PersistenceException
+  {
+    return super.findList(this.getRoleData(role), null);
+  }
+  /**
+   * Cette méthode permet de construire les critères permettant de rechercher des
+   * entités en fonction de leur rôle
+   * @param role Rôle des entités à rechercher
+   * @return Les critères permettant de rechercher des entités en fonction de leur
+   * role
+   */
+  protected Bid4WinData<FOO, Role> getRoleData(Role role)
+  {
+    return new Bid4WinData<FOO, Role>(FooAbstract_Fields.ROLE, role);
   }
 
   /**
    * Cette fonction permet de récupérer la liste d'entités correspondant à la date
-   * en argument
-   * @param date Date des entités à récupérer
+   * de modification en argument. !!! Attention, c'est méthode n'est sensée retourner
+   * aucun résultat car lors d'une requête de type CriteriaQuery, hibernate n'utilise
+   * pas les potentieltype utilisateurs sur des données de type Date
+   * @param date Date de modification des entités à récupérer
    * @return La liste d'entités récupérées
    * @throws PersistenceException Si une exception non attendue est levée
    */
-  public Bid4WinList<FOO> findListByDate(Bid4WinDate date) throws PersistenceException
-  {// TODO
-  /*  TypedQuery<FOO> query = this.getEntityManager().createQuery(
-        "select f from Foo f where f.date >= :edate", this.getEntityClass()).setParameter("edate", date);
-    CriteriaQuery<FOO> criteria = this.createCriteria();
-    Root<FOO> root = criteria.from(this.getEntityClass());
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-    Predicate condition = builder.greaterThanOrEqualTo(root.get(Foo_.date),
-                                                       date);
-                                                       //date.formatYYYYIMMIDD_HHIMMISSISSS());
-    criteria.where(condition);
-    Order order = this.getCriteriaBuilder().asc(root.get(Foo_.date));
-    criteria.orderBy(order);
-    TypedQuery<FOO> query2 = this.createQuery(criteria);
-
-    List<FOO> result1 =query.getResultList();
-    List<FOO> result2 =query2.getResultList();
-
-    return /*query.getResultList();//*/
-    return super.findList(this.getCriteriaForDate(date));
+  public Bid4WinResult<FOO> findListByUpdateDate(Bid4WinDate date) throws PersistenceException
+  {
+    return super.findList(this.getUpdateDateData(date), null);
   }
   /**
    * Cette méthode permet de construire les critères permettant de rechercher des
-   * entités en fonction de leur date
-   * @param date Date des entités à rechercher
+   * entités en fonction de leur date de modification
+   * @param date Date de modification des entités à rechercher
    * @return Les critères permettant de rechercher des entités en fonction de leur
-   * date
+   * date de modification
    */
-  protected CriteriaQuery<FOO> getCriteriaForDate(Bid4WinDate date)
+  protected Bid4WinData<FOO, Bid4WinDate> getUpdateDateData(Bid4WinDate date)
   {
- /*   CriteriaBuilder builder = this.getCriteriaBuilder();
-
-    CriteriaQuery<FOO> criteria = this.createCriteria();
-    Root<FOO> foo_ = criteria.from(this.getEntityClass());
-    Path<String> date_ = builder.toString(foo_.get(FooAbstract_.date));
-
-    */
-
-    // TODO
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-    CriteriaQuery<FOO> criteria = this.createCriteria();
-    Root<FOO> root = criteria.from(this.getEntityClass());
-    Predicate condition = builder.equal(root.get(FooAbstract_.date),
-                                                       date);
-                                                       //greaterThanOrEqualTo date.formatYYYYIMMIDD_HHIMMISSISSS());
-    criteria.where(condition);
-    Order order = builder.asc(root.get(FooAbstract_.date));
-    criteria.orderBy(order);
-
-/*    Hibernate.custom(DateUserType.class);*/
-    //criteria.
-    return criteria;
+    return new Bid4WinDataComparable<FOO, Bid4WinDate>(FooAbstract_Fields.UPDATE_DATE, date);
   }
   /**
    * Cette fonction permet de récupérer la liste d'entités correspondant à la date
@@ -219,16 +209,9 @@ public abstract class FooAbstractDaoSpring<FOO extends FooAbstract<FOO>>
    * @return La liste d'entités récupérées
    * @throws PersistenceException Si une exception non attendue est levée
    */
-  public Bid4WinList<FOO> findListByEmbeddedDate(Bid4WinDate date) throws PersistenceException
+  public Bid4WinResult<FOO> findListByDate(Bid4WinDate date) throws PersistenceException
   {
-    try
-    {
-      return super.findList(this.getCriteriaForEmbeddedDate(date));
-    }
-    catch(ModelArgumentException ex)
-    {
-      throw new PersistenceException(ex);
-    }
+    return super.findList(this.getDateData(date), null);
   }
   /**
    * Cette méthode permet de construire les critères permettant de rechercher des
@@ -236,31 +219,12 @@ public abstract class FooAbstractDaoSpring<FOO extends FooAbstract<FOO>>
    * @param date Date des entités à rechercher
    * @return Les critères permettant de rechercher des entités en fonction de leur
    * date
-   * @throws ModelArgumentException TODO A COMMENTER
    */
-  protected CriteriaQuery<FOO> getCriteriaForEmbeddedDate(Bid4WinDate date) throws ModelArgumentException
+  protected Bid4WinDataComparableDate<FOO> getDateData(Bid4WinDate date)
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-    CriteriaQuery<FOO> criteria = this.createCriteria();
-    Root<FOO> foo_ = criteria.from(this.getEntityClass());
-    Path<EmbeddableDate> embeddedDate = this.getEmbeddedDatePath(foo_);
-    Predicate condition = builder.greaterThanOrEqualTo(embeddedDate, new EmbeddableDate(date));
-      //builder.equal(embeddedDate, new EmbeddedDate(date));
-    criteria.where(condition);
-    Path<Bid4WinDate> date_ = foo_.get(FooAbstract_.date);
-    Order order = builder.asc(date_);
-    criteria.orderBy(order);
-    return criteria;
+    return new Bid4WinDataComparableDate<FOO>(FooAbstract_Fields.DATE, date);
   }
-  /**
-   * A définir car :
-   * Suite à un bug Hibernate, les @Embedded de @MapedSuperClass ne sont pas pris
-   * en compte si défini dans le metamodel de la super class : bug HHH-5024
-   * TODO suivre http://opensource.atlassian.com/projects/hibernate/browse/HHH-5024
-   * @param root TODO A COMMENTER
-   * @return TODO A COMMENTER
-   */
-  protected abstract Path<EmbeddableDate> getEmbeddedDatePath(Root<FOO> root);
+
 
   /**
    * Cette fonction permet de récupérer la liste complète des entités
@@ -334,7 +298,7 @@ public abstract class FooAbstractDaoSpring<FOO extends FooAbstract<FOO>>
    */
   @Override
   @Transactional(readOnly = false, rollbackFor = {Bid4WinException.class})
-  public FOO removeById(Integer id) throws PersistenceException
+  public FOO removeById(Long id) throws PersistenceException
   {
     return super.removeById(id);
   }
@@ -350,7 +314,7 @@ public abstract class FooAbstractDaoSpring<FOO extends FooAbstract<FOO>>
    */
   @Override
   @Transactional(readOnly = false, rollbackFor = {Bid4WinException.class})
-  public Bid4WinSet<FOO> removeListById(Bid4WinSet<Integer> idSet) throws PersistenceException, NotFoundEntityException
+  public Bid4WinSet<FOO> removeListById(Bid4WinSet<Long> idSet) throws PersistenceException, NotFoundEntityException
   {
     return super.removeListById(idSet);
   }

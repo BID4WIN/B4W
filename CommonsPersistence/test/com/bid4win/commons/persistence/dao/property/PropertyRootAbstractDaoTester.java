@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import com.bid4win.commons.core.Bid4WinDate;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.UserException;
@@ -129,6 +130,6 @@ public abstract class PropertyRootAbstractDaoTester<PROPERTY_ROOT extends Proper
   protected PROPERTY addProperty(PROPERTY_ROOT root, int index1, int index2, int index3, int index4)
             throws ModelArgumentException, UserException
   {
-    return root.addProperty("a" + index1 + ".b" + index2 + ".c" + index3 + ".d" + index4, "");
+    return root.addProperty("a" + index1 + ".b" + index2 + ".c" + index3 + ".d" + index4, UtilString.EMPTY);
   }
 }

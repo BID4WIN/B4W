@@ -54,4 +54,5 @@ public class AccountAbstractDaoTest extends AccountAbstractDaoTester<AccountAbst
   {
     return this.dao;
   }
+
 }

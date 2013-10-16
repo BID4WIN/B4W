@@ -68,9 +68,26 @@ public abstract class ConnectionAbstractDao_<CONNECTION extends ConnectionAbstra
   }
 
   /**
+   *
+   * TODO A COMMENTER
+   * @param connection {@inheritDoc}
+   * @return {@inheritDoc}
+   * @throws PersistenceException {@inheritDoc}
+   * @see com.bid4win.commons.persistence.dao.account.AccountBasedEntityDao_#add(com.bid4win.commons.persistence.entity.account.AccountBasedEntity)
+   */
+  @Override
+  public CONNECTION add(CONNECTION connection) throws PersistenceException
+  {
+    if(!connection.isActive())
+    {
+      throw new PersistenceException("Cannot add inactive connection");
+    }
+    return super.add(connection);
+  }
+  /**
    * Cette fonction permet de modifier la connexion en argument. Si celle-ci vient
-   * d'être terminée, son historique sera créée et si elle n'a pas été invalidé
-   * et que la rémanence est inactive, cette connexion sera supprimée
+   * d'être terminée, son historique sera créée et si la rémanence est inactive,
+   * cette connexion sera supprimée
    * @param connection {@inheritDoc}
    * @return {@inheritDoc}
    * @throws PersistenceException {@inheritDoc}
@@ -81,13 +98,13 @@ public abstract class ConnectionAbstractDao_<CONNECTION extends ConnectionAbstra
   {
     // Récupère l'historique potentiel à créer
     HISTORY history = connection.getHistory();
-    if(history != null)
+    if(history != null && history.isNewEntity())
     {
       this.getHistoryDao().add(history);
     }
-    // La connexion est active, rémanente ou invalide, on doit la conserver pour
-    // une utilisation postérieure
-    if(connection.isActive() || connection.isRemanent() || !connection.isValid())
+    // La connexion est active ou rémanente, on doit la conserver pour une utilisation
+    // postérieure
+    if(connection.isActive() || connection.getData().isRemanent())
     {
       // Modifie la connexion en argument
       return super.update(connection);

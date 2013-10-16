@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.persistence.dao.Bid4WinDaoTester;
@@ -137,7 +138,7 @@ public abstract class AccountAbstractDaoTester<ENTITY extends AccountAbstract<EN
     assertNull("Should be null", result);
     try
     {
-      this.getDao().findOneByLoginOrEmail("");
+      this.getDao().findOneByLoginOrEmail(UtilString.EMPTY);
       fail("Should fail with invalid parameter");
     }
     catch(UserException ex)

@@ -1,15 +1,14 @@
 package com.bid4win.commons.persistence.dao.account;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.persistence.dao.Bid4WinDao_;
+import com.bid4win.commons.persistence.entity.Bid4WinEntityGeneratedID;
+import com.bid4win.commons.persistence.entity.Bid4WinField.Bid4WinFieldSimple;
+import com.bid4win.commons.persistence.entity.Bid4WinField.Bid4WinFieldSimpleToSimpleParent;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
+import com.bid4win.commons.persistence.entity.account.AccountAbstract_Fields;
 import com.bid4win.commons.persistence.entity.account.AccountBasedEntity;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 
 /**
  * DAO générique pour les entités de la classe AccountBasedEntity<BR>
@@ -22,8 +21,8 @@ import com.bid4win.commons.persistence.entity.account.AccountBasedEntity;
  * @author Emeric Fillâtre
  */
 public abstract class AccountBasedEntityDao_<ENTITY extends AccountBasedEntity<ENTITY, ID, ACCOUNT>,
-                                            ID,
-                                            ACCOUNT extends AccountAbstract<ACCOUNT>>
+                                             ID,
+                                             ACCOUNT extends AccountAbstract<ACCOUNT>>
        extends Bid4WinDao_<ENTITY, ID>
 {
   /**
@@ -45,7 +44,11 @@ public abstract class AccountBasedEntityDao_<ENTITY extends AccountBasedEntity<E
    */
   public ENTITY findOneByAccount(ACCOUNT account) throws PersistenceException
   {
-    return super.findOne(this.getCriteriaForAccount(account));
+    if(account == null)
+    {
+      return null;
+    }
+    return super.findOne(this.getAccountIdData(account.getId()));
   }
   /**
    * Cette méthode permet de construire les critères permettant de rechercher les
@@ -54,10 +57,10 @@ public abstract class AccountBasedEntityDao_<ENTITY extends AccountBasedEntity<E
    * @return Les critères permettant de rechercher les entités en fonction de leur
    * compte utilisateur
    */
-  protected CriteriaQuery<ENTITY> getCriteriaForAccount(ACCOUNT account)
+  /*protected CriteriaQuery<ENTITY> getCriteriaForAccount(ACCOUNT account)
   {
     return this.getCriteriaForAccountId(account.getId());
-  }
+  }*/
   /**
    * Cette fonction permet de récupérer l'eventuelle entité en fonction de l'
    * identifiant de son compte utilisateur
@@ -68,7 +71,7 @@ public abstract class AccountBasedEntityDao_<ENTITY extends AccountBasedEntity<E
    */
   public ENTITY findOneByAccountId(String accountId) throws PersistenceException
   {
-    return super.findOne(this.getCriteriaForAccountId(accountId));
+    return super.findOne(this.getAccountIdData(accountId));
   }
   /**
    * Cette méthode permet de construire les critères permettant de rechercher les
@@ -77,7 +80,7 @@ public abstract class AccountBasedEntityDao_<ENTITY extends AccountBasedEntity<E
    * @return Les critères permettant de rechercher les entités en fonction de l'
    * identifiant de leur compte utilisateur
    */
-  protected CriteriaQuery<ENTITY> getCriteriaForAccountId(String accountId)
+  /*protected CriteriaQuery<ENTITY> getCriteriaForAccountId(String accountId)
   {
     CriteriaBuilder builder = this.getCriteriaBuilder();
 
@@ -95,7 +98,18 @@ public abstract class AccountBasedEntityDao_<ENTITY extends AccountBasedEntity<E
    * @param root TODO A COMMENTER
    * @return TODO A COMMENTER
    */
-  protected abstract Path<String> getAccountIdPath(Root<ENTITY> root);
+  //protected abstract Path<String> getAccountIdPath(Root<ENTITY> root);
+
+  protected Bid4WinData<ENTITY, String> getAccountIdData(String accountId)
+  {
+    Bid4WinFieldSimpleToSimpleParent<? super ENTITY, Bid4WinEntityGeneratedID<?>, ACCOUNT, String> field =
+        new Bid4WinFieldSimpleToSimpleParent(this.getAccountFied(),
+                                             AccountAbstract_Fields.ID);
+    return new Bid4WinData<ENTITY, String>(field, accountId);
+  }
+  //protected abstract Bid4WinFieldJoinedSingle<? super ENTITY, ? super ACCOUNT> getAccountFied();
+  protected abstract Bid4WinFieldSimple<? super ENTITY, ? super ACCOUNT> getAccountFied();
+
 
   /**
    * Cette fonction permet d'ajouter l'entité en argument

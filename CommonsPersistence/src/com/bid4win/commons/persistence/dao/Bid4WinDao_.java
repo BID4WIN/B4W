@@ -1,12 +1,11 @@
 package com.bid4win.commons.persistence.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.collection.Bid4WinMap;
@@ -16,6 +15,12 @@ import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
 import com.bid4win.commons.persistence.dao.exception.NotPersistedEntityException;
 import com.bid4win.commons.persistence.dao.exception.NotUniqueEntityException;
 import com.bid4win.commons.persistence.entity.Bid4WinEntity;
+import com.bid4win.commons.persistence.request.Bid4WinCriteria;
+import com.bid4win.commons.persistence.request.Bid4WinCriteriaList;
+import com.bid4win.commons.persistence.request.Bid4WinPagination;
+import com.bid4win.commons.persistence.request.Bid4WinRequest;
+import com.bid4win.commons.persistence.request.Bid4WinRequestExecutor;
+import com.bid4win.commons.persistence.request.Bid4WinResult;
 
 /**
  * DAO générique du projet<BR>
@@ -25,7 +30,7 @@ import com.bid4win.commons.persistence.entity.Bid4WinEntity;
  * <BR>
  * @author Emeric Fillâtre
  */
-public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
+public abstract class Bid4WinDao_<ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
 {
   /** Entity Manager générique du projet */
   // Annotation pour la persistence
@@ -46,13 +51,14 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
   }
 
   /**
-   *
-   * TODO A COMMENTER
+   * Cette fonction permet de vider le cache de session des modifications en attente
+   * et de les envoyer à la base de données
    */
   public void flush()
   {
     this.getEntityManager().flush();
   }
+
   /**
    * Cette fonction permet de verrouiller l'entité en paramètre et de récupérer
    * son dernier état persisté
@@ -65,6 +71,7 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
   {
     try
     {
+      // Rafraîchit l'entité en la bloquant
       this.getEntityManager().refresh(entity, LockModeType.PESSIMISTIC_WRITE);
       return entity;
     }
@@ -87,8 +94,10 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
   {
     try
     {
+      // Récupère en la bloquant l'entité en fonction de son identifiant
       ENTITY entity = this.getEntityManager().find(this.getEntityClass(), id,
                                                    LockModeType.PESSIMISTIC_WRITE);
+      // Aucune entité n'existe avec cet identifiant
       if(entity == null)
       {
         throw new NotFoundEntityException(this.getEntityClass(), id);
@@ -101,16 +110,29 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
     }
   }
   /**
-   * Cette fonction permet de verrouiller la liste d'entités correspondants aux
-   * critères en argument
-   * @param criteria Critères permettant la récupération de la liste d'entités à
-   * verrouiller
+   * Cette fonction permet de verrouiller la liste d'entités correspondants à la
+   * définition de requête en argument
+   * @param request Définition de la requête permettant la récupération de la liste
+   * d'entités à verrouiller
    * @throws PersistenceException Si un problème intervient lors de la manipulation
    * de la couche persistante
    */
-  protected void lockList(CriteriaQuery<ENTITY> criteria) throws PersistenceException
+  protected void lockList(Bid4WinRequest<ENTITY> request) throws PersistenceException
   {
-    for(ENTITY entity : this.findList(criteria))
+    this.lockList(request.getCriteria(), request.getPagination());
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param criteria TODO A COMMENTER
+   * @param pagination TODO A COMMENTER
+   * @throws PersistenceException TODO A COMMENTER
+   */
+  protected void lockList(Bid4WinCriteria<ENTITY> criteria,
+                          Bid4WinPagination<ENTITY> pagination)
+            throws PersistenceException
+  {
+    for(ENTITY entity : this.findList(criteria, pagination))
     {
       this.lock(entity);
     }
@@ -219,20 +241,22 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
 
   /**
    * Cette fonction permet de récupérer l'unique entité non nulle correspondant
-   * aux critères en argument
-   * @param criteria Critères permettant la récupération de l'unique entité choisie
-   * @return L'unique entité non nulle correspondant aux critères en argument
+   * à la définition de requête en argument
+   * @param criteria Définition des critères permettant la récupération de l'unique
+   * entité choisie
+   * @return L'unique entité non nulle correspondant à la définition de requête
+   * en argument
    * @throws PersistenceException Si un problème intervient lors de la manipulation
    * de la couche persistante
-   * @throws NotFoundEntityException Si aucune entité ne correspond aux critères
-   * en argument
-   * @throws NotUniqueEntityException Si plusieurs entités correspondent aux critères
-   * en argument
+   * @throws NotFoundEntityException Si aucune entité ne correspond à la définition
+   * de requête en argument
+   * @throws NotUniqueEntityException Si plusieurs entités correspondent à la définition
+   * de requête en argument
    */
-  protected ENTITY getOne(CriteriaQuery<ENTITY> criteria)
+  protected ENTITY getOne(Bid4WinCriteria<ENTITY> criteria)
             throws PersistenceException, NotFoundEntityException, NotUniqueEntityException
   {
-    // On crée la requête et on l'execute
+    // On exécute la requête et récupère son résultat
     ENTITY result = this.findOne(criteria);
     // Le requête doit avoir remonté un élément
     if(result == null)
@@ -243,56 +267,90 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
   }
   /**
    * Cette fonction permet de récupérer l'unique entité potentiellement nulle
-   * correspondant aux critères en argument
-   * @param criteria Critères permettant la récupération de l'unique entité choisie
-   * @return L'unique entité potentiellement nulle correspondant aux critères en
-   * argument
+   * correspondant à la définition de requête en argument
+   * @param criteria Définition des critères permettant la récupération de l'unique
+   * entité choisie
+   * @return L'unique entité potentiellement nulle correspondant à la définition
+   * de requête en argument
    * @throws PersistenceException Si un problème intervient lors de la manipulation
    * de la couche persistante
-   * @throws NotUniqueEntityException Si plusieurs entités correspondent aux critères
-   * en argument
+   * @throws NotUniqueEntityException Si plusieurs entités correspondent à la définition
+   * de requête en argument
    */
-  protected ENTITY findOne(CriteriaQuery<ENTITY> criteria)
+  @SuppressWarnings({"unchecked"})
+  protected ENTITY findOne(Bid4WinCriteria<ENTITY> criteria)
             throws PersistenceException, NotUniqueEntityException
-  {
-    // On crée la requête et on l'execute
-    Bid4WinList<ENTITY> result = this.findList(criteria);
-    // Le requête ne doit pas avoir remonté plus d'un élément
-    if(result.size() > 1)
-    {
-      throw new NotUniqueEntityException(this.getEntityClass());
-    }
-    // On retourne son résultat
-    if(result.size() == 0)
-    {
-      return null;
-    }
-    return result.get(0);
-  }
-
-  /**
-   * Cette fonction permet de récupérer la liste d'entités correspondant aux critères
-   * en argument
-   * @param criteria Critères permettant la récupération de la liste d'entités
-   * choisies
-   * @return La liste d'entités correspondants aux critères en argument
-   * @throws PersistenceException Si un problème intervient lors de la manipulation
-   * de la couche persistante
-   */
-  protected Bid4WinList<ENTITY> findList(CriteriaQuery<ENTITY> criteria) throws PersistenceException
   {
     try
     {
-      // On crée la requête
-      TypedQuery<ENTITY> query = this.createQuery(criteria);
-      // On exécute la requête et retourne son résultat
-      return new Bid4WinList<ENTITY>(query.getResultList(), true);
+      Bid4WinRequestExecutor<ENTITY> executor = new Bid4WinRequestExecutor<ENTITY>(
+          this.getEntityManager(), this.getEntityClass(), criteria);
+      List<ENTITY> result = executor.execute();
+      // Le requête ne doit pas avoir remonté plus d'un élément
+      if(result.size() > 1)
+      {
+        throw new NotUniqueEntityException(this.getEntityClass());
+      }
+      // On retourne son résultat
+      if(result.size() == 0)
+      {
+        return null;
+      }
+      return result.get(0);
     }
     catch(RuntimeException ex)
     {
       throw new PersistenceException(ex);
     }
   }
+
+  /**
+   * Cette fonction permet de récupérer la liste d'entités correspondant à la définition
+   * de requête en argument
+   * @param request Définition de la requête permettant la récupération de la liste
+   * d'entités choisies
+   * @return La liste d'entités correspondants à la définition de requête en argument
+   * @throws PersistenceException Si un problème intervient lors de la manipulation
+   * de la couche persistante
+   */
+  protected Bid4WinResult<ENTITY> findList(Bid4WinRequest<ENTITY> request)
+            throws PersistenceException
+  {
+    return this.findList(request.getCriteria(), request.getPagination());
+  }
+  /**
+   * Cette fonction permet de récupérer la liste d'entités correspondant à la définition
+   * de requête en argument
+   * @param criteria Définition des critères permettant la récupération de la liste
+   * d'entités choisies
+   * @param pagination Définition de la pagination à utiliser pour la liste de résultats
+   * @return La liste d'entités correspondants à la définition de requête en argument
+   * @throws PersistenceException Si un problème intervient lors de la manipulation
+   * de la couche persistante
+   */
+  @SuppressWarnings({"unchecked"})
+  protected Bid4WinResult<ENTITY> findList(Bid4WinCriteria<ENTITY> criteria,
+                                           Bid4WinPagination<ENTITY> pagination)
+            throws PersistenceException
+  {
+    Bid4WinCriteria<ENTITY> criteriaForAll = this.getCriteriaForAll();
+    if(criteriaForAll != null)
+    {
+      if(criteria == null)
+      {
+        criteria = criteriaForAll;
+      }
+      else
+      {
+        criteria  = new Bid4WinCriteriaList<ENTITY>(criteria, criteriaForAll);
+      }
+    }
+    Bid4WinRequestExecutor<ENTITY> executor = new Bid4WinRequestExecutor<ENTITY>(
+        this.getEntityManager(), this.getEntityClass(), criteria, pagination);
+    return executor.execute();
+  }
+
+  // TODO [] getDefaultOrders()
 
   /**
    * Cette fonction permet de récupérer la liste complète des entités
@@ -302,21 +360,33 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
    */
   protected Bid4WinList<ENTITY> findAll() throws PersistenceException
   {
-    // On crée les critères de la requête
-    CriteriaQuery<ENTITY> criteria = this.createCriteria();
-    this.addConditionForAll(criteria);
     // On exécute la requête et retourne son résultat
-    return this.findList(criteria);
+    return this.findAll(null);
   }
   /**
-   * Cette fonction permet d'ajouter des conditions pour la récupération de la
-   * liste complète des entités
-   * @param criteria Critères auxquelles il faut ajouter des conditions si besoin
+   *
+   * TODO A COMMENTER
+   * @param pagination TODO A COMMENTER
+   * @return TODO A COMMENTER
+   * @throws PersistenceException TODO A COMMENTER
    */
-  protected Root<ENTITY> addConditionForAll(CriteriaQuery<ENTITY> criteria)
+  protected Bid4WinList<ENTITY> findAll(Bid4WinPagination<ENTITY> pagination)
+            throws PersistenceException
   {
-    // Par défaut, aucun critère n'est nécessaire
-    return criteria.from(this.getEntityClass());
+    // On exécute la requête et retourne son résultat
+    return this.findList(null, pagination);
+  }
+
+  /**
+   * Cette fonction permet de construire les critères de récupération de la liste
+   * complète des entités. Cette méthode retourne null par défaut et n'a besoin
+   * d'être redéfinie que dans certains cas (chaînage d'entités ou table utilisée
+   * pour différents types d'entités sans définition d'héritage hibernate)
+   * @return La requête de récupération de la liste complète des entités
+   */
+  protected Bid4WinCriteria<ENTITY> getCriteriaForAll()
+  {
+    return null;
   }
 
   /**
@@ -365,7 +435,7 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
   }
   /**
    * Cette fonction permet de forcer la modification de l'entité en argument. Cela
-   * implique que l'entité doit avoir défini son champs updateForce comme persisté
+   * implique que l'entité doit avoir défini son champ updateForce comme persisté
    * @param entity Entité dont la modification doit être forcée
    * @return L'entité gérée par le manager et dont les changements seront suivis
    * @throws PersistenceException Si un problème intervient lors de la manipulation
@@ -438,7 +508,8 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
    * @throws NotFoundEntityException Si aucune entité n'a pu être supprimée avec
    * l'un des identifiants en argument
    */
-  protected Bid4WinSet<ENTITY> removeListById(Bid4WinSet<ID> idSet) throws PersistenceException, NotFoundEntityException
+  protected Bid4WinSet<ENTITY> removeListById(Bid4WinSet<ID> idSet)
+            throws PersistenceException, NotFoundEntityException
   {
     Bid4WinSet<ENTITY> result = new Bid4WinSet<ENTITY>(idSet.size());
     for(ID id : idSet)
@@ -448,17 +519,33 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
     return result;
   }
   /**
-   * Cette fonction permet de supprimer la liste d'entités correspondants aux
-   * critères en argument
-   * @param criteria Critères permettant la récupération de la liste d'entités à
-   * supprimer
-   * @return La liste d'entités supprimées correspondants aux critères en argument
+   * Cette fonction permet de supprimer la liste d'entités correspondants à la définition
+   * de requête en argument
+   * @param request Définition de la requête permettant la récupération de la liste
+   * d'entités à supprimer
+   * @return La liste d'entités supprimées correspondants à la définition de requête
+   * en argument
    * @throws PersistenceException Si un problème intervient lors de la manipulation
    * de la couche persistante
    */
-  protected Bid4WinList<ENTITY> removeList(CriteriaQuery<ENTITY> criteria) throws PersistenceException
+  protected Bid4WinResult<ENTITY> removeList(Bid4WinRequest<ENTITY> request)
+            throws PersistenceException
   {
-    Bid4WinList<ENTITY> list = this.findList(criteria);
+    return this.removeList(request.getCriteria(), request.getPagination());
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param criteria TODO A COMMENTER
+   * @param pagination TODO A COMMENTER
+   * @return TODO A COMMENTER
+   * @throws PersistenceException TODO A COMMENTER
+   */
+  protected Bid4WinResult<ENTITY> removeList(Bid4WinCriteria<ENTITY> criteria,
+                                             Bid4WinPagination<ENTITY> pagination)
+            throws PersistenceException
+  {
+    Bid4WinResult<ENTITY> list = this.findList(criteria, pagination);
     for(ENTITY entity : list)
     {
       this.remove(entity);
@@ -473,9 +560,20 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
    */
   protected Bid4WinList<ENTITY> removeAll() throws PersistenceException
   {
-    CriteriaQuery<ENTITY> criteria = this.createCriteria();
-    this.addConditionForAll(criteria);
-    return this.removeList(criteria);
+    return this.removeAll(null);
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param pagination TODO A COMMENTER
+   * @return TODO A COMMENTER
+   * @throws PersistenceException TODO A COMMENTER
+   */
+  protected Bid4WinList<ENTITY> removeAll(Bid4WinPagination<ENTITY> pagination)
+            throws PersistenceException
+  {
+    // On exécute la requête et retourne son résultat
+    return this.removeList(null, pagination);
   }
 
   /**
@@ -501,33 +599,6 @@ public class Bid4WinDao_ <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
   protected CriteriaBuilder getCriteriaBuilder()
   {
     return this.getEntityManager().getCriteriaBuilder();
-  }
-  /**
-   * Permet de créer une nouvelle définition de critères
-   * @return La nouvelle définition de critères créée
-   */
-  protected CriteriaQuery<ENTITY> createCriteria()
-  {
-    return this.createCriteria(this.getEntityClass());
-  }
-  /**
-   *
-   * TODO A COMMENTER
-   * @param entityClass TODO A COMMENTER
-   * @return TODO A COMMENTER
-   */
-  protected <T> CriteriaQuery<T> createCriteria(Class<T> entityClass)
-  {
-    return this.getCriteriaBuilder().createQuery(entityClass);
-  }
-  /**
-   * Permet de créer une nouvelle requête correspondant aux critères en argument
-   * @param criteria Critères pour la construction de la requête
-   * @return La nouvelle requête créée
-   */
-  protected TypedQuery<ENTITY> createQuery(CriteriaQuery<ENTITY> criteria)
-  {
-    return this.getEntityManager().createQuery(criteria);
   }
 
   /**

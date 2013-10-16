@@ -78,45 +78,17 @@ public abstract class ConnectionAbstractDaoTester<CONNECTION extends ConnectionA
     oldHistoryList.addAll(historyList);
     HISTORY history = historyList.getFirst();
     assertEquals("Wrong history account", connection.getAccount().getId(), history.getAccount().getId());
-    assertEquals("Wrong history IP", connection.getIpAddress(), history.getIpAddress());
-    assertEquals("Wrong disconnection reason", connection.getDisconnectionReason(),
-                 history.getDisconnectionReason());
-    assertEquals("Wrong start date", connection.getStartDate(), history.getStartDate());
-
-    // Création de la connexion
-    connection = this.create(account, false);
-    this.add(connection);
-    // Invalidation de la connexion
-    this.update(connection.invalidate(DisconnectionReason.PASSWORD));
-    result = this.getById(connection.getId());
-    assertEquals("Wrong version", 1, result.getVersion());
-    assertTrue("Wrong result", result.same(connection));
-    assertFalse("Wrong result", result.identical(connection));
-    historyList = this.getHistoryDao().findAll();
-    historyList.removeAll(oldHistoryList);
-    assertEquals("Wrong history nb", 1, historyList.size());
-    oldHistoryList.addAll(historyList);
-    history = historyList.getFirst();
-    assertEquals("Wrong history account", connection.getAccount().getId(), history.getAccount().getId());
-    assertEquals("Wrong history IP", connection.getIpAddress(), history.getIpAddress());
-    assertEquals("Wrong disconnection reason", connection.getDisconnectionReason(),
-                 history.getDisconnectionReason());
-    assertEquals("Wrong start date", connection.getStartDate(), history.getStartDate());
-
-    // Arrêt d'une connexion invalidé
-    connection = result;
-    this.update(connection.endConnection(DisconnectionReason.SECURITY));
-    result = this.findById(connection.getId());
-    assertNull("Connection should be removed", result);
-    historyList = this.getHistoryDao().findAll();
-    historyList.removeAll(oldHistoryList);
-    assertEquals("Wrong history nb", 0, historyList.size());
+    assertEquals("Wrong history IP", connection.getData().getIpAddress(), history.getData().getIpAddress());
+    assertEquals("Wrong disconnection reason", connection.getData().getDisconnectionReason(),
+                 history.getData().getDisconnectionReason());
+    assertEquals("Wrong start date", connection.getData().getStartDate(), history.getData().getStartDate());
 
     // Création de la connexion
     connection = this.create(account, true);
     this.add(connection);
-    // Invalidation de la connexion
+    // Arrêt de la connexion
     this.update(connection.endConnection(DisconnectionReason.PASSWORD));
+
     result = this.getById(connection.getId());
     assertEquals("Wrong version", 1, result.getVersion());
     assertTrue("Wrong result", result.same(connection));
@@ -127,10 +99,10 @@ public abstract class ConnectionAbstractDaoTester<CONNECTION extends ConnectionA
     oldHistoryList.addAll(historyList);
     history = historyList.getFirst();
     assertEquals("Wrong history account", connection.getAccount().getId(), history.getAccount().getId());
-    assertEquals("Wrong history IP", connection.getIpAddress(), history.getIpAddress());
-    assertEquals("Wrong disconnection reason", connection.getDisconnectionReason(),
-                 history.getDisconnectionReason());
-    assertEquals("Wrong start date", connection.getStartDate(), history.getStartDate());
+    assertEquals("Wrong history IP", connection.getData().getIpAddress(), history.getData().getIpAddress());
+    assertEquals("Wrong disconnection reason", connection.getData().getDisconnectionReason(),
+                 history.getData().getDisconnectionReason());
+    assertEquals("Wrong start date", connection.getData().getStartDate(), history.getData().getStartDate());
 
     // Arrêt de la rémanence de la connexion
     connection = result;

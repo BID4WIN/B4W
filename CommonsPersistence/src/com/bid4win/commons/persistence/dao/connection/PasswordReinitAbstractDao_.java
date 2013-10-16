@@ -15,8 +15,8 @@ import com.bid4win.commons.persistence.entity.connection.PasswordReinitAbstract;
  * <BR>
  * @author Emeric Fillâtre
  */
-public class PasswordReinitAbstractDao_<REINIT extends PasswordReinitAbstract<REINIT, ACCOUNT>,
-                                       ACCOUNT extends AccountAbstract<ACCOUNT>>
+public  abstract class PasswordReinitAbstractDao_<REINIT extends PasswordReinitAbstract<REINIT, ACCOUNT>,
+                                                  ACCOUNT extends AccountAbstract<ACCOUNT>>
        extends AccountBasedKeyDao_<REINIT, ACCOUNT>
 {
   /**

@@ -12,8 +12,9 @@ import com.bid4win.commons.core.security.IdGenerator;
 import com.bid4win.commons.persistence.dao.account.AccountInitializerStub;
 import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
 import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
+import com.bid4win.commons.persistence.entity.connection.ConnectionData;
+import com.bid4win.commons.persistence.entity.connection.ConnectionDataStub;
 import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractStub;
-import com.bid4win.commons.persistence.entity.connection.DisconnectionReason;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
 /**
@@ -70,8 +71,10 @@ public class ConnectionHistoryAbstractDaoTest
   protected ConnectionHistoryAbstractStub create(AccountAbstractStub account)
             throws Bid4WinException
   {
-    return new ConnectionHistoryAbstractStub(account, IdGenerator.generateId(32), true,
-                                             this.getGenerator().createIpAddress(true),
-                                             new Bid4WinDate(), DisconnectionReason.AUTO);
+    ConnectionData data = new ConnectionData(IdGenerator.generateId(32),
+                                             this.getGenerator().createIpAddress(true), true);
+    data = new ConnectionDataStub(data, new Bid4WinDate());
+    data = data.endConnection(null);
+    return new ConnectionHistoryAbstractStub(data, account);
   }
 }

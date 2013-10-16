@@ -1,12 +1,7 @@
 package com.bid4win.commons.persistence.dao.foo.cached;
 
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
-
 import com.bid4win.commons.persistence.dao.foo.FooAbstractDaoSpring;
-import com.bid4win.commons.persistence.entity.core.EmbeddableDate;
 import com.bid4win.commons.persistence.entity.foo.cached.FooCached;
-import com.bid4win.commons.persistence.entity.foo.cached.FooCached_;
 
 /**
  * DAO pour les entités de la classe Foo<BR>
@@ -25,6 +20,18 @@ public class FooCachedDaoSpring<FOO extends FooCached<FOO>> extends FooAbstractD
   {
     super(entityClass);
   }
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @return {@inheritDoc}
+   * @see com.bid4win.commons.persistence.dao.foo.FooAbstractDaoSpring#getEmbeddedDateField()
+   */
+ /* @Override
+  protected final Bid4WinFieldSimple<? super FOO, EmbeddableDate> getEmbeddedDateField()
+  {
+    return FooCached_Fields.EMBEDDED_DATE;
+  }
   /**
    *
    * TODO A COMMENTER
@@ -32,10 +39,10 @@ public class FooCachedDaoSpring<FOO extends FooCached<FOO>> extends FooAbstractD
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.dao.foo.FooAbstractDaoSpring#getEmbeddedDatePath(javax.persistence.criteria.Root)
    */
-  @Override
+/*  @Override
   protected Path<EmbeddableDate> getEmbeddedDatePath(Root<FOO> root)
   {
     // TODO Auto-generated method stub
     return root.get(FooCached_.embeddedDate);
-  }
+  }*/
 }

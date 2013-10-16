@@ -1,18 +1,13 @@
 package com.bid4win.commons.persistence.dao.connection;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.persistence.dao.account.AccountBasedEntityMultipleDao_;
 import com.bid4win.commons.persistence.dao.exception.NotPersistedEntityException;
+import com.bid4win.commons.persistence.entity.Bid4WinField;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
 import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstract;
-import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstract_;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 
 /**
  * DAO pour les entités de la classe ConnectionHistoryAbstract<BR>
@@ -23,8 +18,8 @@ import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstra
  * <BR>
  * @author Emeric Fillâtre
  */
-public class ConnectionHistoryAbstractDao_<HISTORY extends ConnectionHistoryAbstract<HISTORY, ACCOUNT>,
-                                           ACCOUNT extends AccountAbstract<ACCOUNT>>
+public abstract class ConnectionHistoryAbstractDao_<HISTORY extends ConnectionHistoryAbstract<HISTORY, ACCOUNT>,
+                                                    ACCOUNT extends AccountAbstract<ACCOUNT>>
        extends AccountBasedEntityMultipleDao_<HISTORY, Long, ACCOUNT>
 {
   /**
@@ -46,7 +41,7 @@ public class ConnectionHistoryAbstractDao_<HISTORY extends ConnectionHistoryAbst
    */
   public Bid4WinList<HISTORY> findListBySessionId(String sessionId) throws PersistenceException
   {
-    return super.findList(this.getCriteriaForSessionId(sessionId));
+    return super.findList(this.getSessionIdData(sessionId), null);
   }
   /**
    * Cette méthode permet de construire les critères permettant de rechercher les
@@ -56,17 +51,18 @@ public class ConnectionHistoryAbstractDao_<HISTORY extends ConnectionHistoryAbst
    * @return Les critères permettant de rechercher les historiques de connexions
    * en fonction de l'identifiant de session associée
    */
-  protected CriteriaQuery<HISTORY> getCriteriaForSessionId(String sessionId)
+  protected Bid4WinData<HISTORY, String> getSessionIdData(String sessionId)
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-
-    CriteriaQuery<HISTORY> criteria = this.createCriteria();
-    Root<HISTORY> history_ = criteria.from(this.getEntityClass());
-    Path<String> sessionId_ = history_.get(ConnectionHistoryAbstract_.sessionId);
-    Predicate condition = builder.equal(sessionId_, sessionId);
-    criteria.where(condition);
-    return criteria;
+    return new Bid4WinData<HISTORY, String>(this.getSessionIdField(), sessionId);
   }
+  /**
+   * A définir car :
+   * Suite à un bug Hibernate, les @Embedded de @MapedSuperClass ne sont pas pris
+   * en compte si défini dans le metamodel de la super class : bug HHH-5024
+   * TODO suivre http://opensource.atlassian.com/projects/hibernate/browse/HHH-5024
+   * @return TODO A COMMENTER
+   */
+  protected abstract Bid4WinField<? super HISTORY, ?, String, ?> getSessionIdField();
 
   /**
    *

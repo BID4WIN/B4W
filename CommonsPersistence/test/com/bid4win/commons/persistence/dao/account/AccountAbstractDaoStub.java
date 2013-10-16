@@ -1,8 +1,5 @@
 package com.bid4win.commons.persistence.dao.account;
 
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
-
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +15,7 @@ import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
 import com.bid4win.commons.persistence.entity.Bid4WinEntityLoader;
 import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
-import com.bid4win.commons.persistence.entity.account.AccountAbstractStub_;
-import com.bid4win.commons.persistence.entity.account.security.Credential;
 import com.bid4win.commons.persistence.entity.account.security.Login;
-import com.bid4win.commons.persistence.entity.connection.ConnectionAbstractStub;
-import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractStub;
 import com.bid4win.commons.persistence.entity.contact.Email;
 
 /**
@@ -33,9 +26,9 @@ import com.bid4win.commons.persistence.entity.contact.Email;
 @Component("AccountAbstractDaoStub")
 @Scope("singleton")
 @Transactional(readOnly = true, rollbackFor = {Bid4WinException.class})
-public class AccountAbstractDaoStub extends AccountAbstractDao_<AccountAbstractStub,
+public class AccountAbstractDaoStub extends AccountAbstractDao/*<AccountAbstractStub,
                                                                 ConnectionAbstractStub,
-                                                                ConnectionHistoryAbstractStub>
+                                                                ConnectionHistoryAbstractStub>*/
        implements IAccountAbstractDaoStub<AccountAbstractStub>
 {
   /**
@@ -44,7 +37,7 @@ public class AccountAbstractDaoStub extends AccountAbstractDao_<AccountAbstractS
    */
   protected AccountAbstractDaoStub()
   {
-    super(AccountAbstractStub.class);
+   // super(AccountAbstractStub.class);
   }
   /**
    *
@@ -53,7 +46,19 @@ public class AccountAbstractDaoStub extends AccountAbstractDao_<AccountAbstractS
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.dao.account.AccountAbstractDao_#getCredentialPath(javax.persistence.criteria.Root)
    */
+/*  @Override
+  protected Bid4WinField<AccountAbstractStub, Login> getLoginField()
+  {
+    // TODO Auto-generated method stub
+    return AccountAbstractStub_.LOGIN;
+  }
   @Override
+  protected Bid4WinField<AccountAbstractStub, Email> getEmailField()
+  {
+    // TODO Auto-generated method stub
+    return AccountAbstractStub_.EMAIL;
+  }
+  /*@Override
   protected Path<Credential> getCredentialPath(Root<AccountAbstractStub> root)
   {
     return root.get(com.bid4win.commons.persistence.entity.account.AccountAbstractStub_.credential);
@@ -65,7 +70,7 @@ public class AccountAbstractDaoStub extends AccountAbstractDao_<AccountAbstractS
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.dao.account.AccountAbstractDao_#getEmailPath(javax.persistence.criteria.Root)
    */
-  @Override
+  /*@Override
   protected Path<Email> getEmailPath(Root<AccountAbstractStub> root)
   {
     return root.get(AccountAbstractStub_.email);
@@ -152,7 +157,7 @@ public class AccountAbstractDaoStub extends AccountAbstractDao_<AccountAbstractS
    */
   @Override
   public AccountAbstractStub getOneByLoginOrEmail(String loginOrEmail)
-         throws PersistenceException, NotFoundEntityException, UserException
+         throws PersistenceException, NotFoundEntityException//, UserException
   {
     return super.getOneByLoginOrEmail(loginOrEmail).loadRelation();
   }
@@ -167,7 +172,7 @@ public class AccountAbstractDaoStub extends AccountAbstractDao_<AccountAbstractS
    */
   @Override
   public AccountAbstractStub findOneByLoginOrEmail(String loginOrEmail)
-         throws PersistenceException, UserException
+         throws PersistenceException//, UserException
   {
     return Bid4WinEntityLoader.getInstance().loadRelation(super.findOneByLoginOrEmail(loginOrEmail));
   }

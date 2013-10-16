@@ -15,12 +15,14 @@ import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.io.UtilFile;
 import com.bid4win.commons.core.reference.MessageRef.ResourceRef;
-import com.bid4win.commons.persistence.dao.Bid4WinDao_;
+import com.bid4win.commons.persistence.dao.Bid4WinDaoAutoID_;
 import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
 import com.bid4win.commons.persistence.dao.exception.NotPersistedEntityException;
 import com.bid4win.commons.persistence.entity.resource.Resource;
 import com.bid4win.commons.persistence.entity.resource.ResourceType;
 import com.bid4win.commons.persistence.entity.resource.Resource_;
+import com.bid4win.commons.persistence.entity.resource.Resource_Fields;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 
 /**
  * DAO générique pour les référence de ressources<BR>
@@ -32,7 +34,7 @@ import com.bid4win.commons.persistence.entity.resource.Resource_;
  */
 public class ResourceDao_<RESOURCE extends Resource<RESOURCE, TYPE>,
                           TYPE extends ResourceType<TYPE>>
-       extends Bid4WinDao_<RESOURCE, Long>
+       extends Bid4WinDaoAutoID_<RESOURCE>
 {
   /**
    * Constructeur
@@ -99,7 +101,7 @@ public class ResourceDao_<RESOURCE extends Resource<RESOURCE, TYPE>,
     CriteriaBuilder builder = this.getCriteriaBuilder();
     String pathAlias = "PATH";
     // Création de la requête
-    CriteriaQuery<Tuple> criteria = this.createCriteria(Tuple.class);
+    CriteriaQuery<Tuple> criteria = this.getCriteriaBuilder().createQuery(Tuple.class);
     Root<RESOURCE> resource_ = criteria.from(this.getEntityClass());
     Path<String> path_ = resource_.get(Resource_.path);
     // Création de la condition sur le path parent
@@ -135,7 +137,7 @@ public class ResourceDao_<RESOURCE extends Resource<RESOURCE, TYPE>,
   public RESOURCE getOneByFullPath(String fullPath)
          throws PersistenceException, NotFoundEntityException, UserException
   {
-    return super.getOne(this.getCriteriaForFullPath(fullPath));
+    return super.getOne(this.getFullPathData(fullPath));
   }
   /**
    * Cette fonction permet de récupérer l'eventuelle référence de ressource en
@@ -149,7 +151,7 @@ public class ResourceDao_<RESOURCE extends Resource<RESOURCE, TYPE>,
   public RESOURCE findOneByFullPath(String fullPath)
          throws PersistenceException, UserException
   {
-    return super.findOne(this.getCriteriaForFullPath(fullPath));
+    return super.findOne(this.getFullPathData(fullPath));
   }
   /**
    * Cette méthode permet de construire les critères permettant de rechercher la
@@ -159,18 +161,11 @@ public class ResourceDao_<RESOURCE extends Resource<RESOURCE, TYPE>,
    * fonction de son chemin d'accès complet
    * @throws UserException Si le chemin d'accès complet en argument est invalide
    */
-  protected CriteriaQuery<RESOURCE> getCriteriaForFullPath(String fullPath)
+  protected Bid4WinData<RESOURCE, String> getFullPathData(String fullPath)
             throws UserException
   {
     fullPath = UtilFile.checkRelativePath(fullPath, ResourceRef.RESOURCE);
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-
-    CriteriaQuery<RESOURCE> criteria = this.createCriteria();
-    Root<RESOURCE> resource_ = criteria.from(this.getEntityClass());
-    Path<String> fullPath_ = resource_.get(Resource_.fullPath);
-    Predicate condition = builder.equal(fullPath_, fullPath);
-    criteria.where(condition);
-    return criteria;
+    return new Bid4WinData<RESOURCE, String>(Resource_Fields.FULL_PATH, fullPath);
   }
 
   /**
@@ -186,7 +181,7 @@ public class ResourceDao_<RESOURCE extends Resource<RESOURCE, TYPE>,
   public Bid4WinList<RESOURCE> findResourceList(String path)
          throws PersistenceException, UserException
   {
-    return super.findList(this.getCriteriaForPath(path));
+    return super.findList(this.getPathData(path), null);
   }
   /**
    * Cette méthode permet de construire les critères permettant de rechercher la
@@ -196,18 +191,10 @@ public class ResourceDao_<RESOURCE extends Resource<RESOURCE, TYPE>,
    * de leur emplacement de stockage
    * @throws UserException Si l'emplacement de stockage en argument est invalide
    */
-  protected CriteriaQuery<RESOURCE> getCriteriaForPath(String path)
-            throws UserException
+  protected Bid4WinData<RESOURCE, String> getPathData(String path) throws UserException
   {
     path = UtilFile.checkRelativePath(path, ResourceRef.RESOURCE);
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-
-    CriteriaQuery<RESOURCE> criteria = this.createCriteria();
-    Root<RESOURCE> resource_ = criteria.from(this.getEntityClass());
-    Path<String> path_ = resource_.get(Resource_.path);
-    Predicate condition = builder.equal(path_, path);
-    criteria.where(condition);
-    return criteria;
+    return new Bid4WinData<RESOURCE, String>(Resource_Fields.PATH, path);
   }
 
   /**
@@ -273,4 +260,5 @@ public class ResourceDao_<RESOURCE extends Resource<RESOURCE, TYPE>,
   {
     return super.remove(resource);
   }
+
 }

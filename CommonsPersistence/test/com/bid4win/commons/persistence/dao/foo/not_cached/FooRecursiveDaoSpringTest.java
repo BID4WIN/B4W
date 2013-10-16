@@ -230,7 +230,7 @@ public class FooRecursiveDaoSpringTest extends FooAbstractDaoSpringTester<FooRec
       // Ne fait rien
       child1 = this.getDao().update(child1);
 
-      parent1.setValue(parent1.getValue()+"BIS");
+      parent1.defineValue(parent1.getValue()+"BIS");
       // Modifie le parent
       parent1 = this.getDao().update(parent1);
       try
@@ -253,7 +253,7 @@ public class FooRecursiveDaoSpringTest extends FooAbstractDaoSpringTester<FooRec
       // Ne fait rien
       parent1 = this.getDao().update(parent1);
 
-      child1.setValue(child1.getValue()+"BIS");
+      child1.defineValue(child1.getValue()+"BIS");
       // Ne fait rien
       parent1 = this.getDao().update(parent1);
       // Modifie l'enfant

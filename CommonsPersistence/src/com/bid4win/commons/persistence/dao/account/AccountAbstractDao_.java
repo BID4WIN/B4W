@@ -1,30 +1,25 @@
 package com.bid4win.commons.persistence.dao.account;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.exception.PersistenceException;
-import com.bid4win.commons.core.exception.UserException;
-import com.bid4win.commons.core.reference.MessageRef.ConnectionRef;
-import com.bid4win.commons.persistence.dao.Bid4WinDao_;
+import com.bid4win.commons.persistence.dao.Bid4WinDaoGeneratedID_;
 import com.bid4win.commons.persistence.dao.connection.ConnectionAbstractDao_;
 import com.bid4win.commons.persistence.dao.connection.ConnectionHistoryAbstractDao_;
 import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
+import com.bid4win.commons.persistence.entity.Bid4WinField;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
-import com.bid4win.commons.persistence.entity.account.security.Credential;
-import com.bid4win.commons.persistence.entity.account.security.Credential_;
 import com.bid4win.commons.persistence.entity.account.security.Login;
 import com.bid4win.commons.persistence.entity.connection.ConnectionAbstract;
 import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstract;
 import com.bid4win.commons.persistence.entity.connection.DisconnectionReason;
 import com.bid4win.commons.persistence.entity.contact.Email;
+import com.bid4win.commons.persistence.request.Bid4WinCriteria;
+import com.bid4win.commons.persistence.request.Bid4WinCriteriaList;
+import com.bid4win.commons.persistence.request.Bid4WinRequest;
+import com.bid4win.commons.persistence.request.Bid4WinResult;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 
 /**
  * DAO pour les entités de la classe Account<BR>
@@ -38,7 +33,7 @@ import com.bid4win.commons.persistence.entity.contact.Email;
 public abstract class AccountAbstractDao_<ACCOUNT extends AccountAbstract<ACCOUNT>,
                                           CONNECTION extends ConnectionAbstract<CONNECTION, HISTORY, ACCOUNT>,
                                           HISTORY extends ConnectionHistoryAbstract<HISTORY, ACCOUNT>>
-       extends Bid4WinDao_<ACCOUNT, String>
+       extends Bid4WinDaoGeneratedID_<ACCOUNT>
 {
   /** Référence du DAO des connexions */
   @Autowired
@@ -113,7 +108,7 @@ public abstract class AccountAbstractDao_<ACCOUNT extends AccountAbstract<ACCOUN
    */
   public ACCOUNT getOneByLogin(Login login) throws PersistenceException, NotFoundEntityException
   {
-    return super.getOne(this.getCriteriaForLogin(login));
+    return super.getOne(this.getLoginValueData(login.getValue()));
   }
   /**
    * Cette fonction permet de récupérer l'eventuel compte utilisateur en fonction
@@ -125,30 +120,28 @@ public abstract class AccountAbstractDao_<ACCOUNT extends AccountAbstract<ACCOUN
    */
   public ACCOUNT findOneByLogin(Login login) throws PersistenceException
   {
-    return super.findOne(this.getCriteriaForLogin(login));
+    return super.findOne(this.getLoginValueData(login.getValue()));
   }
   /**
-   * Cette méthode permet de construire les critères permettant de rechercher le
-   * compte utilisateur dont l'identifiant de connexion est précisé en argument
+   * Cette méthode permet de construire la définition de requête permettant de
+   * rechercher le compte utilisateur dont l'identifiant de connexion est précisé
+   * en argument
    * @param login Identifiant de connexion du compte utilisateur à rechercher
-   * @return Les critères permettant de rechercher le compte utilisateur en fonction
-   * de son identifiant de connexion
+   * @return La définition de requête permettant de rechercher le compte utilisateur
+   * en fonction de son identifiant de connexion
    */
-  protected CriteriaQuery<ACCOUNT> getCriteriaForLogin(Login login)
+  protected Bid4WinData<ACCOUNT, String> getLoginValueData(String value)
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-
-    CriteriaQuery<ACCOUNT> criteria = this.createCriteria();
-    Root<ACCOUNT> account_ = criteria.from(this.getEntityClass());
-    Path<Login> login_ = this.getCredentialPath(account_).get(Credential_.login);
-    Predicate condition = builder.equal(login_, login);
-    // Suite à un bug Hibernate, les @Embedded de @MapedSuperClass ne sont pas pris
-    // en compte si défini dans le metamodel de la super class : bug HHH-5024
-    // TODO suivre http://opensource.atlassian.com/projects/hibernate/browse/HHH-5024
-    //root.get(AccountAbstract_.credential).get(Credential_.login), login);
-    criteria.where(condition);
-    return criteria;
+    return new Bid4WinData<ACCOUNT, String>(this.getLoginValueField(), value);
   }
+  /**
+   * A définir car :
+   * Suite à un bug Hibernate, les @Embedded de @MapedSuperClass ne sont pas pris
+   * en compte si défini dans le metamodel de la super class : bug HHH-5024
+   * TODO suivre http://opensource.atlassian.com/projects/hibernate/browse/HHH-5024
+   * @return TODO A COMMENTER
+   */
+  protected abstract Bid4WinField<? super ACCOUNT, ?, String, ?> getLoginValueField();
 
   /**
    * Cette fonction permet de récupérer l'unique compte utilisateur en fonction
@@ -162,7 +155,7 @@ public abstract class AccountAbstractDao_<ACCOUNT extends AccountAbstract<ACCOUN
    */
   public ACCOUNT getOneByEmail(Email email) throws PersistenceException, NotFoundEntityException
   {
-    return super.getOne(this.getCriteriaForEmail(email));
+    return super.getOne(this.getEmailAddressData(email.getAddress()));
   }
   /**
    * Cette fonction permet de récupérer l'eventuel compte utilisateur en fonction
@@ -174,30 +167,27 @@ public abstract class AccountAbstractDao_<ACCOUNT extends AccountAbstract<ACCOUN
    */
   public ACCOUNT findOneByEmail(Email email) throws PersistenceException
   {
-    return super.findOne(this.getCriteriaForEmail(email));
+    return super.findOne(this.getEmailAddressData(email.getAddress()));
   }
   /**
-   * Cette méthode permet de construire les critères permettant de rechercher le
-   * compte utilisateur dont l'adresse email est précisée en argument
+   * Cette méthode permet de construire la définition de requête permettant de
+   * rechercher le compte utilisateur dont l'adresse email est précisée en argument
    * @param email Adresse email du compte utilisateur à rechercher
-   * @return Les critères permettant de rechercher le compte utilisateur en fonction
-   * de son adresse email
+   * @return La définition de requête permettant de rechercher le compte utilisateur
+   * en fonction de son adresse email
    */
-  protected CriteriaQuery<ACCOUNT> getCriteriaForEmail(Email email)
+  protected Bid4WinData<ACCOUNT, String> getEmailAddressData(String address)
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-
-    CriteriaQuery<ACCOUNT> criteria = this.createCriteria();
-    Root<ACCOUNT> account_ = criteria.from(this.getEntityClass());
-    Path<Email> email_ = this.getEmailPath(account_);
-    Predicate condition = builder.equal(email_, email);
-    // Suite à un bug Hibernate, les @Embedded de @MapedSuperClass ne sont pas pris
-    // en compte si défini dans le metamodel de la super class : bug HHH-5024
-    // TODO suivre http://opensource.atlassian.com/projects/hibernate/browse/HHH-5024
-    //root.get(AccountAbstract_.credential).get(Credential_.login), login);
-    criteria.where(condition);
-    return criteria;
+    return new Bid4WinData<ACCOUNT, String>(this.getEmailAddressField(), address);
   }
+  /**
+   * A définir car :
+   * Suite à un bug Hibernate, les @Embedded de @MapedSuperClass ne sont pas pris
+   * en compte si défini dans le metamodel de la super class : bug HHH-5024
+   * TODO suivre http://opensource.atlassian.com/projects/hibernate/browse/HHH-5024
+   * @return TODO A COMMENTER
+   */
+  protected abstract Bid4WinField<? super ACCOUNT, ?, String, ?> getEmailAddressField();
 
   /**
    * Cette fonction permet de récupérer l'unique compte utilisateur en fonction
@@ -209,13 +199,11 @@ public abstract class AccountAbstractDao_<ACCOUNT extends AccountAbstract<ACCOUN
    * de la couche persistante
    * @throws NotFoundEntityException Si aucun compte utilisateur ne correspond aux
    * critères en argument
-   * @throws UserException Si le paramètre ne correspond ni à un login, ni à un
-   * email valide
    */
   public ACCOUNT getOneByLoginOrEmail(String loginOrEmail)
-         throws PersistenceException, NotFoundEntityException, UserException
+         throws PersistenceException, NotFoundEntityException
   {
-    return super.getOne(this.getCriteriaForLoginOrEmail(loginOrEmail));
+    return super.getOne(this.getLoginOrEmailCriteria(loginOrEmail));
   }
   /**
    * Cette fonction permet de récupérer l'eventuel compte utilisateur en fonction
@@ -225,86 +213,39 @@ public abstract class AccountAbstractDao_<ACCOUNT extends AccountAbstract<ACCOUN
    * @return Le compte utilisateur éventuellement trouvé
    * @throws PersistenceException Si un problème intervient lors de la manipulation
    * de la couche persistante
-   * @throws UserException Si le paramètre ne correspond ni à un login, ni à un
-   * email valide
    */
-  public ACCOUNT findOneByLoginOrEmail(String loginOrEmail)
-         throws PersistenceException, UserException
+  public ACCOUNT findOneByLoginOrEmail(String loginOrEmail) throws PersistenceException
   {
-    return super.findOne(this.getCriteriaForLoginOrEmail(loginOrEmail));
+    return super.findOne(this.getLoginOrEmailCriteria(loginOrEmail));
   }
   /**
-   * Cette méthode permet de construire les critères permettant de rechercher le
-   * compte utilisateur dont l'identifiant de connexion ou l'adresse email est
-   * précisé en argument
+   * Cette méthode permet de construire la définition de requête permettant de
+   * rechercher le compte utilisateur dont l'identifiant de connexion ou l'adresse
+   * email est précisé en argument
    * @param loginOrEmail Identifiant de connexion ou email du compte utilisateur
    * à rechercher
-   * @return Les critères permettant de rechercher le compte utilisateur en fonction
-   * de son identifiant de connexion
-   * @throws UserException Si le paramètre ne correspond ni à un login, ni à un
-   * email valide
+   * @return La définition de requête permettant de rechercher le compte utilisateur
+   * en fonction de son identifiant de connexion
    */
-  protected CriteriaQuery<ACCOUNT> getCriteriaForLoginOrEmail(String loginOrEmail)
-            throws UserException
+  @SuppressWarnings("unchecked")
+  protected Bid4WinCriteria<ACCOUNT> getLoginOrEmailCriteria(String loginOrEmail)
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-
-    CriteriaQuery<ACCOUNT> criteria = this.createCriteria();
-    Root<ACCOUNT> account_ = criteria.from(this.getEntityClass());
-    Predicate condition = null;
-    try
-    {
-      Login login = new Login(loginOrEmail);
-      Path<Login> login_ = this.getCredentialPath(account_).get(Credential_.login);
-      condition = builder.equal(login_, login);
-    }
-    catch(UserException ex1)
-    {
-      try
-      {
-        Email email = new Email(loginOrEmail);
-        Path<Email> email_ = this.getEmailPath(account_);
-        condition = builder.equal(email_, email);
-      }
-      catch(UserException ex2)
-      {
-        throw new UserException(ConnectionRef.CONNECTION_LOGIN_OR_EMAIL_UNKNOWN_ERROR);
-      }
-    }
-    criteria.where(condition);
-    return criteria;
+    return new Bid4WinCriteriaList<ACCOUNT>(
+        false, this.getLoginValueData(loginOrEmail), this.getEmailAddressData(loginOrEmail));
   }
 
   /**
-   * A définir car :
-   * Suite à un bug Hibernate, les @Embedded de @MapedSuperClass ne sont pas pris
-   * en compte si défini dans le metamodel de la super class : bug HHH-5024
-   * TODO suivre http://opensource.atlassian.com/projects/hibernate/browse/HHH-5024
-   * @param root TODO A COMMENTER
-   * @return TODO A COMMENTER
-   */
-  protected abstract Path<Credential> getCredentialPath(Root<ACCOUNT> root);
-  /**
-   * A définir car :
-   * Suite à un bug Hibernate, les @Embedded de @MapedSuperClass ne sont pas pris
-   * en compte si défini dans le metamodel de la super class : bug HHH-5024
-   * TODO suivre http://opensource.atlassian.com/projects/hibernate/browse/HHH-5024
-   * @param root TODO A COMMENTER
-   * @return TODO A COMMENTER
-   */
-  protected abstract Path<Email> getEmailPath(Root<ACCOUNT> root);
-
-  /**
-   * Cette fonction permet de récupérer la liste complète des comptes utilisateur
-   * @return La liste complète des comptes utilisateur trouvés
-   * @throws PersistenceException Si un problème intervient lors de la manipulation
-   * de la couche persistante
-   * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#findAll()
+   * Cette fonction permet de récupérer la liste des comptes utilisateur correspondant
+   * à la définition de requête en argument
+   * @param request {@inheritDoc}
+   * @return {@inheritDoc}
+   * @throws PersistenceException {@inheritDoc}
+   * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#findList(com.bid4win.commons.persistence.request.Bid4WinRequest)
    */
   @Override
-  public Bid4WinList<ACCOUNT> findAll() throws PersistenceException
+  public Bid4WinResult<ACCOUNT> findList(Bid4WinRequest<ACCOUNT> request) throws PersistenceException
   {
-    return new Bid4WinList<ACCOUNT>(super.findAll(), true);
+    return super.findList(request);
   }
 
   /**

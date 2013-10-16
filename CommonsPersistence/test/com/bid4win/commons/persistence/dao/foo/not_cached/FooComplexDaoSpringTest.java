@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import com.bid4win.commons.core.Bid4WinDate;
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.exception.Bid4WinException;
-import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.persistence.dao.foo.FooAbstractDaoSpringTester;
 import com.bid4win.commons.persistence.entity.foo.not_cached.FooComplex;
 import com.bid4win.commons.persistence.entity.foo.not_cached.FooEmbeddable;
@@ -215,11 +214,10 @@ public class FooComplexDaoSpringTest extends FooAbstractDaoSpringTester<FooCompl
   /**
    * Permet de modifier l'entité à utiliser pour les tests
    * @param fooComplex {@inheritDoc}
-   * @throws ModelArgumentException {@inheritDoc}
    * @see com.bid4win.commons.persistence.dao.foo.FooAbstractDaoSpringTester#updateFoo(com.bid4win.commons.persistence.entity.foo.FooAbstract)
    */
   @Override
-  protected void updateFoo(FooComplex fooComplex) throws ModelArgumentException
+  protected void updateFoo(FooComplex fooComplex)
   {
     super.updateFoo(fooComplex);
     fooComplex.getEmbedded().setKey("KEY2");

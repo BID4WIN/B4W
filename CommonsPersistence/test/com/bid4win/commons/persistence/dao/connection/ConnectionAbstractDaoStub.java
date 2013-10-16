@@ -123,7 +123,9 @@ public class ConnectionAbstractDaoStub
   public ConnectionAbstractStub add(ConnectionAbstractStub accountBasedEntity)
          throws PersistenceException
   {
-    return super.add(accountBasedEntity);
+    ConnectionAbstractStub connection = super.add(accountBasedEntity);
+    this.flush();
+    return super.refresh(connection).loadRelation();
   }
   /**
    *
@@ -137,7 +139,7 @@ public class ConnectionAbstractDaoStub
   @Transactional(readOnly = false, rollbackFor = {Bid4WinException.class})
   public ConnectionAbstractStub update(ConnectionAbstractStub connection) throws PersistenceException
   {
-    return super.update(connection);
+    return super.update(connection).loadRelation();
   }
   /////////////////////////////////////////////////////////////////////////////
   ////////////////////////// Ajoutées pour les tests //////////////////////////
@@ -192,7 +194,7 @@ public class ConnectionAbstractDaoStub
   @Transactional(readOnly = false, rollbackFor = {Bid4WinException.class})
   public ConnectionAbstractStub removeById(String id) throws PersistenceException
   {
-    return super.removeById(id);
+    return super.removeById(id).loadRelation();
   }
   /**
    * Cette fonction permet de supprimer le set d'entités dont les identifiants

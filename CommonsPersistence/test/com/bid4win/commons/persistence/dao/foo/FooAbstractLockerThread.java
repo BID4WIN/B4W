@@ -17,7 +17,7 @@ public abstract class FooAbstractLockerThread<FOO extends FooAbstract<FOO>>
   /** TODO A COMMENTER */
   private FooAbstractDaoSpringTester<FOO> test = null;
   /** TODO A COMMENTER */
-  private int id = -1;
+  private long id = -1;
   /** TODO A COMMENTER */
   private boolean lockDone = false;
   /** TODO A COMMENTER */
@@ -38,7 +38,7 @@ public abstract class FooAbstractLockerThread<FOO extends FooAbstract<FOO>>
    * @param test TODO A COMMENTER
    * @param id TODO A COMMENTER
    */
-  public void init(FooAbstractDaoSpringTester<FOO> test, int id)
+  public void init(FooAbstractDaoSpringTester<FOO> test, long id)
   {
     this.test = test;
     this.id = id;

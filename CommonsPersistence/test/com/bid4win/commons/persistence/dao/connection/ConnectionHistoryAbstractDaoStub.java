@@ -11,8 +11,11 @@ import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
 import com.bid4win.commons.persistence.entity.Bid4WinEntityLoader;
+import com.bid4win.commons.persistence.entity.Bid4WinField.Bid4WinFieldSimpleToSimple;
 import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
+import com.bid4win.commons.persistence.entity.connection.ConnectionData;
 import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractStub;
+import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractStub_Fields;
 
 /**
  * TODO A COMMENTER<BR>
@@ -32,6 +35,12 @@ public class ConnectionHistoryAbstractDaoStub
   protected ConnectionHistoryAbstractDaoStub()
   {
     super(ConnectionHistoryAbstractStub.class);
+  }
+
+  @Override
+  protected Bid4WinFieldSimpleToSimple<ConnectionHistoryAbstractStub, ConnectionData, String> getSessionIdField()
+  {
+    return ConnectionHistoryAbstractStub_Fields.SESSION_ID;
   }
 
   /////////////////////////////////////////////////////////////////////////////

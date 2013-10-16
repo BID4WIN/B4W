@@ -1,15 +1,11 @@
 package com.bid4win.commons.persistence.dao.foo.cached;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.persistence.entity.foo.cached.FooCachedTwin;
-import com.bid4win.commons.persistence.entity.foo.cached.FooCachedTwin_;
+import com.bid4win.commons.persistence.entity.foo.cached.FooCachedTwin_Fields;
+import com.bid4win.commons.persistence.request.Bid4WinPagination;
+import com.bid4win.commons.persistence.request.Bid4WinResult;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 
 /**
  * DAO pour les entités de la classe FooCachedTwin<BR>
@@ -38,7 +34,7 @@ public class FooCachedTwinDaoSpring extends FooCachedDaoSpring<FooCachedTwin>
    * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#getById(java.lang.Object)
    */
   @Override
-  public FooCachedTwin getById(Integer id) throws PersistenceException
+  public FooCachedTwin getById(Long id) throws PersistenceException
   {
     FooCachedTwin twin = super.getById(id);
     return twin.loadRelation(/*NODE_LIST*/);
@@ -61,14 +57,15 @@ public class FooCachedTwinDaoSpring extends FooCachedDaoSpring<FooCachedTwin>
    *
    * TODO A COMMENTER
    * @param value {@inheritDoc}
+   * @param pagination {@inheritDoc}
    * @return {@inheritDoc}
    * @throws PersistenceException {@inheritDoc}
-   * @see com.bid4win.commons.persistence.dao.foo.FooAbstractDaoSpring#findListByValue(java.lang.String)
+   * @see com.bid4win.commons.persistence.dao.foo.FooAbstractDaoSpring#findListByValue(java.lang.String, com.bid4win.commons.persistence.request.Bid4WinPagination)
    */
   @Override
-  public Bid4WinList<FooCachedTwin> findListByValue(String value) throws PersistenceException
+  public Bid4WinResult<FooCachedTwin> findListByValue(String value, Bid4WinPagination<FooCachedTwin> pagination) throws PersistenceException
   {
-    Bid4WinList<FooCachedTwin> twinList = super.findListByValue(value);
+    Bid4WinResult<FooCachedTwin> twinList = super.findListByValue(value, pagination);
     for(FooCachedTwin twin : twinList)
     {
       twin.loadRelation(/*NODE_LIST*/);
@@ -83,9 +80,9 @@ public class FooCachedTwinDaoSpring extends FooCachedDaoSpring<FooCachedTwin>
    * @return Entité récupérée
    * @throws PersistenceException Si une exception non attendue est levée
    */
-  public FooCachedTwin getByTwin(Integer twinId) throws PersistenceException
+  public FooCachedTwin getByTwin(Long twinId) throws PersistenceException
   {
-    return super.getOne(this.getCriteriaForTwin(twinId)).loadRelation(/*NODE_LIST*/);
+    return super.getOne(this.getTwinData(twinId)).loadRelation(/*NODE_LIST*/);
   }
   /**
    * Cette fonction permet de récupérer l'unique entité liée au jumeau dont l'
@@ -94,9 +91,9 @@ public class FooCachedTwinDaoSpring extends FooCachedDaoSpring<FooCachedTwin>
    * @return Entité récupérée
    * @throws PersistenceException Si une exception non attendue est levée
    */
-  public FooCachedTwin findOneByTwin(Integer twinId) throws PersistenceException
+  public FooCachedTwin findOneByTwin(Long twinId) throws PersistenceException
   {
-    FooCachedTwin twin = super.findOne(this.getCriteriaForTwin(twinId));
+    FooCachedTwin twin = super.findOne(this.getTwinData(twinId));
     return (twin != null ? twin.loadRelation(/*NODE_LIST*/) : null);
   }
   /**
@@ -106,16 +103,9 @@ public class FooCachedTwinDaoSpring extends FooCachedDaoSpring<FooCachedTwin>
    * @return Les critères permettant de rechercher des entités en fonction de l'
    * identifiant de leur jumeau
    */
-  protected CriteriaQuery<FooCachedTwin> getCriteriaForTwin(Integer twinId)
+  protected Bid4WinData<FooCachedTwin, Long> getTwinData(Long twinId)
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-
-    CriteriaQuery<FooCachedTwin> criteria = this.createCriteria();
-    Root<FooCachedTwin> foo_ = criteria.from(this.getEntityClass());
-    Path<FooCachedTwin> twin_ = foo_.get(FooCachedTwin_.twin);
-    Path<Integer> twinId_ = twin_.get(FooCachedTwin_.id);
-
-    Predicate condition = builder.equal(twinId_, twinId);
-    return criteria.where(condition);
+    return new Bid4WinData<FooCachedTwin, Long>(FooCachedTwin_Fields.TWIN_ID,
+                                                twinId);
   }
 }

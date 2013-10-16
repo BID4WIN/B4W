@@ -1,18 +1,14 @@
 package com.bid4win.commons.persistence.dao.property;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.persistence.dao.Bid4WinDao_;
 import com.bid4win.commons.persistence.dao.exception.NotPersistedEntityException;
 import com.bid4win.commons.persistence.entity.property.PropertyAbstract;
-import com.bid4win.commons.persistence.entity.property.PropertyAbstract_;
+import com.bid4win.commons.persistence.entity.property.PropertyAbstract_Fields;
 import com.bid4win.commons.persistence.entity.property.PropertyRootAbstract;
-import com.bid4win.commons.persistence.entity.property.PropertyRootAbstract_;
+import com.bid4win.commons.persistence.request.Bid4WinCriteria;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 
 /**
  * DAO générique pour les entités de la classe PropertyAbstract<BR>
@@ -123,13 +119,26 @@ public abstract class PropertyAbstractDao_<PROPERTY extends PropertyAbstract<PRO
   }
 
   /**
+   *
+   * TODO A COMMENTER
+   * @return {@inheritDoc}
+   * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#getCriteriaForAll()
+   */
+  @Override
+  protected Bid4WinCriteria<PROPERTY> getCriteriaForAll()
+  {
+    return new Bid4WinData<PROPERTY, Integer>(PropertyAbstract_Fields.ROOT_ID_JOINED,
+                                              this.getRootDao().getUniqueId());
+  }
+
+  /**
    * Cette fonction permet d'ajouter des conditions pour la récupération de la
    * liste complète des propriétés
    * @param criteria {@inheritDoc}
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.dao.Bid4WinDao_#addConditionForAll(javax.persistence.criteria.CriteriaQuery)
    */
-  @Override
+  /*@Override
   protected final Root<PROPERTY> addConditionForAll(CriteriaQuery<PROPERTY> criteria)
   {
     Root<PROPERTY> property_ = super.addConditionForAll(criteria);
@@ -145,14 +154,14 @@ public abstract class PropertyAbstractDao_<PROPERTY extends PropertyAbstract<PRO
    * @return La condition à utiliser pour filter uniquement les propriétés de premier
    * niveau
    */
-  protected Predicate getFirstLevelCondition(Root<PROPERTY> property_)
+  /*protected Predicate getFirstLevelCondition(Root<PROPERTY> property_)
   {
     CriteriaBuilder builder = this.getCriteriaBuilder();
     Predicate condition = builder.equal(
         property_.get(PropertyAbstract_.root).get(PropertyRootAbstract_.id),
         this.getRootDao().getUniqueId());
     return condition;
-  }
+  }*/
 
 
   /**

@@ -44,7 +44,7 @@ public abstract class ResourceStorageDao_<STORAGE extends ResourceStorage<STORAG
   public STORAGE forceUpdate(STORAGE storage) throws PersistenceException
   {
     // Propage le forçage de modification aux utilisations de la ressource
-    for(USAGE usage : storage.getUsageList())
+    for(USAGE usage : storage.getUsages())
     {
       this.getUsageDao().forceUpdate(usage);
     }

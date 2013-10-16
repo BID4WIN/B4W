@@ -5,6 +5,7 @@ import org.junit.Before;
 
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.PersistenceException;
 import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
 import com.bid4win.commons.persistence.dao.exception.NotPersistedEntityException;
@@ -148,6 +149,18 @@ public abstract class Bid4WinDaoTester<ENTITY extends Bid4WinEntity<ENTITY, ID>,
   protected Bid4WinList<ENTITY> removeAll() throws PersistenceException
   {
     return this.getDao().removeAll();
+  }
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.core.security.ProtectableObjectTester#testCheckProtection()
+   */
+  @Override
+  public void testCheckProtection() throws Bid4WinException
+  {
+    // TODO Auto-generated method stub
   }
 
   /**

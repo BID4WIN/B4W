@@ -293,7 +293,7 @@ public abstract class PropertyAbstractDaoTester<PROPERTY extends PropertyAbstrac
     assertTrue("Wrong result", b_result.identical(b, new Bid4WinList<Bid4WinRelationNode>()));
     assertTrue("Wrong result", b_result.same(b));
     assertEquals("Wrong property set size", 2, b_result.getPropertyNb());
-    for(PROPERTY c : b.getPropertySet())
+    for(PROPERTY c : b.getProperties())
     {
       // Récupère la propriété ajoutée
       PROPERTY c_result = this.findOneByKey(c.getKey());
@@ -398,7 +398,7 @@ public abstract class PropertyAbstractDaoTester<PROPERTY extends PropertyAbstrac
     {
       System.out.println(ex.getMessage());
     }
-    for(PROPERTY c : b.getPropertySet())
+    for(PROPERTY c : b.getProperties())
     {
       try
       {

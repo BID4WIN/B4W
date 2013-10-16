@@ -37,7 +37,7 @@ public class FooStubDaoSpringTest extends FooAbstractDaoSpringTester<FooStub>
    * @throws Bid4WinException Issue not expected during this test
    */
   //@Test
-  public void testLock_Integer() throws Bid4WinException
+  public void testLock_Long() throws Bid4WinException
   {
     FooStub foo = this.createFoo();
     this.getDao().add(foo);

@@ -1,21 +1,11 @@
 package com.bid4win.commons.persistence.dao.foo.not_cached;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-import com.bid4win.commons.core.Bid4WinDate;
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.exception.PersistenceException;
-import com.bid4win.commons.persistence.entity.foo.FooAbstract_;
 import com.bid4win.commons.persistence.entity.foo.not_cached.FooComplex;
-import com.bid4win.commons.persistence.entity.foo.not_cached.FooComplex_;
-import com.bid4win.commons.persistence.entity.foo.not_cached.FooEmbeddable;
-import com.bid4win.commons.persistence.entity.foo.not_cached.FooEmbeddable_;
+import com.bid4win.commons.persistence.entity.foo.not_cached.FooComplex_Fields;
+import com.bid4win.commons.persistence.request.Bid4WinRequest;
+import com.bid4win.commons.persistence.request.data.Bid4WinData;
 
 /**
  * DAO pour les entités de la classe FooComplex<BR>
@@ -41,7 +31,7 @@ public class FooComplexDaoSpring extends FooDaoSpring<FooComplex>
    */
   public Bid4WinList<FooComplex> findListByEmbeddedKey(String key) throws PersistenceException
   {
-    return super.findList(this.getCriteriaForEmbeddedKey(key));
+    return super.findList(this.getRequestForEmbeddedKey(key));
   }
   /**
    * Cette méthode permet de construire les critères permettant de rechercher des
@@ -50,20 +40,10 @@ public class FooComplexDaoSpring extends FooDaoSpring<FooComplex>
    * @return Les critères permettant de rechercher des entités en fonction de la
    * clé de leur objet inclus
    */
-  protected CriteriaQuery<FooComplex> getCriteriaForEmbeddedKey(String key)
+  protected Bid4WinRequest<FooComplex> getRequestForEmbeddedKey(String key)
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-
-    CriteriaQuery<FooComplex> criteria = this.createCriteria();
-    Root<FooComplex> foo_ = criteria.from(this.getEntityClass());
-    Path<String> embeddedKey_ = foo_.get(FooComplex_.embedded).get(FooEmbeddable_.key);
-    Predicate condition = builder.equal(embeddedKey_, key);
-    criteria.where(condition);
-
-    Path<Bid4WinDate> date_ = foo_.get(FooAbstract_.date);
-    Order order = builder.asc(date_);
-    criteria.orderBy(order);
-    return criteria;
+    return new Bid4WinRequest<FooComplex>(new Bid4WinData<FooComplex, String>(
+        FooComplex_Fields.EMBEDDED_KEY, key));
   }
 
   /**
@@ -75,7 +55,7 @@ public class FooComplexDaoSpring extends FooDaoSpring<FooComplex>
    */
   public Bid4WinList<FooComplex> findListByEmbeddedSetKey(String key) throws PersistenceException
   {
-    return super.findList(this.getCriteriaForEmbeddedSetKey(key));
+    return super.findList(this.getEmbeddedSetKeyData(key), null);
   }
   /**
    * Cette méthode permet de construire les critères permettant de rechercher des
@@ -84,23 +64,10 @@ public class FooComplexDaoSpring extends FooDaoSpring<FooComplex>
    * @return Les critères permettant de rechercher des entités en fonction de la
    * clé de leurs objets inclus
    */
-  protected CriteriaQuery<FooComplex> getCriteriaForEmbeddedSetKey(String key)
+  protected Bid4WinData<FooComplex, String> getEmbeddedSetKeyData(String key)
   {
-    CriteriaBuilder builder = this.getCriteriaBuilder();
-
-    CriteriaQuery<FooComplex> criteria = this.createCriteria();
-    Root<FooComplex> foo_ = criteria.from(this.getEntityClass());
-
-    Join<FooComplex, FooEmbeddable> embeddableSet_ = foo_.join(FooComplex_.embeddedSetInternal);
-
-    Predicate condition = builder.equal(embeddableSet_, key);
-    criteria.where(condition);
-
-    Path<Bid4WinDate> date_ = foo_.get(FooAbstract_.date);
-    Order order = builder.asc(date_);
-
-    criteria.orderBy(order);
-    criteria.groupBy(foo_.get(FooAbstract_.id));
-    return criteria;
+    return new Bid4WinData<FooComplex, String>(FooComplex_Fields.EMBEDDED_SET_KEY_JOINED, key);
+    //return new FooComplexEmbeddedSetKeyRequest(key);
   }
+
 }

@@ -2,9 +2,9 @@ package com.bid4win.commons.persistence.dao.account;
 
 import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.PersistenceException;
+import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
 import com.bid4win.commons.persistence.entity.account.AccountBasedKey;
-import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
 
 /**
  * DAO générique pour les entités de la classe AccountBasedKey<BR>
@@ -15,8 +15,8 @@ import com.bid4win.commons.persistence.dao.exception.NotFoundEntityException;
  * <BR>
  * @author Emeric Fillâtre
  */
-public class AccountBasedKeyDao_<KEY extends AccountBasedKey<KEY, ACCOUNT>,
-                                ACCOUNT extends AccountAbstract<ACCOUNT>>
+public abstract class AccountBasedKeyDao_<KEY extends AccountBasedKey<KEY, ACCOUNT>,
+                                          ACCOUNT extends AccountAbstract<ACCOUNT>>
        extends AccountBasedEntitySingleDao_<KEY, String, ACCOUNT>
 {
   /**
