@@ -1,6 +1,7 @@
 package com.bid4win.commons.testing;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -35,6 +36,38 @@ public class Bid4WinTester
   {
     assertEquals(message, expected, result);
   }
+  /**
+  *
+  * TODO A COMMENTER
+  * @param expected TODO A COMMENTER
+  * @param result TODO A COMMENTER
+  */
+ public void checkNotEquals(Object expected, Object result)
+ {
+   this.checkNotEquals("Wrong result", expected, result);
+ }
+ /**
+  *
+  * TODO A COMMENTER
+  * @param message TODO A COMMENTER
+  * @param expected TODO A COMMENTER
+  * @param result TODO A COMMENTER
+  */
+ public void checkNotEquals(String message, Object expected, Object result)
+ {
+   try
+   {
+     assertEquals(message, expected, result);
+     message += ": Both objects should not be equals ";
+     fail(message);
+   }
+   catch(AssertionError error)
+   {
+     // Les deux objets sont bien différents
+   }
+ }
+
+
   /**
    * Class setup method
    * @throws Exception Issue not expected during class setup
