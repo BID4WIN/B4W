@@ -1,7 +1,6 @@
 package com.bid4win.tools.dependency.model;
 
 import java.io.File;
-import java.util.Set;
 
 import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.collection.Bid4WinList;
@@ -11,8 +10,8 @@ import com.bid4win.commons.core.io.UtilFile;
 import com.bid4win.commons.core.reference.MessageRef.ResourceRef;
 import com.bid4win.commons.persistence.entity.Bid4WinEntity;
 import com.bid4win.commons.persistence.entity.Bid4WinRelation;
-import com.bid4win.commons.persistence.entity.Bid4WinRelationNode;
 import com.bid4win.commons.persistence.entity.Bid4WinRelation.Type;
+import com.bid4win.commons.persistence.entity.Bid4WinRelationNode;
 import com.bid4win.commons.persistence.entity.renderer.Bid4WinEntityCollectionRenderer;
 
 /**
@@ -233,7 +232,7 @@ public class Project<CLASS extends Project<CLASS>>
    * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getRelationSet(com.bid4win.commons.persistence.entity.Bid4WinRelation)
    */
   @Override
-  protected Set<? extends Bid4WinEntity<?, ?>> getRelationSet(Bid4WinRelation relation)
+  protected Bid4WinSet<? extends Bid4WinEntity<?, ?>> getRelationSet(Bid4WinRelation relation)
   {
     if(relation.equals(Project.RELATION))
     {

@@ -62,13 +62,13 @@ public class SwissKnife extends Menu<Menu<?>>
       System.out.println("*** Session ID " + data.getSessionId());
       System.out.println("*** Process ID " + IdProcess.ID);
       System.out.println("*** " + data.getIpAddress().render());
-      if(data.getAccount() == null)
+      if(data.getConnection() == null)
       {
         System.out.println("*** Not connected");
       }
       else
       {
-        System.out.println("*** " + data.getAccount().getCredential().getLogin().getValue() + " connected");
+        System.out.println("*** " + data.getConnection().getAccount().getCredential().getLogin().getValue() + " connected");
       }
     }
     catch(Bid4WinException ex)
