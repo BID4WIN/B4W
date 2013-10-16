@@ -79,4 +79,16 @@ public class EmailTest extends Bid4WinEntityTester<AccountAbstractStub, EntityGe
     assertFalse(email2.equalsInternal(email1));
     assertTrue(email1.equalsInternal(email1));
   }
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.core.security.ProtectableObjectTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    // Pas de méthode protégée à tester
+  }
 }

@@ -14,6 +14,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.bid4win.commons.core.Bid4WinDate;
+import com.bid4win.commons.persistence.entity.account.security.Role;
 import com.bid4win.commons.persistence.entity.foo.FooAbstract;
 
 /**
@@ -47,5 +48,16 @@ public class FooCached<CLASS extends FooCached<CLASS>> extends FooAbstract<CLASS
   public FooCached(String value, Bid4WinDate date)
   {
     super(value, date);
+  }
+  /**
+   * Constructeur
+   * @param value Valeur de l'objet
+   * @param date Date de l'objet
+   * @param role Rôle de l'objet
+   * @throws IllegalArgumentException TODO A COMMENTER
+   */
+  public FooCached(String value, Bid4WinDate date, Role role) throws IllegalArgumentException
+  {
+    super(value, date, role);
   }
 }

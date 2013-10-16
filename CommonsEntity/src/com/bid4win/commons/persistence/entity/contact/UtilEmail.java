@@ -25,6 +25,6 @@ public class UtilEmail
   public static String checkAddress(String address) throws UserException
   {
     return UtilString.checkPattern("address", address, UtilEmail.EMAIL_PATTERN,
-                                   ConnectionRef.CONNECTION_EMAIL_INVALID_ERROR, 1);
+                                   ConnectionRef.EMAIL_INVALID_ERROR, 1);
   }
 }

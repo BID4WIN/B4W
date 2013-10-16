@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.bid4win.commons.core.UtilBoolean;
 import com.bid4win.commons.core.UtilObject;
 import com.bid4win.commons.core.UtilString;
-import com.bid4win.commons.core.collection.Bid4WinCollection;
+import com.bid4win.commons.core.collection.Bid4WinCollectionAbstract;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.RuntimeArgumentException;
 import com.bid4win.commons.persistence.usertype.Bid4WinStringUserType;
@@ -22,7 +22,7 @@ import com.bid4win.commons.persistence.usertype.Bid4WinStringUserType;
  * @author Emeric Fillâtre
  */
 public abstract class Bid4WinCollectionUserType<ELEMENT extends Serializable,
-                                                COLLECTION extends Bid4WinCollection<ELEMENT, ?, COLLECTION>>
+                                                COLLECTION extends Bid4WinCollectionAbstract<ELEMENT, ?, COLLECTION>>
        extends Bid4WinStringUserType<COLLECTION>
 {
   /** Séparateur utilisé entre les différents éléments de la collection */

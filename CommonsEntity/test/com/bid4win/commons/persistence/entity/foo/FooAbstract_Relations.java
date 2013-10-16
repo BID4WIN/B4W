@@ -1,5 +1,6 @@
 package com.bid4win.commons.persistence.entity.foo;
 
+import com.bid4win.commons.persistence.entity.Bid4WinEntityAutoID_Relations;
 import com.bid4win.commons.persistence.entity.Bid4WinEntity_Relations;
 
 /**
@@ -7,7 +8,7 @@ import com.bid4win.commons.persistence.entity.Bid4WinEntity_Relations;
  * <BR>
  * @author Emeric Fillâtre
  */
-public class FooAbstract_Relations extends Bid4WinEntity_Relations
+public class FooAbstract_Relations extends Bid4WinEntityAutoID_Relations
 {
   // Démarre la protection des relations
   static

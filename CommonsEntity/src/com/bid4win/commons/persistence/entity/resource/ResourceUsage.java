@@ -37,8 +37,7 @@ public class ResourceUsage<CLASS extends ResourceUsage<CLASS, TYPE, STORAGE>,
        extends Resource<CLASS, TYPE>
 {
   /** Stockage de la ressource associée à cette utilisation */
-  @Transient
-  private STORAGE storage = null;
+  @Transient private STORAGE storage = null;
 
   /**
    * Constructeur pour création par introspection

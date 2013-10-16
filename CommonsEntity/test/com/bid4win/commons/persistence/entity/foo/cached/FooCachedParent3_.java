@@ -14,7 +14,7 @@ import com.bid4win.commons.persistence.entity.Bid4WinEntity_;
 public abstract class FooCachedParent3_ extends FooCachedParent_
 {
   /** Définition de la map d'enfants inclus dans l'objet parent */
-  public static volatile MapAttribute<FooCachedParent3, String, FooCachedChild3> childMapInternal;
+  public static volatile MapAttribute<FooCachedParent3, String, FooCachedChild3> childMap;
 
   // Définition de la profondeur des relations
   static

@@ -4,7 +4,6 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 
-import com.bid4win.commons.core.Bid4WinDate;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
 
@@ -37,12 +36,12 @@ public class ConnectionHistoryAbstractStub
    * @param disconnectionReason Raison de fin de connexion
    * @throws UserException TODO A COMMENTER
    */
-  public ConnectionHistoryAbstractStub(AccountAbstractStub account, String sessionId, boolean remanent,
+  public ConnectionHistoryAbstractStub(ConnectionData data, AccountAbstractStub account/*, String sessionId, boolean remanent,
                                        IpAddress ipAddress, Bid4WinDate startDate,
-                                       DisconnectionReason disconnectionReason)
+                                       DisconnectionReason disconnectionReason*/)
          throws UserException
   {
-    super(account, sessionId, remanent, ipAddress, startDate, disconnectionReason);
+    super(data, account/*, sessionId, remanent, ipAddress, startDate, disconnectionReason*/);
   }
   /**
    *
@@ -50,9 +49,9 @@ public class ConnectionHistoryAbstractStub
    * @param connection TODO A COMMENTER
    * @throws UserException TODO A COMMENTER
    */
-  public ConnectionHistoryAbstractStub(ConnectionAbstractStub connection)
+  /*public ConnectionHistoryAbstractStub(ConnectionAbstractStub connection)
          throws UserException
   {
     super(connection);
-  }
+  }*/
 }

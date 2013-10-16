@@ -1,0 +1,1 @@
+mysql --host=localhost --user=root --password=admin < ./CREATE_SCHEMA.SQL

@@ -12,6 +12,7 @@ import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.reference.MessageRef;
+import com.bid4win.commons.core.security.exception.ProtectionException;
 import com.bid4win.commons.persistence.entity.EntityGenerator;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
 
@@ -150,12 +151,12 @@ public abstract class ResourceUsageTester<USAGE extends ResourceUsage<USAGE, TYP
     USAGE usage = this.createResource("path", "name", storage);
 
     assertTrue("Wrong storage", storage == usage.getStorage());
-    assertTrue("Wrong storage link", storage.getUsageList().contains(usage));
+    assertTrue("Wrong storage link", storage.getUsages().contains(usage));
     try
     {
       STORAGE result = usage.unlinkFromStorage();
       assertNull("Wrong storage", usage.getStorage());
-      assertFalse("Wrong storage link", storage.getUsageList().contains(usage));
+      assertFalse("Wrong storage link", storage.getUsages().contains(usage));
       assertTrue("Wrong result", storage == result);
     }
     catch(UserException ex)
@@ -189,5 +190,45 @@ public abstract class ResourceUsageTester<USAGE extends ResourceUsage<USAGE, TYP
     assertEquals("Wrong real name",
                  name + "_" + usage.getId() + "_" + usage.getUpdateForce(),
                  usage.getRealName());
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.persistence.entity.resource.ResourceTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    super.testCheckProtection();
+
+    this.startProtection();
+    STORAGE storage = this.createStorage(this.getType());
+    String protectionId = this.startProtection();
+    USAGE usage = this.createResource("path", "name", storage);
+    this.stopProtection();
+    try
+    {
+      usage.unlinkFromStorage();
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    this.stopProtection();
+    this.startProtection(protectionId);
+    try
+    {
+      usage.unlinkFromStorage();
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    assertTrue("Wrong storage", storage == usage.getStorage());
+    assertTrue("Wrong usage", storage.getUsages().contains(usage));
   }
 }

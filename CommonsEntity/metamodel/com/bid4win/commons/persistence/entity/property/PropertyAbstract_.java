@@ -21,7 +21,7 @@ public abstract class PropertyAbstract_ extends PropertyBase_
   /** Definition de la valeur de la propriété */
   public static volatile SingularAttribute<PropertyAbstract<?, ?>, String> value;
   /** Definition de la map de sous-propriétés de la propriété */
-  public static volatile MapAttribute<PropertyAbstract<?, ?>, String, PropertyAbstract<?, ?>> propertyMapInternal;
+  public static volatile MapAttribute<PropertyAbstract<?, ?>, String, PropertyAbstract<?, ?>> propertyMapDatabase;
   /** Definition de la propriété racine de la propriété */
   public static volatile SingularAttribute<PropertyAbstract<?, ?>, PropertyRootAbstract<?, ?>> root;
   /** Definition de la propriété parent de la propriété */

@@ -1,0 +1,1 @@
+CREATE USER 'bid4win'@'localhost' IDENTIFIED BY 'bid4win';

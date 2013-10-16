@@ -7,8 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.bid4win.commons.core.Bid4WinCoreTester;
 import com.bid4win.commons.core.collection.Bid4WinList;
+import com.bid4win.commons.core.security.ProtectableObjectTester;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
 
 /**
@@ -20,9 +20,9 @@ import com.bid4win.commons.persistence.entity.account.AccountAbstract;
  * <BR>
  * @author Emeric Fillâtre
  */
-public class Bid4WinEntityTester<ACCOUNT extends AccountAbstract<ACCOUNT>,
-                                 GENERATOR extends EntityGenerator<ACCOUNT>>
-       extends Bid4WinCoreTester
+public abstract class Bid4WinEntityTester<ACCOUNT extends AccountAbstract<ACCOUNT>,
+                                          GENERATOR extends EntityGenerator<ACCOUNT>>
+       extends ProtectableObjectTester
 {
   /** TODO A COMMENTER */
   @Autowired

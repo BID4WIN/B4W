@@ -32,7 +32,7 @@ public class UtilPassword
   {
     return UtilString.checkPattern("password", password,
                                    UtilPassword.CLEAR_PASSWORD_PATTERN,
-                                   ConnectionRef.CONNECTION_PASSWORD_INVALID_ERROR, 1);
+                                   ConnectionRef.PASSWORD_INVALID_ERROR, 1);
   }
 
   /**
@@ -47,6 +47,6 @@ public class UtilPassword
   {
     return UtilString.checkPattern("password", password,
                                    UtilPassword.HASHED_PASSWORD_PATTERN,
-                                   ConnectionRef.CONNECTION_PASSWORD_INVALID_ERROR, 1);
+                                   ConnectionRef.PASSWORD_INVALID_ERROR, 1);
   }
 }

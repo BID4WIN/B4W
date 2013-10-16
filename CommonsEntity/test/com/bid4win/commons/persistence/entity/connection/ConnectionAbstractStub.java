@@ -27,7 +27,8 @@ public class ConnectionAbstractStub
        extends ConnectionAbstract<ConnectionAbstractStub, ConnectionHistoryAbstractStub, AccountAbstractStub>
 {
   /** TODO A COMMENTER */
-  @Transient private Bid4WinDate startDate = null;
+  @Transient
+  private Bid4WinDate createDate = null;
 
   /**
    * Constructeur pour création par introspection
@@ -45,11 +46,11 @@ public class ConnectionAbstractStub
    * @throws UserException Si l'identifiant de session, le compte utilisateur ou
    * l'adresse IP de connexion en argument est nul
    */
-  public ConnectionAbstractStub(String sessionId, AccountAbstractStub account,
-                                IpAddress ipAddress, boolean remanent)
+  public ConnectionAbstractStub(/*String sessionId,*/ConnectionData data, AccountAbstractStub account/*,
+                                IpAddress ipAddress, boolean remanent*/)
          throws UserException
   {
-    super(sessionId, account, ipAddress, remanent);
+    super(/*sessionId,*/data, account/*, ipAddress, remanent*/);
   }
 
   /**
@@ -62,7 +63,7 @@ public class ConnectionAbstractStub
   @Override
   protected ConnectionHistoryAbstractStub createHistory() throws UserException
   {
-    return new ConnectionHistoryAbstractStub(this);
+    return new ConnectionHistoryAbstractStub(this.getData(), this.getAccount());
   }
 
   /**
@@ -72,7 +73,7 @@ public class ConnectionAbstractStub
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.entity.connection.ConnectionAbstract#endConnection(com.bid4win.commons.persistence.entity.connection.DisconnectionReason)
    */
-  @Override
+ /* @Override
   public ConnectionAbstractStub endConnection(DisconnectionReason disconnectionReason)
   {
     if(super.getStartDate() == null)
@@ -80,30 +81,30 @@ public class ConnectionAbstractStub
       this.setStartDate(new Bid4WinDate());
     }
     return super.endConnection(disconnectionReason);
-  }
+  }*/
 
   /**
    *
    * TODO A COMMENTER
    * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.connection.ConnectionAbstract#getStartDate()
+   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getCreateDate()
    */
-  @Override
-  public Bid4WinDate getStartDate()
+ /* @Override
+  public Bid4WinDate getCreateDate()
   {
-    if(super.getStartDate() != null)
+    if(super.getCreateDate() != null)
     {
-      return super.getStartDate();
+      return super.getCreateDate();
     }
-    return this.startDate;
+    return this.createDate;
   }
   /**
    *
    * TODO A COMMENTER
-   * @param startDate TODO A COMMENTER
+   * @param createDate TODO A COMMENTER
    */
-  public void setStartDate(Bid4WinDate startDate)
+/*  public void defineCreateDate(Bid4WinDate createDate)
   {
-    this.startDate = startDate;
-  }
+    this.createDate = createDate;
+  }*/
 }

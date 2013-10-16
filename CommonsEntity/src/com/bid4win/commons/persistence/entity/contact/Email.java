@@ -22,8 +22,7 @@ import com.bid4win.commons.persistence.entity.Bid4WinEmbeddable;
 public class Email extends Bid4WinEmbeddable<Email>
 {
   /** Adresse de l'email */
-  @Transient
-  private String address = null;
+  @Transient private String address = null;
 
   /**
    * Constructeur pour création par introspection

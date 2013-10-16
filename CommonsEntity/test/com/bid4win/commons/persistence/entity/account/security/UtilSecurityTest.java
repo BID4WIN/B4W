@@ -6,9 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
-import com.bid4win.commons.persistence.entity.Bid4WinEntityTester;
-import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
-import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
+import com.bid4win.commons.core.Bid4WinCoreTester;
 import com.bid4win.commons.persistence.entity.account.security.exception.AuthorizationException;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
@@ -21,7 +19,7 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
 @RunWith(Bid4WinJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-commons.xml")
-public class UtilSecurityTest extends Bid4WinEntityTester<AccountAbstractStub, EntityGeneratorStub>
+public class UtilSecurityTest extends Bid4WinCoreTester
 {
   /**
    * Test of checkRole(Role, Role ...), of class Role.

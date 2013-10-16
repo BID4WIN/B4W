@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
@@ -83,28 +84,15 @@ public class AccountBasedEntityTest
     super.testSameInternal_CLASS_boolean();
 
     long id = 123;
-/*    AccountBasedEntityMultipleStub key1 = new AccountBasedEntityMultipleStub(
-        this.createAccount("" + id));
-    AccountBasedEntityMultipleStub key2 = new AccountBasedEntityMultipleStub(
-        this.createAccount("" + id + 1)); TODO FAIRE LE TEST DANS LA BONNE CLASSE
-    this.checkSame(key1, key2);
-    this.checkSame(key2, key1);
-    this.checkNotIdentical(key1, key2);
-    this.checkNotIdentical(key2, key1);
-    key2 = new AccountBasedEntityMultipleStub(this.createAccount("" + id));
-    this.checkSame(key1, key2);
-    this.checkSame(key2, key1);
-    this.checkIdentical(key1, key2);
-    this.checkIdentical(key2, key1);*/
 
-    AccountBasedEntityStub entity1 = new AccountBasedEntityStub(id, this.getGenerator().createAccount("" + id));
-    AccountBasedEntityStub entity2 = new AccountBasedEntityStub(id + 1, this.getGenerator().createAccount("" + id));
+    AccountBasedEntityStub entity1 = new AccountBasedEntityStub(id, this.getGenerator().createAccount(UtilString.EMPTY + id));
+    AccountBasedEntityStub entity2 = new AccountBasedEntityStub(id + 1, this.getGenerator().createAccount(UtilString.EMPTY + id));
     this.checkSame(entity1, entity2);
     this.checkSame(entity2, entity1);
     this.checkNotIdentical(entity1, entity2);
     this.checkNotIdentical(entity2, entity1);
 
-    entity2 = new AccountBasedEntityStub(id, this.getGenerator().createAccount("" + id));
+    entity2 = new AccountBasedEntityStub(id, this.getGenerator().createAccount(UtilString.EMPTY + id));
     this.checkSame(entity1, entity2);
     this.checkSame(entity2, entity1);
     this.checkIdentical(entity1, entity2);

@@ -6,10 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.bid4win.commons.core.Bid4WinCoreTester;
 import com.bid4win.commons.core.exception.UserException;
-import com.bid4win.commons.persistence.entity.Bid4WinEntityTester;
-import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
-import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
 /**
@@ -19,7 +17,7 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
  */
 @RunWith(Bid4WinJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-commons.xml")
-public class UtilLoginTest extends Bid4WinEntityTester<AccountAbstractStub, EntityGeneratorStub>
+public class UtilLoginTest extends Bid4WinCoreTester
 {
   /** Identifiant le plus complexe autorisé */
   public final static String LOGIN = "123abc_-.$cba321";

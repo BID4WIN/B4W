@@ -53,17 +53,24 @@ public abstract class PropertyAbstract<CLASS extends PropertyAbstract<CLASS, PRO
        extends PropertyBase<CLASS, PROPERTY_ROOT, CLASS>
 {
   /** Clé de la propriété */
-  @Transient
-  private String key;
+  @Transient private String key;
   /** Valeur de la propriété */
-  @Transient
-  private String value;
+  @Transient private String value;
   /** Propriété parent de la propriété */
-  @Transient
-  private CLASS property = null;
+  @Transient private CLASS property = null;
   /** Propriété racine de la propriété */
-  @Transient
-  private PROPERTY_ROOT root = null;
+  @Transient private PROPERTY_ROOT root = null;
+  /** Présent uniquement pour la définition JPA de la map persistante */
+  @SuppressWarnings("unused")
+  // Annotation pour la persistence
+  @Access(AccessType.PROPERTY)
+  @OneToMany(mappedBy = "property", fetch = FetchType.LAZY,
+             cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+  @MapKey(name = "key")
+  @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+  // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
+  @OptimisticLock(excluded = false)
+  private Map<String, CLASS> propertyMapDatabase;
 
   /**
    * Constructeur pour création par introspection
@@ -130,7 +137,7 @@ public abstract class PropertyAbstract<CLASS extends PropertyAbstract<CLASS, PRO
          throws ProtectionException, ModelArgumentException, UserException
   {
     this(UtilObject.checkNotNull("toBeCopied", toBeCopied).getKey(), toBeCopied.getValue());
-    for(CLASS current : toBeCopied.getPropertySet())
+    for(CLASS current : toBeCopied.getProperties())
     {
       this.createProperty(current, (CLASS)this);
     }
@@ -297,12 +304,12 @@ public abstract class PropertyAbstract<CLASS extends PropertyAbstract<CLASS, PRO
     // La base est inconnue pour la propriété
     else
     {
-      baseKey = "";
+      baseKey = UtilString.EMPTY;
     }
     // Ajoute la propriété
     properties.put(fullKey, this.getValue());
     // Ajoute les sous-propriétés
-    for(CLASS property : this.getPropertySet())
+    for(CLASS property : this.getProperties())
     {
       properties.putAll(property.toProperties(baseKey));
     }
@@ -448,33 +455,23 @@ public abstract class PropertyAbstract<CLASS extends PropertyAbstract<CLASS, PRO
     return (PROPERTY_ROOT)this.unlinkFrom(PropertyAbstract_Relations.RELATION_ROOT,
                                           PropertyBase_Relations.RELATION_PROPERTY_MAP);
   }
-  /**
-   * Cette méthode permet d'ajouter une propriété à la propriété courante
-   * @param property {@inheritDoc}
-   * @throws ProtectionException {@inheritDoc}
-   * @throws ModelArgumentException {@inheritDoc}
-   * @throws UserException {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.property.PropertyBase#addProperty(com.bid4win.commons.persistence.entity.property.PropertyAbstract)
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public void addProperty(CLASS property)
-         throws ProtectionException, ModelArgumentException, UserException
-  {
-    UtilObject.checkNotNull("property", property);
-    property.linkTo((CLASS)this);
-  }
 
   /**
    * Cette méthode permet de définir la clé de la propriété
    * @param key Définition de la clé de la propriété
    * @throws ProtectionException Si la propriété courante est protégée
-   * @throws UserException Si on défini une clé invalide
+   * @throws UserException Si on défini une clé invalide ou si la propriété est
+   * liée à une propriété racine ou parent
    */
   public void defineKey(String key) throws ProtectionException, UserException
   {
     // Vérifie la protection de la propriété courante
     this.checkProtection();
+    // Vérifie que la propriété n'est pas lié
+    if(this.hasProperty() || this.hasRoot())
+    {
+      throw new UserException(this.getMessageRef(MessageRef.SUFFIX_EXISTING_ERROR));
+    }
     key = UtilString.trimNotNull(key).toLowerCase();
     this.setKey(UtilProperty.checkSimpleKey(key, this.getMessageRef()));
   }
@@ -642,24 +639,5 @@ public abstract class PropertyAbstract<CLASS extends PropertyAbstract<CLASS, PRO
   private void setRoot(PROPERTY_ROOT root)
   {
     this.root = root;
-  }
-
-  /**
-   * Getter de la map interne de sous-propriétés de la propriété courante
-   * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.property.PropertyBase#getPropertyMapInternal()
-   */
-  @Override
-  // Annotation pour la persistence
-  @Access(AccessType.PROPERTY)
-  @OneToMany(mappedBy = "property", fetch = FetchType.LAZY,
-             cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-  @MapKey(name = "key")
-  @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-  // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
-  @OptimisticLock(excluded = false)
-  protected Map<String, CLASS> getPropertyMapInternal()
-  {
-    return super.getPropertyMapInternal();
   }
 }

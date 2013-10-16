@@ -1,5 +1,6 @@
 package com.bid4win.commons.persistence.entity.resource;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.UserException;
+import com.bid4win.commons.core.security.exception.ProtectionException;
 import com.bid4win.commons.persistence.entity.EntityGenerator;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
 import com.bid4win.commons.persistence.entity.resource.store.ResourcePart;
@@ -55,7 +57,7 @@ public abstract class ResourceStorageMultiPartTester<STORAGE extends ResourceSto
 
     assertTrue(storage.hasPartType(storage.getPartTypeDefault()));
     assertFalse(storage.hasPartType(this.getPartType()));
-    for(USAGE usage : storage.getUsageList())
+    for(USAGE usage : storage.getUsages())
     {
       assertTrue(usage.hasPartType(storage.getPartTypeDefault()));
       assertFalse(usage.hasPartType(this.getPartType()));
@@ -64,7 +66,7 @@ public abstract class ResourceStorageMultiPartTester<STORAGE extends ResourceSto
     storage.addPartType(this.getPartType());
     assertTrue(storage.hasPartType(storage.getPartTypeDefault()));
     assertTrue(storage.hasPartType(this.getPartType()));
-    for(USAGE usage : storage.getUsageList())
+    for(USAGE usage : storage.getUsages())
     {
       assertTrue(usage.hasPartType(storage.getPartTypeDefault()));
       assertTrue(usage.hasPartType(this.getPartType()));
@@ -80,7 +82,7 @@ public abstract class ResourceStorageMultiPartTester<STORAGE extends ResourceSto
       System.out.println(ex.getMessage());
       assertTrue(storage.hasPartType(storage.getPartTypeDefault()));
       assertTrue(storage.hasPartType(this.getPartType()));
-      for(USAGE usage : storage.getUsageList())
+      for(USAGE usage : storage.getUsages())
       {
         assertTrue(usage.hasPartType(storage.getPartTypeDefault()));
         assertTrue(usage.hasPartType(this.getPartType()));
@@ -97,7 +99,7 @@ public abstract class ResourceStorageMultiPartTester<STORAGE extends ResourceSto
       System.out.println(ex.getMessage());
       assertTrue(storage.hasPartType(storage.getPartTypeDefault()));
       assertTrue(storage.hasPartType(this.getPartType()));
-      for(USAGE usage : storage.getUsageList())
+      for(USAGE usage : storage.getUsages())
       {
         assertTrue(usage.hasPartType(storage.getPartTypeDefault()));
         assertTrue(usage.hasPartType(this.getPartType()));
@@ -126,7 +128,7 @@ public abstract class ResourceStorageMultiPartTester<STORAGE extends ResourceSto
       System.out.println(ex.getMessage());
       assertTrue(storage.hasPartType(storage.getPartTypeDefault()));
       assertTrue(storage.hasPartType(this.getPartType()));
-      for(USAGE usage : storage.getUsageList())
+      for(USAGE usage : storage.getUsages())
       {
         assertTrue(usage.hasPartType(storage.getPartTypeDefault()));
         assertTrue(usage.hasPartType(this.getPartType()));
@@ -143,7 +145,7 @@ public abstract class ResourceStorageMultiPartTester<STORAGE extends ResourceSto
       System.out.println(ex.getMessage());
       assertTrue(storage.hasPartType(storage.getPartTypeDefault()));
       assertTrue(storage.hasPartType(this.getPartType()));
-      for(USAGE usage : storage.getUsageList())
+      for(USAGE usage : storage.getUsages())
       {
         assertTrue(usage.hasPartType(storage.getPartTypeDefault()));
         assertTrue(usage.hasPartType(this.getPartType()));
@@ -153,7 +155,7 @@ public abstract class ResourceStorageMultiPartTester<STORAGE extends ResourceSto
     storage.removePartType(this.getPartType());
     assertTrue(storage.hasPartType(storage.getPartTypeDefault()));
     assertFalse(storage.hasPartType(this.getPartType()));
-    for(USAGE usage : storage.getUsageList())
+    for(USAGE usage : storage.getUsages())
     {
       assertTrue(usage.hasPartType(storage.getPartTypeDefault()));
       assertFalse(usage.hasPartType(this.getPartType()));
@@ -169,11 +171,46 @@ public abstract class ResourceStorageMultiPartTester<STORAGE extends ResourceSto
       System.out.println(ex.getMessage());
       assertTrue(storage.hasPartType(storage.getPartTypeDefault()));
       assertFalse(storage.hasPartType(this.getPartType()));
-      for(USAGE usage : storage.getUsageList())
+      for(USAGE usage : storage.getUsages())
       {
         assertTrue(usage.hasPartType(storage.getPartTypeDefault()));
         assertFalse(usage.hasPartType(this.getPartType()));
       }
     }
+  }
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.persistence.entity.resource.ResourceStorageTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    super.testCheckProtection();
+
+    this.startProtection();
+    STORAGE storage = this.createResource("path", "name", this.getType());
+    String protectionId = this.startProtection();
+    USAGE usage = this.createUsage("usagePath", "usageName", storage);
+    this.stopProtection();
+    this.stopProtection();
+    this.startProtection(protectionId);
+
+    try
+    {
+      storage.addPartType(this.getPartType());
+      fail("Should fail with protected storage");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    assertEquals("Wrong part types", 1, storage.getPartTypes().size());
+    assertFalse("Wrong part types", storage.getPartTypes().contains(this.getPartType()));
+    assertEquals("Wrong part types", 1, usage.getPartTypes().size());
+    assertFalse("Wrong part types", usage.getPartTypes().contains(this.getPartType()));
   }
 }

@@ -30,11 +30,11 @@ public class ConnectionHistoryAbstractTest
    * @see com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractTester#createConnection(java.lang.String, com.bid4win.commons.persistence.entity.account.AccountAbstract, com.bid4win.commons.persistence.entity.connection.IpAddress, boolean)
    */
   @Override
-  protected ConnectionAbstractStub createConnection(String sessionId, AccountAbstractStub account,
-                                                    IpAddress ipAddress, boolean remanent)
+  protected ConnectionAbstractStub createConnection(ConnectionData data/*String sessionId*/, AccountAbstractStub account/*,
+                                                    IpAddress ipAddress, boolean remanent*/)
             throws UserException
   {
-    return new ConnectionAbstractStub(sessionId, account, ipAddress, remanent);
+    return new ConnectionAbstractStub(data/*sessionId*/, account/*, ipAddress, remanent*/);
   }
   /**
    *
@@ -47,6 +47,6 @@ public class ConnectionHistoryAbstractTest
   @Override
   protected ConnectionHistoryAbstractStub createHistory(ConnectionAbstractStub connection) throws UserException
   {
-    return new ConnectionHistoryAbstractStub(connection);
+    return new ConnectionHistoryAbstractStub(connection.getData(), connection.getAccount());
   }
 }

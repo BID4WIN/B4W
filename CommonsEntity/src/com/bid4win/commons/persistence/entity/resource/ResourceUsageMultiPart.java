@@ -37,8 +37,7 @@ public abstract class ResourceUsageMultiPart<CLASS extends ResourceUsageMultiPar
        implements Bid4WinResourceMultiPart<TYPE, PART_TYPE, PART>
 {
   /** Set des portions de l'utilisation de ressource */
-  @Transient
-  private Bid4WinSet<PART_TYPE> partTypeSet = new Bid4WinSet<PART_TYPE>();
+  @Transient private Bid4WinSet<PART_TYPE> partTypeSet = new Bid4WinSet<PART_TYPE>(this.getProtection());
 
   /**
    * Constructeur pour création par introspection
@@ -61,10 +60,7 @@ public abstract class ResourceUsageMultiPart<CLASS extends ResourceUsageMultiPar
          throws ProtectionException, ModelArgumentException, UserException
   {
     super(path, name, storage);
-    for(PART_TYPE partType : storage.getPartTypeSet())
-    {
-      this.addPartType(partType);
-    }
+    this.definePartTypeSet();
   }
 
   /**
@@ -96,36 +92,33 @@ public abstract class ResourceUsageMultiPart<CLASS extends ResourceUsageMultiPar
   {
     return this.getPartTypeSet().contains(partType);
   }
+
   /**
-   * Cette méthode permet d'ajouter à l'utilisation de ressource courante le type
-   * de portion en argument
-   * @param partType Type de portion à ajouter
-   * @throws ProtectionException Si l'utilisation de ressource courante est protégée
-   * @throws UserException Si la portion de ressource en argument est nulle ou
-   * déjà référencée
+   *
+   * TODO A COMMENTER
+   * @return TODO A COMMENTER
    */
-  protected void addPartType(PART_TYPE partType) throws ProtectionException, UserException
+  public Bid4WinSet<PART_TYPE> getPartTypes()
   {
-    this.add(this.getPartTypeSet(), partType, this.getPartTypeMessageRef());
+    return this.getPartTypeSet().clone(true);
   }
   /**
-   * Cette méthode permet de retirer de l'utilisation de ressource courante le type
-   * de portion en argument
-   * @param partType Type de portion à retirer
-   * @throws ProtectionException Si l'utilisation de ressource courante est protégée
-   * @throws UserException Si la portion de ressource en argument est nulle ou
-   * pas référencée
+   * Met à jour le set des portions de l'utilisation de ressource en récupérant
+   * celui de son stockage
    */
-  protected void removePartType(PART_TYPE partType) throws ProtectionException, UserException
+  protected void definePartTypeSet()
   {
-    this.remove(this.getPartTypeSet(), partType, this.getPartTypeMessageRef());
+    this.setPartTypeSet(this.getStorage().getPartTypes());
   }
 
+  /** #################################################################### **/
+  /** ########################### PERSISTENCE ############################ **/
+  /** #################################################################### **/
   /**
    * Getter du set des portions de l'utilisation de ressource
    * @return Le set des portions de l'utilisation de ressource
    */
-  protected Bid4WinSet<PART_TYPE> getPartTypeSet()
+  private Bid4WinSet<PART_TYPE> getPartTypeSet()
   {
     return this.partTypeSet;
   }

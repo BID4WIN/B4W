@@ -6,7 +6,7 @@ CREATE TABLE `RESOURCE_STORAGE_STUB`
   `VERSION`       int(3)       NOT NULL                COMMENT 'Version de la ressource',
   `CREATE_DATE`   varchar(23)  NOT NULL                COMMENT 'Date de creation de la ressource',
   `UPDATE_DATE`   varchar(23)  NOT NULL                COMMENT 'Date de modification de la ressource',
-  `UPDATE_FORCE`  int(5)       NOT NULL                COMMENT 'Champs permettant le forcage de la modification de la ressource',
+  `UPDATE_FORCE`  int(5)       NOT NULL                COMMENT 'Champ permettant le forcage de la modification de la ressource',
   `PATH`          varchar(150) NOT NULL                COMMENT 'Emplacement de stockage de la ressource',
   `NAME`          varchar(50)  NOT NULL                COMMENT 'Nom de la ressource',
   `RESOURCE_TYPE` varchar(5)   NOT NULL                COMMENT 'Type de la ressource',

@@ -11,7 +11,6 @@ import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.io.UtilFile;
 import com.bid4win.commons.core.reference.MessageRef.ResourceRef;
-import com.bid4win.commons.core.security.ObjectProtector;
 import com.bid4win.commons.core.security.exception.ProtectionException;
 import com.bid4win.commons.persistence.entity.Bid4WinEntityTester;
 import com.bid4win.commons.persistence.entity.EntityGenerator;
@@ -68,7 +67,7 @@ public abstract class ResourceTester<RESOURCE extends Resource<RESOURCE, TYPE>,
   @Test
   public void testConstructor_etc() throws Bid4WinException
   {
-    String path = "";
+    String path = UtilString.EMPTY;
     String name = " name ";
     TYPE type = this.getType();
     try
@@ -147,13 +146,11 @@ public abstract class ResourceTester<RESOURCE extends Resource<RESOURCE, TYPE>,
 
   /**
    * Test of definePath(String), of class Resource.
-   * @throws Bid4WinException Issue not expected during this test
    */
   @Test
-  public void testDefinePath_String() throws Bid4WinException
+  public void testDefinePath_String()
   {
     String path = "path";
-    String protectionId = ObjectProtector.startProtection();
     RESOURCE resource = null;
     try
     {
@@ -162,31 +159,19 @@ public abstract class ResourceTester<RESOURCE extends Resource<RESOURCE, TYPE>,
       resource.definePath(path);
       assertEquals("Wrong path", path, resource.getPath());
     }
-    finally
+    catch(UserException ex)
     {
-      ObjectProtector.stopProtection(protectionId);
-    }
-    try
-    {
-      resource.definePath("new" + path);
-      fail("Should fail with protected object");
-    }
-    catch(ProtectionException ex)
-    {
-      System.out.println(ex.getMessage());
-      assertEquals("Wrong path", path, resource.getPath());
+      ex.printStackTrace();
+      fail("Instanciation should not fail: " + ex.getMessage());
     }
   }
-
   /**
    * Test of defineName(String), of class Resource.
-   * @throws Bid4WinException Issue not expected during this test
    */
   @Test
-  public void testDefineName_String() throws Bid4WinException
+  public void testDefineName_String()
   {
     String name = "name";
-    String protectionId = ObjectProtector.startProtection();
     RESOURCE resource = null;
     try
     {
@@ -195,30 +180,21 @@ public abstract class ResourceTester<RESOURCE extends Resource<RESOURCE, TYPE>,
       resource.defineName(name);
       assertEquals("Wrong name", name, resource.getName());
     }
-    finally
+    catch(UserException ex)
     {
-      ObjectProtector.stopProtection(protectionId);
-    }
-    try
-    {
-      resource.defineName("new" + name);
-      fail("Should fail with protected object");
-    }
-    catch(ProtectionException ex)
-    {
-      System.out.println(ex.getMessage());
-      assertEquals("Wrong name", name, resource.getName());
+      ex.printStackTrace();
+      fail("Instanciation should not fail: " + ex.getMessage());
     }
   }
   /**
    * Test of defineType(TYPE), of class Resource.
    * @throws Bid4WinException Issue not expected during this test
    */
+  @SuppressWarnings("unused")
   @Test
   public void testDefineType_TYPE() throws Bid4WinException
   {
     TYPE type = this.getType();
-    String protectionId = ObjectProtector.startProtection();
     RESOURCE resource = null;
     try
     {
@@ -227,19 +203,10 @@ public abstract class ResourceTester<RESOURCE extends Resource<RESOURCE, TYPE>,
       resource.defineType(type);
       assertEquals("Wrong type", type, resource.getType());
     }
-    finally
+    catch(UserException ex)
     {
-      ObjectProtector.stopProtection(protectionId);
-    }
-    try
-    {
-      resource.defineType(type);
-      fail("Should fail with protected object");
-    }
-    catch(ProtectionException ex)
-    {
-      System.out.println(ex.getMessage());
-      assertEquals("Wrong type", type, resource.getType());
+      ex.printStackTrace();
+      fail("Instanciation should not fail: " + ex.getMessage());
     }
   }
 
@@ -278,5 +245,55 @@ public abstract class ResourceTester<RESOURCE extends Resource<RESOURCE, TYPE>,
     fullPath = UtilFile.concatRelativePath(ResourceRef.RESOURCE, resource.getRealPath(), fullPath);
     fullPath = fullPath.toLowerCase();
     assertEquals("Wrong full path", fullPath, resource.getFullPath());
+  }
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.core.security.ProtectableObjectTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    this.startProtection();
+    RESOURCE resource = this.createResource("path", "name", this.getType());
+    String path = resource.getPath();
+    String name = resource.getName();
+    TYPE type = resource.getType();
+    this.stopProtection();
+
+    try
+    {
+      resource.definePath("new" + path);
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    try
+    {
+      resource.defineName("new" + name);
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    try
+    {
+      resource.defineType(type);
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+
+    assertEquals("Wrong path", path, resource.getPath());
+    assertEquals("Wrong name", name, resource.getName());
+    assertEquals("Wrong type", type, resource.getType());
   }
 }

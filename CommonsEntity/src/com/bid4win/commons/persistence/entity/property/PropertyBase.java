@@ -2,17 +2,16 @@ package com.bid4win.commons.persistence.entity.property;
 
 import java.util.Map;
 import java.util.Properties;
-import java.util.Map.Entry;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import com.bid4win.commons.core.UtilObject;
+import com.bid4win.commons.core.UtilString;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.collection.Bid4WinMap;
-import com.bid4win.commons.core.collection.Bid4WinSet;
 import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.reference.MessageRef;
@@ -39,8 +38,10 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
        extends Bid4WinEntity<CLASS, Integer>
 {
   /** Map de sous-propriétés de la propriété */
-  @Transient
-  private Bid4WinMap<String, PROPERTY> propertyMap = new Bid4WinMap<String, PROPERTY>();
+  @Transient private Bid4WinMap<String, PROPERTY> propertyMap;
+  {
+    this.setPropertyMapInternal(new Bid4WinMap<String, PROPERTY>());
+  }
 
   /**
    * Constructeur pour création par introspection
@@ -67,9 +68,9 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
   {
     Properties properties = new Properties();
     // Ajoute les sous-propriétés
-    for(PROPERTY property : this.getPropertySet())
+    for(PROPERTY property : this.getProperties())
     {
-      properties.putAll(property.toProperties(""));
+      properties.putAll(property.toProperties(UtilString.EMPTY));
     }
     return properties;
   }
@@ -88,7 +89,7 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
     return nodeList;
   }
   /**
-   * Permet de récupérer la map de sous-propriétés de l'entité si elle correspondant
+   * Permet de récupérer la map de sous-propriétés de l'entité si elle correspond
    * à la relation en argument. Elle doit être redéfinie pour toute nouvelle relation
    * de type map à remonter
    * @param relation {@inheritDoc}
@@ -96,7 +97,7 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
    * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getRelationMap(com.bid4win.commons.persistence.entity.Bid4WinRelation)
    */
   @Override
-  protected Map<?, ? extends Bid4WinEntity<?, ?>> getRelationMap(Bid4WinRelation relation)
+  protected Bid4WinMap<?, ? extends Bid4WinEntity<?, ?>> getRelationMap(Bid4WinRelation relation)
   {
     if(relation.equals(PropertyBase_Relations.RELATION_PROPERTY_MAP))
     {
@@ -105,8 +106,8 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
     return super.getRelationMap(relation);
   }
   /**
-   *
-   * TODO A COMMENTER
+   * Permet de récupérer la clé associée à la propriété en paramètre pour son classement
+   * dans la map si elle correspond à la relation en argument
    * @param relation {@inheritDoc}
    * @param value {@inheritDoc}
    * @return {@inheritDoc}
@@ -122,10 +123,8 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
     }
     return super.getRelationMapKey(relation, value);
   }
-
   /**
-   *
-   * TODO A COMMENTER
+   * Permet de définir la base des références de messages liées aux propriétés
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getMessageRefBase()
    */
@@ -159,52 +158,18 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
    */
   public PROPERTY getProperty(String key)
   {
-    PROPERTY property = this.getPropertyMap().get(UtilProperty.getFirstKey(key));
+    PROPERTY property = this.getPropertyMapInternal().get(UtilProperty.getFirstKey(key));
     // On doit continuer à descendre l'arbre de sous-propriétés
-    if(property != null && !UtilProperty.removeFirstKey(key).equals(""))
+    if(property != null && !UtilProperty.removeFirstKey(key).equals(UtilString.EMPTY))
     {
       property = property.getProperty(UtilProperty.removeFirstKey(key));
     }
     // La clé en argument est incomplète
-    else if(UtilProperty.getLastKey(key).equals(""))
+    else if(UtilProperty.getLastKey(key).equals(UtilString.EMPTY))
     {
       property = null;
     }
     return property;
-  }
-  /**
-   * Cette méthode doit permettre d'ajouter une propriété à la propriété courante
-   * @param property Propriété à ajouter à la propriété courante
-   * @throws ProtectionException Si la propriété courante ou celle en argument est
-   * protégée
-   * @throws ModelArgumentException Si la propriété en argument est nulle ou déjà
-   * liée
-   * @throws UserException Si la propriété en argument est déjà référencée par la
-   * propriété courante
-   */
-  public abstract void addProperty(PROPERTY property)
-         throws ProtectionException, ModelArgumentException, UserException;
-  /**
-   * Cette méthode doit permettre d'ajouter un set de propriétés à la propriété
-   * courante
-   * @param propertySet Set de propriétés à ajouter à la propriété courante
-   * @throws ProtectionException Si la propriété courante ou une de celles en argument
-   * est protégée
-   * @throws ModelArgumentException Si une des propriétés en argument est nulle
-   * ou déjà liée
-   * @throws UserException Si une des propriétés en argument est déjà référencée
-   * par la propriété courante
-   */
-  public void addPropertySet(Bid4WinSet<PROPERTY> propertySet)
-         throws ProtectionException, ModelArgumentException, UserException
-  {
-    // Vérifie la protection de la propriété courante
-    this.checkProtection();
-    UtilObject.checkNotNull("propertySet", propertySet);
-    for(PROPERTY property : propertySet)
-    {
-      this.addProperty(property);
-    }
   }
   /**
    * Ajoute une sous-propriété à la propriété courante et crée les propriétés
@@ -217,6 +182,7 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
    * @throws UserException Si la clé est invalide ou si on positionne une propriété
    * déjà référencée
    */
+  @SuppressWarnings("unchecked")
   public PROPERTY addProperty(String key, String value)
          throws ProtectionException, ModelArgumentException, UserException
   {
@@ -228,10 +194,10 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
     // Récupère la propriété potentiellement existante
     PROPERTY property = this.getProperty(firstKey);
     // On est sur la dernière clé ou la propriété n'existe pas
-    if(key.equals("") || property == null)
+    if(key.equals(UtilString.EMPTY) || property == null)
     {
       // On crée la dernière propriété de l'arbre
-      if(key.equals(""))
+      if(key.equals(UtilString.EMPTY))
       {
         property = this.createProperty(firstKey, value);
       }
@@ -241,8 +207,14 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
         property = this.createProperty(firstKey, null);
         property.addProperty(key, value);
       }
-      // On ajoute la propriété à la propriété courante
-      this.addProperty(property);
+      if(this instanceof PropertyRootAbstract)
+      {
+        property.linkTo((PROPERTY_ROOT)this);
+      }
+      else
+      {
+        property.linkTo((PROPERTY)this);
+      }
     }
     else
     {
@@ -251,6 +223,7 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
     // On retourne la première propriété créée dans l'arbre
     return property;
   }
+
   /**
    * Cette méthode doit être définie afin de créer le bon type de propriété gérée
    * @param key Clé de la propriété à créer
@@ -268,9 +241,9 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
   public int getTotalPropertyNb()
   {
     int totalNb = this.getPropertyNb();
-    for(Entry<String, PROPERTY> entry : this.getPropertyMapInternal().entrySet())
+    for(PROPERTY property : this.getPropertyMapInternal().values())
     {
-      totalNb += entry.getValue().getTotalPropertyNb();
+      totalNb += property.getTotalPropertyNb();
     }
     return totalNb;
   }
@@ -280,31 +253,45 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
    */
   public int getPropertyNb()
   {
-    return this.getPropertyMap().size();
+    return this.getPropertyMapInternal().size();
   }
   /**
-   * Getter du set de sous-propriétés de la propriété courante
-   * @return Le set de sous-propriétés de la propriété courante
+   * Getter des sous-propriétés de la propriété courante
+   * @return Les sous-propriétés de la propriété courante
    */
-  public Bid4WinSet<PROPERTY> getPropertySet()
+  public Bid4WinCollection<PROPERTY> getProperties()
   {
-    return new Bid4WinSet<PROPERTY>(this.getPropertyMap().values());
+    return this.getPropertyMapInternal().valuesProtected();
   }
 
   /**
-   * Getter de la map de sous-propriétés de la propriété courante
-   * @return La map de sous-propriétés de la propriété courante
+   *
+   * TODO A COMMENTER
+   * @param map TODO A COMMENTER
+   * @return TODO A COMMENTER
    */
-  private Bid4WinMap<String, PROPERTY> getPropertyMap()
+  public boolean isPropertyMapInternal(Map<?, ?> map)
+  {
+    return this.getPropertyMapInternal() == map;
+  }
+  /**
+   * Getter de la map interne de sous-propriétés de la propriété courante
+   * @return La map interne de sous-propriétés de la propriété courante
+   */
+  private Bid4WinMap<String, PROPERTY> getPropertyMapInternal()
   {
     return this.propertyMap;
   }
   /**
-   * Setter de la map de sous-propriétés de la propriété courante
-   * @param propertyMap Map de sous-propriétés de la propriété courante à positionner
+   * Setter de la map interne de sous-propriétés de la propriété courante
+   * @param propertyMap Map interne de sous-propriétés de la propriété courante
+   * à positionner
+   * @throws ProtectionException Si la protection de la map en paramètre échoue
    */
-  private void setPropertyMap(Bid4WinMap<String, PROPERTY> propertyMap)
+  private void setPropertyMapInternal(Bid4WinMap<String, PROPERTY> propertyMap)
+          throws ProtectionException
   {
+    propertyMap.protect(this.getProtection());
     this.propertyMap = propertyMap;
   }
 
@@ -312,21 +299,22 @@ public abstract class PropertyBase<CLASS extends PropertyBase<CLASS, PROPERTY_RO
   /** ########################### PERSISTENCE ############################ **/
   /** #################################################################### **/
   /**
-   * Getter de la map interne de sous-propriétés de la propriété courante
-   * @return La map interne de sous-propriétés de la propriété courante
+   * Getter de la map persistante de sous-propriétés de la propriété courante
+   * @return La map persistante de sous-propriétés de la propriété courante
    */
-  protected Map<String, PROPERTY> getPropertyMapInternal()
+  @SuppressWarnings("unused")
+  private Map<String, PROPERTY> getPropertyMapDatabase()
   {
-    return this.getPropertyMap().getInternal();
+    return this.getPropertyMapInternal().getInternal();
   }
   /**
-   * Setter de la map interne de sous-propriétés de la propriété courante
-   * @param propertyMap Map interne de sous-propriétés de la propriété courante
+   * Setter de la map persistante de sous-propriétés de la propriété courante
+   * @param propertyMap Map persistante de sous-propriétés de la propriété courante
    * à positionner
    */
   @SuppressWarnings(value = "unused")
-  private void setPropertyMapInternal(Map<String, PROPERTY> propertyMap)
+  private void setPropertyMapDatabase(Map<String, PROPERTY> propertyMap)
   {
-    this.setPropertyMap(new Bid4WinMap<String, PROPERTY>(propertyMap, true));
+    this.setPropertyMapInternal(new Bid4WinMap<String, PROPERTY>(propertyMap, true));
   }
 }

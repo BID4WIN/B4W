@@ -11,9 +11,11 @@ import java.util.Properties;
 
 import org.junit.Test;
 
+import com.bid4win.commons.core.UtilString;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.exception.Bid4WinException;
-import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.UserException;
+import com.bid4win.commons.core.security.exception.ProtectionException;
 import com.bid4win.commons.persistence.entity.Bid4WinEntityTester;
 import com.bid4win.commons.persistence.entity.EntityGenerator;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
@@ -167,12 +169,12 @@ public abstract class PropertyBaseTester<BASE extends PropertyBase<BASE, ROOT, P
     // Ajout d'une propriété multiple
     result = base.addProperty(UtilProperty.computeKey(key,"b", "c", "d"), "value d");
     assertNotNull("Property was not added", base.getProperty(key).getProperty("b"));
-    assertEquals("Property was badly added", "", base.getProperty(key).getProperty("b").getValue());
+    assertEquals("Property was badly added", UtilString.EMPTY, base.getProperty(key).getProperty("b").getValue());
     assertNotNull("Result should not be null", result);
     assertTrue("Wrong result", base.getProperty(key).getProperty("b") == result);
     assertNotNull("Property was not added",
                   base.getProperty(key).getProperty("b").getProperty("c"));
-    assertEquals("Property was badly added", "",
+    assertEquals("Property was badly added", UtilString.EMPTY,
                  base.getProperty(key).getProperty("b").getProperty("c").getValue());
     assertNotNull("Property was not added",
                   base.getProperty(key).getProperty("b").getProperty("c").getProperty("d"));
@@ -206,11 +208,49 @@ public abstract class PropertyBaseTester<BASE extends PropertyBase<BASE, ROOT, P
       System.out.println(ex.getMessage());
     }
   }
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.core.security.ProtectableObjectTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    this.startProtection();
+    BASE base = this.createBase();
+    base.addProperty("a", "b");
+    this.stopProtection();
+    try
+    {
+      base.addProperty("c", "d");
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+      assertEquals("Wrong properties nb", 1, base.getPropertyNb());
+    }
+    try
+    {
+      Bid4WinCollection<PROPERTY> properties = base.getProperties();
+      properties.clear();
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+      assertEquals("Wrong properties nb", 1, base.getPropertyNb());
+    }
+  }
+
   /**
    * Test of addProperty(Property), of class PropertyBase.
    * @throws Bid4WinException Issue not expected during this test
    */
-  @Test
+ /* @Test
   public void testAddProperty_CLASS() throws Bid4WinException
   {
     BASE base = this.createBase();

@@ -21,7 +21,7 @@ public class AuthorizationException extends UserException
    */
   public AuthorizationException()
   {
-    this(ConnectionRef.CONNECTION_PERMISSION_NOT_GRANTED_ERROR);
+    this(ConnectionRef.PERMISSION_NOT_GRANTED_ERROR);
   }
   /**
    * Constructeur

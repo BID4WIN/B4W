@@ -87,7 +87,7 @@ public class UtilIpAddress
   public static String checkAddress(String ip, String pattern, int partSize, String separator)
          throws UserException
   {
-    UtilString.checkPattern("ip", ip, pattern, ConnectionRef.CONNECTION_IP_INVALID_ERROR, 1);
+    UtilString.checkPattern("ip", ip, pattern, ConnectionRef.IP_INVALID_ERROR, 1);
     String[] string = ip.split("[" + separator + "]");
     StringBuffer result = new StringBuffer();
     for(int i = 0 ; i < string.length ; i++)

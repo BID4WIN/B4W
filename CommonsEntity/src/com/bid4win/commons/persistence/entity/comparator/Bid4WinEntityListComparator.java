@@ -1,9 +1,11 @@
 package com.bid4win.commons.persistence.entity.comparator;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import com.bid4win.commons.core.collection.Bid4WinList;
+import com.bid4win.commons.core.exception.Bid4WinRuntimeException;
 import com.bid4win.commons.persistence.entity.Bid4WinEntity;
 import com.bid4win.commons.persistence.entity.Bid4WinRelationNode;
 import com.bid4win.commons.persistence.entity.collection.Bid4WinMatchReferenceMap;
@@ -27,6 +29,20 @@ public class Bid4WinEntityListComparator<ENTITY extends Bid4WinEntity<?, ?>,
       instance = new Bid4WinEntityListComparator<Bid4WinEntity<?, ?>,
                                                  Bid4WinEntityComparator<Bid4WinEntity<?, ?>>>(
           Bid4WinEntityComparator.getInstanceEntity());
+  /**
+   *
+   * TODO A COMMENTER
+   * @return TODO A COMMENTER
+   * @see com.bid4win.commons.persistence.entity.comparator.Bid4WinEntityCollectionComparator#getInstanceObjectCollection()
+   * @deprecated TODO A COMMENTER
+   */
+  @Deprecated
+  public static Bid4WinEntityCollectionComparator<Bid4WinEntity<?, ?>, Collection<? extends Bid4WinEntity<?, ?>>,
+                                                  Bid4WinEntityComparator<Bid4WinEntity<?, ?>>>
+         getInstanceEntityCollection()
+  {
+    throw new Bid4WinRuntimeException("Deprecated");
+  }
   /**
    * Le comparateur est un singleton. On passe donc par cette méthode pour récupérer
    * l'unique objet en mémoire

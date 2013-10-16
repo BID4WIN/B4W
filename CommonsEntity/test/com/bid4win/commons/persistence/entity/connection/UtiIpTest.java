@@ -7,10 +7,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.bid4win.commons.core.Bid4WinCoreTester;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.UserException;
-import com.bid4win.commons.persistence.entity.Bid4WinEntityTester;
-import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
-import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
 /**
@@ -20,7 +19,7 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
  */
 @RunWith(Bid4WinJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-commons.xml")
-public class UtiIpTest extends Bid4WinEntityTester<AccountAbstractStub, EntityGeneratorStub>
+public class UtiIpTest extends Bid4WinCoreTester
 {
   /**
    * Test of checkAddressV4(String), of class UtilIp.
@@ -50,7 +49,7 @@ public class UtiIpTest extends Bid4WinEntityTester<AccountAbstractStub, EntityGe
     }
     try
     {
-      UtilIpAddress.checkAddressV4("");
+      UtilIpAddress.checkAddressV4(UtilString.EMPTY);
       fail("Check should have failed with invalid address");
     }
     catch(UserException ex)
@@ -194,7 +193,7 @@ public class UtiIpTest extends Bid4WinEntityTester<AccountAbstractStub, EntityGe
     }
     try
     {
-      UtilIpAddress.checkAddressV6("");
+      UtilIpAddress.checkAddressV6(UtilString.EMPTY);
       fail("Check should have failed with invalid address");
     }
     catch(UserException ex)

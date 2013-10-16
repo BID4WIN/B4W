@@ -5,8 +5,8 @@ import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import com.bid4win.commons.core.UtilObject;
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
+import com.bid4win.commons.core.UtilObject;
 import com.bid4win.commons.core.collection.Bid4WinSet;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.io.resource.Bid4WinResourceMultiPart;
@@ -37,8 +37,10 @@ public abstract class ResourceStorageMultiPart<CLASS extends ResourceStorageMult
        implements Bid4WinResourceMultiPart<TYPE, PART_TYPE, PART>
 {
   /** Set des portions du stockage de ressource */
-  @Transient
-  private Bid4WinSet<PART_TYPE> partTypeSet = new Bid4WinSet<PART_TYPE>(this.getPartTypeDefault());
+  @Transient private Bid4WinSet<PART_TYPE> partTypeSet = new Bid4WinSet<PART_TYPE>(this.getProtection());
+  {
+    this.getPartTypeSet().add(this.getPartTypeDefault());
+  }
 
   /**
    * Constructeur pour création par introspection
@@ -100,9 +102,9 @@ public abstract class ResourceStorageMultiPart<CLASS extends ResourceStorageMult
   public void addPartType(PART_TYPE partType) throws ProtectionException, UserException
   {
     this.add(this.getPartTypeSet(), partType, this.getPartTypeMessageRef());
-    for(USAGE usage : this.getUsageList())
+    for(USAGE usage : this.getUsages())
     {
-      usage.addPartType(partType);
+      usage.definePartTypeSet();
     }
   }
   /**
@@ -118,17 +120,29 @@ public abstract class ResourceStorageMultiPart<CLASS extends ResourceStorageMult
     UtilObject.checkDiffers("default", partType, this.getPartTypeDefault(),
                             this.getPartTypeMessageRef(MessageRef.SUFFIX_INVALID_ERROR));
     this.remove(this.getPartTypeSet(), partType, this.getPartTypeMessageRef());
-    for(USAGE usage : this.getUsageList())
+    for(USAGE usage : this.getUsages())
     {
-      usage.removePartType(partType);
+      usage.definePartTypeSet();
     }
   }
+  /**
+   *
+   * TODO A COMMENTER
+   * @return TODO A COMMENTER
+   */
+  public Bid4WinSet<PART_TYPE> getPartTypes()
+  {
+    return this.getPartTypeSet().clone(true);
+  }
 
+  /** #################################################################### **/
+  /** ########################### PERSISTENCE ############################ **/
+  /** #################################################################### **/
   /**
    * Getter du set des portions du stockage de ressource
    * @return Le set des portions du stockage de ressource
    */
-  protected Bid4WinSet<PART_TYPE> getPartTypeSet()
+  private Bid4WinSet<PART_TYPE> getPartTypeSet()
   {
     return this.partTypeSet;
   }

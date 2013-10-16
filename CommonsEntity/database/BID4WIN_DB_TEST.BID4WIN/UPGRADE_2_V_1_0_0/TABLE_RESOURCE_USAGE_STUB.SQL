@@ -6,7 +6,7 @@ CREATE TABLE `RESOURCE_USAGE_STUB`
   `VERSION`       int(3)       NOT NULL                COMMENT 'Version de l utilisation d une ressource',
   `CREATE_DATE`   varchar(23)  NOT NULL                COMMENT 'Date de creation de l utilisation d une ressource',
   `UPDATE_DATE`   varchar(23)  NOT NULL                COMMENT 'Date de modification de l utilisation d une ressource',
-  `UPDATE_FORCE`  int(5)       NOT NULL                COMMENT 'Champs permettant le forcage de la modification de l utilisation d une ressource',
+  `UPDATE_FORCE`  int(5)       NOT NULL                COMMENT 'Champ permettant le forcage de la modification de l utilisation d une ressource',
   `PATH`          varchar(150) NOT NULL                COMMENT 'Emplacement de stockage de l utilisation d une ressource',
   `NAME`          varchar(50)  NOT NULL                COMMENT 'Nom de l utilisation d une ressource',
   `FULL_PATH`     varchar(250) NOT NULL                COMMENT 'Chemin complet d acces a l utilisation d une ressource',

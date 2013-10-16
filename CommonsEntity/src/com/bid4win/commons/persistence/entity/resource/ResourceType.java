@@ -23,9 +23,9 @@ public class ResourceType<CLASS extends ResourceType<CLASS>>
   private static final long serialVersionUID = 5609000437063539644L;
 
   /** Extension liée au type de ressource */
-  private String extension = "";
+  private String extension = UtilString.EMPTY;
   /** Potentiel classement spécifique du type de ressource */
-  private String pathPrefix = "";
+  private String pathPrefix = UtilString.EMPTY;
 
   /**
    * Constructeur d'un type de resource

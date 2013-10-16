@@ -41,8 +41,10 @@ public class ResourceStorage<CLASS extends ResourceStorage<CLASS, TYPE, USAGE>,
        extends Resource<CLASS, TYPE>
 {
   /** Set des utilisations de ressources associées au stockage courant */
-  @Transient
-  private Bid4WinSet<USAGE> usageSet = new Bid4WinSet<USAGE>();
+  @Transient private Bid4WinSet<USAGE> usageSet;
+  {
+    this.setUsageSetInternal(new Bid4WinSet<USAGE>());
+  }
 
   /**
    * Constructeur pour création par introspection
@@ -103,7 +105,7 @@ public class ResourceStorage<CLASS extends ResourceStorage<CLASS, TYPE, USAGE>,
    * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getRelationSet(com.bid4win.commons.persistence.entity.Bid4WinRelation)
    */
   @Override
-  protected Set<? extends Bid4WinEntity<?, ?>> getRelationSet(Bid4WinRelation relation)
+  protected Bid4WinSet<? extends Bid4WinEntity<?, ?>> getRelationSet(Bid4WinRelation relation)
   {
     if(relation.equals(ResourceStorage_Relations.RELATION_USAGE_SET))
     {
@@ -124,7 +126,7 @@ public class ResourceStorage<CLASS extends ResourceStorage<CLASS, TYPE, USAGE>,
    */
   public USAGE getUsage(long usageId) throws UserException
   {
-    for(USAGE usage : this.getUsageSet())
+    for(USAGE usage : this.getUsageSetInternal())
     {
       if(usage.getId().equals(usageId))
       {
@@ -134,28 +136,33 @@ public class ResourceStorage<CLASS extends ResourceStorage<CLASS, TYPE, USAGE>,
     throw new UserException(this.getMessageRef("usage", MessageRef.SUFFIX_UNKNOWN_ERROR));
   }
   /**
-   * Getter de la liste des utilisations de ressources associées au stockage courant
-   * @return La liste des utilisations de ressources associées au stockage courant
+   * Getter des utilisations de ressources associées au stockage courant
+   * @return Les utilisations de ressources associées au stockage courant
    */
-  public Bid4WinList<USAGE> getUsageList()
+  public final Bid4WinSet<USAGE> getUsages()
   {
-    return new Bid4WinList<USAGE>(this.getUsageSetInternal());
+    return this.getUsageSetInternal().clone(true);
   }
   /**
-   * Getter du set des utilisations de ressources associées au stockage courant
-   * @return Le set des utilisations de ressources associées au stockage courant
+   * Getter du set interne des utilisations de ressources associées au stockage
+   * courant
+   * @return Le set interne des utilisations de ressources associées au stockage
+   * courant
    */
-  private Bid4WinSet<USAGE> getUsageSet()
+  private Bid4WinSet<USAGE> getUsageSetInternal()
   {
     return this.usageSet;
   }
   /**
-   * Setter du set des utilisations de ressources associées au stockage courant
-   * @param usageSet Set des utilisations de ressources associées au stockage
+   * Setter du set interne des utilisations de ressources associées au stockage
+   * courant
+   * @param usageSet Set interne des utilisations de ressources associées au stockage
    * courant à positionner
+   * @throws ProtectionException Si la protection du set en paramètre échoue
    */
-  private void setUsageSet(Bid4WinSet<USAGE> usageSet)
+  private void setUsageSetInternal(Bid4WinSet<USAGE> usageSet) throws ProtectionException
   {
+    usageSet.protect(this.getProtection());
     this.usageSet = usageSet;
   }
 
@@ -173,9 +180,9 @@ public class ResourceStorage<CLASS extends ResourceStorage<CLASS, TYPE, USAGE>,
     super.defineType(type);
     // A l'instanciation de la super classe, le set d'utilisations n'est pas encore
     // initialisé
-    if(this.getUsageSet() != null)
+    if(this.getUsageSetInternal() != null)
     {
-      for(USAGE usage : this.getUsageSet())
+      for(USAGE usage : this.getUsageSetInternal())
       {
         usage.defineType(type);
       }
@@ -186,30 +193,31 @@ public class ResourceStorage<CLASS extends ResourceStorage<CLASS, TYPE, USAGE>,
   /** ########################### PERSISTENCE ############################ **/
   /** #################################################################### **/
   /**
-   * Getter du set interne des utilisations de ressources associées au stockage
+   * Getter du set persistant des utilisations de ressources associées au stockage
    * courant
-   * @return Le set interne des utilisations de ressources associées au stockage
+   * @return Le set persistant des utilisations de ressources associées au stockage
    * courant
    */
+  @SuppressWarnings("unused")
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @OneToMany(mappedBy = "storage", fetch = FetchType.LAZY, cascade = {})
   @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
   // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
   @OptimisticLock(excluded = false)
-  private Set<USAGE> getUsageSetInternal()
+  private Set<USAGE> getUsageSetDatabase()
   {
-    return this.getUsageSet().getInternal();
+    return this.getUsageSetInternal().getInternal();
   }
   /**
-   * Setter du set interne des utilisations de ressources associées au stockage
+   * Setter du set persistant des utilisations de ressources associées au stockage
    * courant
-   * @param usageSet Set interne des utilisations de ressources associées au stockage
-   * courant à positionner
+   * @param usageSet Set persistant des utilisations de ressources associées au
+   * stockage courant à positionner
    */
   @SuppressWarnings(value = "unused")
-  private void setUsageSetInternal(Set<USAGE> usageSet)
+  private void setUsageSetDatabase(Set<USAGE> usageSet)
   {
-    this.setUsageSet(new Bid4WinSet<USAGE>(usageSet, true));
+    this.setUsageSetInternal(new Bid4WinSet<USAGE>(usageSet, true));
   }
 }

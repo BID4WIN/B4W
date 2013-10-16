@@ -17,11 +17,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OptimisticLock;
 
-import com.bid4win.commons.core.UtilObject;
-import com.bid4win.commons.core.exception.ModelArgumentException;
-import com.bid4win.commons.core.exception.UserException;
-import com.bid4win.commons.core.security.exception.ProtectionException;
-
 /**
  * Cette entité représente la racine de base des propriétés<BR>
  * <BR>
@@ -38,6 +33,18 @@ public abstract class PropertyRootAbstract<CLASS extends PropertyRootAbstract<CL
                                            PROPERTY extends PropertyAbstract<PROPERTY, CLASS>>
        extends PropertyBase<CLASS, CLASS, PROPERTY>
 {
+  /** Présent uniquement pour la définition JPA de la map persistante */
+  @SuppressWarnings("unused")
+  // Annotation pour la persistence
+  @Access(AccessType.PROPERTY)
+  @OneToMany(mappedBy = "root", fetch = FetchType.LAZY,
+             cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+  @MapKey(name = "key")
+  @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+  // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
+  @OptimisticLock(excluded = false)
+  private Map<String, PROPERTY> propertyMapDatabase;
+
   /**
    * Constructeur avec précision de l'identifiant car celui-ci doit être défini
    * de manière unique
@@ -46,22 +53,6 @@ public abstract class PropertyRootAbstract<CLASS extends PropertyRootAbstract<CL
   public PropertyRootAbstract(int id)
   {
     super(id);
-  }
-
-  /**
-   * Cette méthode permet d'ajouter une propriété à la propriété racine courante
-   * @param property {@inheritDoc}
-   * @throws ModelArgumentException {@inheritDoc}
-   * @throws ProtectionException {@inheritDoc}
-   * @throws UserException {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.property.PropertyBase#addProperty(com.bid4win.commons.persistence.entity.property.PropertyAbstract)
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public void addProperty(PROPERTY property)
-          throws ProtectionException, ModelArgumentException, UserException
-  {
-    UtilObject.checkNotNull("property", property).linkTo((CLASS)this);
   }
 
   /** #################################################################### **/
@@ -83,7 +74,7 @@ public abstract class PropertyRootAbstract<CLASS extends PropertyRootAbstract<CL
   }
 
   /**
-   * Getter du champs permettant le forçage de la modification de la propriété
+   * Getter du champ permettant le forçage de la modification de la propriété
    * racine
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getUpdateForce()
@@ -95,24 +86,5 @@ public abstract class PropertyRootAbstract<CLASS extends PropertyRootAbstract<CL
   public int getUpdateForce()
   {
     return super.getUpdateForce();
-  }
-
-  /**
-   * Getter de la map interne de sous-propriétés de la propriété racine courante
-   * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.property.PropertyBase#getPropertyMapInternal()
-   */
-  @Override
-  // Annotation pour la persistence
-  @Access(AccessType.PROPERTY)
-  @OneToMany(mappedBy = "root", fetch = FetchType.LAZY,
-             cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-  @MapKey(name = "key")
-  @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-  // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
-  @OptimisticLock(excluded = false)
-  protected Map<String, PROPERTY> getPropertyMapInternal()
-  {
-    return super.getPropertyMapInternal();
   }
 }

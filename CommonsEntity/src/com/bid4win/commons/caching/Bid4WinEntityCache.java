@@ -21,7 +21,7 @@ public class Bid4WinEntityCache
   /**
    * Cette méthode permet de récupérer l'entité potentiellement cachée en fonction
    * de son identifiant
-   * @param <ENTITY> Definition du type d'entité à rechercher
+   * @param <ENTITY> Définition du type d'entité à rechercher
    * @param <ID> Définition du type d'identifiant de l'entité à rechercher
    * @param entityClass Classe de l'entité à rechercher
    * @param id Identifiant de l'entité à rechercher
@@ -31,12 +31,13 @@ public class Bid4WinEntityCache
   public <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
          ENTITY get(Class<ENTITY> entityClass, ID id)
   {
+    // Récupère l'entité demandée dans le cache approprié
     return this.getCache(entityClass).get(id);
   }
   /**
    * Cette méthode permet de récupérer les entités potentiellement cachées en
    * fonction de leur identifiant
-   * @param <ENTITY> Definition du type d'entité à rechercher
+   * @param <ENTITY> Définition du type d'entité à rechercher
    * @param <ID> Définition du type d'identifiant des entités à rechercher
    * @param entityClass Classe des entités à rechercher
    * @param idSet Set d'identifiant des entités à rechercher
@@ -45,8 +46,11 @@ public class Bid4WinEntityCache
   public <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
          Bid4WinMap<ID, ENTITY> get(Class<ENTITY> entityClass, Bid4WinSet<ID> idSet)
   {
+    // Construit la map de résultat
     Bid4WinMap<ID, ENTITY> result = new Bid4WinMap<ID, ENTITY>(idSet.size());
+    // Récupère le cache approprié aux entités demandées
     EntityMap<ENTITY, ID> entityMap = this.getCache(entityClass);
+    // Récupère les entités une à une et les ajoute au résultat
     for(ID id : idSet)
     {
       ENTITY cached = entityMap.get(id);
@@ -60,14 +64,14 @@ public class Bid4WinEntityCache
   /**
    * Cette méthode permet d'ajouter une entité au cache. Celle-ci ne sera réellement
    * ajoutée à la place de toute entité potentiellement déjà présente avec le même
-   * identifiant que si sa version lui est supérieure
-   * @param <ENTITY> Definition du type d'entité à cacher
+   * identifiant que si sa version lui est strictement supérieure
+   * @param <ENTITY> Définition du type d'entité à cacher
    * @param <ID> Définition du type d'identifiant de l'entité à cacher
    * @param entityClass Classe de l'entité à cacher
    * @param entity Entité à cacher
-   * @return L'entité cachée, c'est à dire l'entité en argument s'il n'existait
-   * pas une référence au moins aussi récente dans le cache, ou l'entité déjà
-   * présente dans le cache le cas échéant
+   * @return L'entité finalement cachée, c'est à dire l'entité en argument s'il
+   * n'existait pas une référence au moins aussi récente dans le cache, ou l'entité
+   * déjà présente dans le cache le cas échéant
    * @throws IllegalArgumentException Si la classe fournie ne correspond pas à
    * celle de l'entité
    */
@@ -79,13 +83,14 @@ public class Bid4WinEntityCache
     {
       throw new IllegalArgumentException("Class definition should represent entity");
     }
+    // Stocke l'entité dans le cache approprié
     return this.getCache(entityClass).putEntity(entity);
   }
   /**
    * Cette méthode permet d'ajouter des entités au cache. Celles-ci ne seront réellement
    * ajoutées à la place de toute entité potentiellement déjà présente avec le même
-   * identifiant que si leur version leur est supérieure
-   * @param <ENTITY> Definition du type d'entité à cacher
+   * identifiant que si leur version leur est strictement supérieure
+   * @param <ENTITY> Définition du type d'entité à cacher
    * @param <ID> Définition du type d'identifiant des entités à cacher
    * @param entityClass Classe des entités à cacher
    * @param entityMap Entités à cacher
@@ -100,7 +105,9 @@ public class Bid4WinEntityCache
                                       Bid4WinMap<ID, ENTITY> entityMap)
          throws IllegalArgumentException
   {
+    // Construit la map de résultat
     Bid4WinMap<ID, ENTITY> cachedMap = new Bid4WinMap<ID, ENTITY>(entityMap.size());
+    // Stocke les entités une à une et les ajoute au résultat
     for(ENTITY entity : entityMap.values())
     {
       cachedMap.put(entity.getId(), this.cache(entityClass, entity));
@@ -110,8 +117,8 @@ public class Bid4WinEntityCache
   /**
    * Cette méthode permet de retirer une entité du cache. Celle-ci ne sera réellement
    * retirée que si l'entité potentiellement déjà présente avec le même identifiant
-   * à la même version
-   * @param <ENTITY> Definition du type d'entité à retirer du cache
+   * a la même version
+   * @param <ENTITY> Définition du type d'entité à retirer du cache
    * @param <ID> Définition du type d'identifiant de l'entité à retirer du cache
    * @param entityClass Classe de l'entité à retirer du cache
    * @param entity Entité à retirer du cache
@@ -149,7 +156,7 @@ public class Bid4WinEntityCache
   }
   /**
    * Cette méthode permet de récupérer le cache du type d'entité définie en argument
-   * @param <ENTITY>  Definition du type des entités du cache à récupérer
+   * @param <ENTITY>  Définition du type des entités du cache à récupérer
    * @param <ID> Définition du type d'identifiant des entités du cache à récupérer
    * @param entityClass Classe des entités du cache à récupérer
    * @return Le cache du type d'entité définie en argument

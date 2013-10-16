@@ -10,9 +10,11 @@ import java.util.Properties;
 
 import org.junit.Test;
 
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.UserException;
+import com.bid4win.commons.core.security.exception.ProtectionException;
 import com.bid4win.commons.persistence.entity.EntityGenerator;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
 
@@ -112,7 +114,7 @@ public abstract class PropertyAbstractTester<PROPERTY extends PropertyAbstract<P
       value = null;
       instance = this.createProperty(key, value);
       assertEquals("Bad property key", key.toLowerCase(), instance.getKey());
-      assertEquals("Bad property value", "", instance.getValue());
+      assertEquals("Bad property value", UtilString.EMPTY, instance.getValue());
       assertEquals("Bad sub property nb", 0, instance.getPropertyNb());
       key = "1_a";
       value = "azerty12345@:";
@@ -202,7 +204,7 @@ public abstract class PropertyAbstractTester<PROPERTY extends PropertyAbstract<P
     root.addProperty(UtilProperty.computeKey(key, "b", "c", "d", "e", "f1"), "f1");
     root.addProperty(UtilProperty.computeKey(key, "b", "c", "d", "e", "f2"), "f2");
     root.addProperty(UtilProperty.computeKey(key, "b", "c", "d", "e", "f3"), "f3");
-    PROPERTY a2 = root.addProperty(this.getBaseKey(2), "");
+    PROPERTY a2 = root.addProperty(this.getBaseKey(2), UtilString.EMPTY);
 
     PROPERTY property = this.createProperty(a1, a2);
     assertTrue("Wrong parent property", a2 == property.getProperty());
@@ -218,6 +220,41 @@ public abstract class PropertyAbstractTester<PROPERTY extends PropertyAbstract<P
     {
       System.out.println(ex.getMessage());
     }
+  }
+  /**
+   * Test of defineKey(), of class PropertyAbstract.
+   * @throws Bid4WinException Issue not expected during this test
+   */
+  @Test
+  public void testDefineKey_String() throws Bid4WinException
+  {
+    PROPERTY property1 = this.createBase();
+    String key1 = property1.getKey();
+    String key2 = this.getBaseKey(2);
+    property1.defineKey(key2);
+    assertEquals("Wrong key", key2, property1.getKey());
+    property1.linkTo(this.createBase());
+    try
+    {
+      property1.defineKey(key1);
+      fail("Should fail with linked property");
+    }
+    catch(UserException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    property1.unlinkFromProperty();
+    property1.linkTo(this.createRoot());
+    try
+    {
+      property1.defineKey(key1);
+      fail("Should fail with linked property");
+    }
+    catch(UserException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    assertEquals("Wrong key", key2, property1.getKey());
   }
 
   /**
@@ -256,13 +293,13 @@ public abstract class PropertyAbstractTester<PROPERTY extends PropertyAbstract<P
     ROOT root1 = this.createRoot();
     ROOT root2 = this.createRoot();
 
-    root1.addProperty(property1);
+    property1.linkTo(root1);
     assertFalse(property1.same(property2));
     assertFalse(property2.same(property1));
     assertFalse(property1.identical(property2));
     assertFalse(property2.identical(property1));
 
-    root2.addProperty(property2);
+    property2.linkTo(root2);
     assertTrue(property1.same(property2));
     assertTrue(property2.same(property1));
     assertTrue(property1.identical(property2));
@@ -330,7 +367,7 @@ public abstract class PropertyAbstractTester<PROPERTY extends PropertyAbstract<P
     Properties properties = base.toProperties();
     assertEquals("Bad properties nb", 5, properties.size());
     assertEquals("Bad properties value", base.getValue(), properties.get(base.getKey()));
-    assertEquals("Bad properties value", "",  properties.get(UtilProperty.computeKey(base.getKey(), "a")));
+    assertEquals("Bad properties value", UtilString.EMPTY,  properties.get(UtilProperty.computeKey(base.getKey(), "a")));
     assertEquals("Bad properties value", "1", properties.get(UtilProperty.computeKey(base.getKey(), "a", "b")));
     assertEquals("Bad properties value", "2", properties.get(UtilProperty.computeKey(base.getKey(), "c")));
     assertEquals("Bad properties value", "3", properties.get(UtilProperty.computeKey(base.getKey(), "c", "b")));
@@ -339,7 +376,7 @@ public abstract class PropertyAbstractTester<PROPERTY extends PropertyAbstract<P
     properties = base.toProperties();
     assertEquals("Bad properties nb", 5, properties.size());
     assertEquals("Bad properties value", base.getValue(), properties.get(base.getKey()));
-    assertEquals("Bad properties value", "",  properties.get(UtilProperty.computeKey(base.getKey(), "a")));
+    assertEquals("Bad properties value", UtilString.EMPTY,  properties.get(UtilProperty.computeKey(base.getKey(), "a")));
     assertEquals("Bad properties value", "1", properties.get(UtilProperty.computeKey(base.getKey(), "a", "b")));
     assertEquals("Bad properties value", "2", properties.get(UtilProperty.computeKey(base.getKey(), "c")));
     assertEquals("Bad properties value", "3", properties.get(UtilProperty.computeKey(base.getKey(), "c" , "b")));
@@ -611,7 +648,7 @@ public abstract class PropertyAbstractTester<PROPERTY extends PropertyAbstract<P
     {
       System.out.println(ex.getMessage());
     }
-    a.addProperty(b);
+    b.linkTo(a);
     try
     {
       b.unlinkFromProperty();
@@ -623,7 +660,7 @@ public abstract class PropertyAbstractTester<PROPERTY extends PropertyAbstract<P
     {
       fail("Should be unlinked if linked to parent property");
     }
-    root.addProperty(b);
+    b.linkTo(root);
     try
     {
       b.unlinkFromProperty();
@@ -655,7 +692,7 @@ public abstract class PropertyAbstractTester<PROPERTY extends PropertyAbstract<P
     {
       System.out.println(ex.getMessage());
     }
-    root.addProperty(b);
+    b.linkTo(root);
     try
     {
       b.unlinkFromRoot();
@@ -667,7 +704,7 @@ public abstract class PropertyAbstractTester<PROPERTY extends PropertyAbstract<P
     {
       fail("Should be unlinked if linked to root property");
     }
-    a.addProperty(b);
+    b.linkTo(a);
     try
     {
       b.unlinkFromRoot();
@@ -679,5 +716,200 @@ public abstract class PropertyAbstractTester<PROPERTY extends PropertyAbstract<P
       assertNull("Should not have root property", b.getRoot());
       assertTrue("Should still have parent property", a == b.getProperty());
     }
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.persistence.entity.property.PropertyBaseTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    super.testCheckProtection();
+
+    String id1 = this.startProtection();
+    PROPERTY property1 = this.createBase();
+    String key = property1.getKey();
+    String value = property1.getValue();
+    String id2 = this.startProtection();
+    PROPERTY property2 = property1.addProperty("a", "b");
+    this.stopProtection();
+    this.stopProtection();
+
+    try
+    {
+      property1.defineKey(this.getBaseKey(2));
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+      assertEquals("Wrong property", key, property1.getKey());
+    }
+    try
+    {
+      property1.defineValue(value + "1");
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+      assertEquals("Wrong property", value, property1.getValue());
+    }
+
+    try
+    {
+      property2.unlinkFromProperty();
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+
+    this.startProtection(id1);
+    try
+    {
+      property2.unlinkFromProperty();
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+
+    this.stopProtection();
+    this.startProtection(id2);
+    try
+    {
+      property2.unlinkFromProperty();
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    assertTrue("Wrong property", property1 == property2.getProperty());
+    assertTrue("Wrong property", property2 == property1.getProperty(property2.getKey()));
+
+    this.startProtection(id1);
+    property2.unlinkFromProperty();
+    this.stopProtection();
+    this.stopProtection();
+    try
+    {
+      property2.linkTo(property1);
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+
+    this.startProtection(id1);
+    try
+    {
+      property2.linkTo(property1);
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+
+    this.stopProtection();
+    this.startProtection(id2);
+    try
+    {
+      property2.linkTo(property1);
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    assertNull("Wrong property", property2.getProperty());
+    assertNull("Wrong property", property1.getProperty(property2.getKey()));
+
+    this.startProtection(id1);
+    ROOT root = this.createRoot();
+    this.stopProtection();
+    this.stopProtection();
+    try
+    {
+      property2.linkTo(root);
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+
+    this.startProtection(id1);
+    try
+    {
+      property2.linkTo(root);
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+
+    this.stopProtection();
+    this.startProtection(id2);
+    try
+    {
+      property2.linkTo(root);
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    assertNull("Wrong property", property2.getRoot());
+    assertNull("Wrong property", root.getProperty(property2.getKey()));
+
+    this.startProtection(id1);
+    property2.linkTo(root);
+    this.stopProtection();
+    this.stopProtection();
+
+    try
+    {
+      property2.unlinkFromRoot();
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+
+    this.startProtection(id1);
+    try
+    {
+      property2.unlinkFromRoot();
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+
+    this.stopProtection();
+    this.startProtection(id2);
+    try
+    {
+      property2.unlinkFromRoot();
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    assertTrue("Wrong property", root == property2.getRoot());
+    assertTrue("Wrong property", property2 == root.getProperty(property2.getKey()));
   }
 }

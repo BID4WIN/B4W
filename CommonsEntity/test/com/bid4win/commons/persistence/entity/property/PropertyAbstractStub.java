@@ -11,7 +11,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.security.exception.ProtectionException;
-import com.bid4win.commons.persistence.entity.collection.Bid4WinMatchReferenceMap;
 
 /**
  *
@@ -117,17 +116,5 @@ public class PropertyAbstractStub extends PropertyAbstract<PropertyAbstractStub,
             throws ModelArgumentException, ProtectionException, UserException
   {
     return new PropertyAbstractStub(toBeCopied, Property);
-  }
-
-  /**
-   *
-   * TODO A COMMENTER
-   * @param toBeCompared TODO A COMMENTER
-   * @param identical TODO A COMMENTER
-   * @return TODO A COMMENTER
-   */
-  protected boolean same(PropertyAbstractStub toBeCompared, boolean identical)
-  {
-    return this.sameInternal(toBeCompared, this.getFullRelationNodeList(), new Bid4WinMatchReferenceMap(), identical);
   }
 }

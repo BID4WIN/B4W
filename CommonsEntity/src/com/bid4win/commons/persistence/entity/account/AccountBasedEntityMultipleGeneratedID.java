@@ -50,7 +50,7 @@ public class AccountBasedEntityMultipleGeneratedID<CLASS extends AccountBasedEnt
    */
   protected AccountBasedEntityMultipleGeneratedID(String id)
   {
-    super((UtilString.trimNotNull(id).equals("") ? null : UtilString.trimNotNull(id)));
+    super((UtilString.trimNotNull(id).equals(UtilString.EMPTY) ? null : UtilString.trimNotNull(id)));
   }
 
   /**

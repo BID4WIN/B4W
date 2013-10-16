@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.bid4win.commons.core.UtilString;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.collection.Bid4WinSet;
 import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.UserException;
@@ -68,7 +69,7 @@ public class UtilProperty
     // La clé est simple
     if(index < 0)
     {
-      return "";
+      return UtilString.EMPTY;
     }
     // La clé est composée
     return fullKey.substring(index + UtilProperty.KEY_SEPARATOR.length());
@@ -86,7 +87,7 @@ public class UtilProperty
     // La clé est simple
     if(index < 0)
     {
-      return "";
+      return UtilString.EMPTY;
     }
     // La clé est composée
     return fullKey.substring(0, index);
@@ -101,7 +102,7 @@ public class UtilProperty
   {
     baseKey = UtilString.trimNotNull(baseKey);
     // La clé complète doit être définie à partir de la base donnée
-    if(!baseKey.equals(""))
+    if(!baseKey.equals(UtilString.EMPTY))
     {
       key = baseKey + UtilProperty.KEY_SEPARATOR + key;
     }
@@ -115,7 +116,7 @@ public class UtilProperty
    */
   public static String computeKey(String ... keys)
   {
-    String result = "";
+    String result = UtilString.EMPTY;
     for(String key : keys)
     {
       result = UtilProperty.addKey(result, key);
@@ -183,8 +184,11 @@ public class UtilProperty
     // La propriété à retourner si elle, ou une de ses filles, passe le filtre
     PROPERTY result = property.createProperty(property.getKey(), property.getValue());
     // On filtre toutes les propriétés filles
-    result.addPropertySet(UtilProperty.getFilteredPropertySet(property.getPropertySet(),
-                                                              searchString));
+    for(PROPERTY filteredProperty : UtilProperty.getFilteredPropertySet(property.getProperties(),
+                                                                        searchString))
+    {
+      filteredProperty.linkTo(result);
+    }
     // Si la propriété n'a pas de fille ou qu'aucune de ses filles n'a passé le
     // filtre
     if(result.getPropertyNb() == 0)
@@ -208,20 +212,20 @@ public class UtilProperty
    * l'une de leurs propriétés filles, passent le filtre, à savoir la présence de
    * la chaîne à rechercher dans la clé ou la valeur.
    * @param <PROPERTY> Définition du type de propriété à filter
-   * @param propertySet Le set de propriétés à filtrer
+   * @param properties Propriétés à filtrer
    * @param searchString La chaîne à rechercher
    * @return Le set de propriétés filtrées
    * @throws ModelArgumentException Si la manipulation d'une propriété échoue
    * @throws UserException Si la manipulation d'une propriété échoue
    */
   public static <PROPERTY extends PropertyAbstract<PROPERTY, ?>>
-         Bid4WinSet<PROPERTY> getFilteredPropertySet(Bid4WinSet<PROPERTY> propertySet,
+         Bid4WinSet<PROPERTY> getFilteredPropertySet(Bid4WinCollection<PROPERTY> properties,
                                                      String searchString)
          throws ModelArgumentException, UserException
   {
     Bid4WinSet<PROPERTY> result = new Bid4WinSet<PROPERTY>();
     // On ajoute les propriétés qui passent le filtre
-    for(PROPERTY property : propertySet)
+    for(PROPERTY property : properties)
     {
       PROPERTY filtered = UtilProperty.getFilteredProperty(property, searchString);
       if(filtered != null)

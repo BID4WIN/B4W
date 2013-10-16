@@ -111,7 +111,7 @@ public abstract class Bid4WinStringUserType<TYPE extends Serializable>
    * @return {@inheritDoc}
    * @see org.hibernate.usertype.EnhancedUserType#objectToSQLString(java.lang.Object)
    */
-  @SuppressWarnings("unchecked")
+  /*@SuppressWarnings("unchecked")
   @Override
   public String objectToSQLString(Object value)
   {
@@ -132,7 +132,7 @@ public abstract class Bid4WinStringUserType<TYPE extends Serializable>
    * @return {@inheritDoc}
    * @see org.hibernate.usertype.EnhancedUserType#fromXMLString(java.lang.String)
    */
-  @Override
+  /*@Override
   public Object fromXMLString(String arg0)
   {
     // TODO Auto-generated method stub
@@ -145,12 +145,12 @@ public abstract class Bid4WinStringUserType<TYPE extends Serializable>
    * @return {@inheritDoc}
    * @see org.hibernate.usertype.EnhancedUserType#toXMLString(java.lang.Object)
    */
-  @Override
+  /*@Override
   public String toXMLString(Object arg0)
   {
     // TODO Auto-generated method stub
     return null;
-  }
+  }*/
 
   /**
    *

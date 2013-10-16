@@ -10,6 +10,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({com.bid4win.commons.persistence.entity.connection.ConnectionAbstractTest.class,
+                     com.bid4win.commons.persistence.entity.connection.ConnectionDataTest.class,
                      com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractTest.class,
                      com.bid4win.commons.persistence.entity.connection.IpAddressTest.class,
                      com.bid4win.commons.persistence.entity.connection.PasswordReinitAbstractTest.class,

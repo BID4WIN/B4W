@@ -43,7 +43,7 @@ public abstract class Bid4WinEntityAutoID<CLASS extends Bid4WinEntityAutoID<CLAS
   @Id()
   @Column(name = "ID", length = 10, nullable = false, unique = true)
   @GeneratedValue(strategy = GenerationType.AUTO)
-  public Long getId()
+  public final Long getId()
   {
     return super.getId();
   }

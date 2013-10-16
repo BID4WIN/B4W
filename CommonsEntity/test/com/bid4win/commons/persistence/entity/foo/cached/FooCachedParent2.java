@@ -27,6 +27,15 @@ import com.bid4win.commons.core.Bid4WinDate;
 @DiscriminatorValue("CACHED_PARENT1")
 public class FooCachedParent2 extends FooCachedParent<FooCachedParent2, FooCachedChild2>
 {
+  // Annotation pour la persistence
+  @Access(AccessType.PROPERTY)
+  @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  @MapKey(name = "value")
+  @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+  // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
+  @OptimisticLock(excluded = false)
+  private Map<String, FooCachedChild2> childMap;
+
   /**
    * Constructeur
    */
@@ -49,11 +58,11 @@ public class FooCachedParent2 extends FooCachedParent<FooCachedParent2, FooCache
   /** ########################### PERSISTENCE ############################ **/
   /** #################################################################### **/
   /**
-   * Getter de la map interne d'objets inclus dans l'objet
+   * Getter de la map d'enfants inclus dans l'objet pour la persistence
    * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.foo.cached.FooCachedParent#getChildMapInternal()
+   * @see com.bid4win.commons.persistence.entity.foo.cached.FooCachedParent#getChildMap()
    */
-  @Override
+/*  @Override
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -61,8 +70,8 @@ public class FooCachedParent2 extends FooCachedParent<FooCachedParent2, FooCache
   @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
   // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
   @OptimisticLock(excluded = false)
-  protected Map<String, FooCachedChild2> getChildMapInternal()
+  protected Map<String, FooCachedChild2> getChildMap()
   {
-    return super.getChildMapInternal();
-  }
+    return super.getChildMap();
+  }*/
 }

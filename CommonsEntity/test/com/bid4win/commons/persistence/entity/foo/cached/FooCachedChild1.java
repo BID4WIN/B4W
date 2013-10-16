@@ -19,6 +19,14 @@ import javax.persistence.ManyToOne;
 @DiscriminatorValue("CACHED_CHILD1")
 public class FooCachedChild1 extends FooCachedChild<FooCachedChild1, FooCachedParent1>
 {
+
+  // Annotation pour la persistence
+  @Access(AccessType.PROPERTY)
+  @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+  @JoinColumn(name = "PARENT_ID", nullable = false, unique = false)
+  private FooCachedParent1 parent;
+
+
   /**
    * Constructeur
    */
@@ -44,7 +52,7 @@ public class FooCachedChild1 extends FooCachedChild<FooCachedChild1, FooCachedPa
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.entity.foo.not_cached.FooChild#getParent()
    */
-  @Override
+/*  @Override
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
@@ -52,5 +60,5 @@ public class FooCachedChild1 extends FooCachedChild<FooCachedChild1, FooCachedPa
   public FooCachedParent1 getParent()
   {
     return super.getParent();
-  }
+  }*/
 }

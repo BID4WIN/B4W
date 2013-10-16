@@ -26,14 +26,11 @@ import com.bid4win.commons.persistence.entity.Bid4WinEmbeddable;
 public class Credential extends Bid4WinEmbeddable<Credential>
 {
   /** Identifiant de connexion */
-  @Transient
-  private Login login = null;
+  @Transient private Login login = null;
   /** Mot de passe de connexion */
-  @Transient
-  private Password password = null;
+  @Transient private Password password = null;
   /** Rôle du certificat de connexion */
-  @Transient
-  private Role role = Role.NONE;
+  @Transient private Role role = Role.NONE;
 
   /**
    * Constructeur pour création par introspection
@@ -105,19 +102,6 @@ public class Credential extends Bid4WinEmbeddable<Credential>
   }
 
   /**
-   * Cette méthode permet de savoir si le certificat de connexion possède le rôle
-   * en argument
-   * @param role Rôle dont on veut savoir s'il fait parti des rôles du certificat
-   * de connexion
-   * @return True si le certificat de connexion possède le rôle en argument, false
-   * sinon
-   */
-  public boolean hasRole(Role role)
-  {
-    return this.getRole().belongsTo(role);
-  }
-
-  /**
    * Cette méthode permet de définir l'identifiant de connexion du certificat
    * @param login Définition de l'identifiant de connexion du certificat
    * @throws ProtectionException Si le certificat courant est protégé
@@ -128,7 +112,7 @@ public class Credential extends Bid4WinEmbeddable<Credential>
     // Vérifie la protection du certificat courant
     this.checkProtection();
     this.setLogin(UtilObject.checkNotNull("login", login,
-                                          ConnectionRef.CONNECTION_LOGIN_MISSING_ERROR));
+                                          ConnectionRef.LOGIN_MISSING_ERROR));
   }
   /**
    * Cette méthode permet de définir le mot de passe de connexion du certificat
@@ -141,7 +125,7 @@ public class Credential extends Bid4WinEmbeddable<Credential>
     // Vérifie la protection du certificat courant
     this.checkProtection();
     this.setPassword(UtilObject.checkNotNull("password", password,
-                                             ConnectionRef.CONNECTION_PASSWORD_MISSING_ERROR));
+                                             ConnectionRef.PASSWORD_MISSING_ERROR));
   }
   /**
    * Cette méthode permet de définir le rôle du certificat de connexion

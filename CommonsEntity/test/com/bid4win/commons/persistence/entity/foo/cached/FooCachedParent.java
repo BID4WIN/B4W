@@ -11,6 +11,7 @@ import javax.persistence.Transient;
 import com.bid4win.commons.core.Bid4WinDate;
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.collection.Bid4WinMap;
+import com.bid4win.commons.core.security.exception.ProtectionException;
 import com.bid4win.commons.persistence.entity.Bid4WinRelation;
 import com.bid4win.commons.persistence.entity.Bid4WinRelationNode;
 
@@ -31,7 +32,7 @@ public class FooCachedParent<CLASS extends FooCachedParent<CLASS, CHILD>,
 {
   /** Map d'enfants inclus dans l'objet parent */
   @Transient
-  private Bid4WinMap<String, CHILD> childMap = new Bid4WinMap<String, CHILD>();
+  private Bid4WinMap<String, CHILD> childMapInternal = new Bid4WinMap<String, CHILD>(this.getProtection());
 
   /**
    * Constructeur
@@ -40,7 +41,6 @@ public class FooCachedParent<CLASS extends FooCachedParent<CLASS, CHILD>,
   {
     super();
   }
-
   /**
    * Constructeur
    * @param value Valeur de l'objet parent
@@ -74,7 +74,7 @@ public class FooCachedParent<CLASS extends FooCachedParent<CLASS, CHILD>,
   {
     if(relation.equals(FooCachedParent_Relations.RELATION_CHILD))
     {
-      return this.getChildMap();
+      return this.getChildMapInternal();
     }
     return null;
   }
@@ -87,7 +87,7 @@ public class FooCachedParent<CLASS extends FooCachedParent<CLASS, CHILD>,
    */
   public CHILD getChild(String value)
   {
-    return this.getChildMap().get(value);
+    return this.getChildMapInternal().get(value);
   }
   /**
    *
@@ -96,7 +96,7 @@ public class FooCachedParent<CLASS extends FooCachedParent<CLASS, CHILD>,
    */
   public int getChildNb()
   {
-    return this.getChildMap().size();
+    return this.getChildMapInternal().size();
   }
   /**
    * Cette méthode permet d'ajouter l'enfant en argument à la map
@@ -106,7 +106,7 @@ public class FooCachedParent<CLASS extends FooCachedParent<CLASS, CHILD>,
   @SuppressWarnings("unchecked")
   public CHILD putChild(CHILD child)
   {
-    CHILD previous = this.getChildMap().put(child.getValue(), child);
+    CHILD previous = this.getChildMapInternal().put(child.getValue(), child);
     if(previous != null)
     {
       previous.setParent(null);
@@ -131,41 +131,47 @@ public class FooCachedParent<CLASS extends FooCachedParent<CLASS, CHILD>,
    */
   public CHILD removeChild(String value)
   {
-    CHILD child = this.getChildMap().remove(value);
+    CHILD child = this.getChildMapInternal().remove(value);
     child.setParent(null);
     return child;
   }
   /**
-   * Getter de la map d'enfants inclus dans l'objet parent
-   * @return La map d'enfants inclus dans l'objet parent
+   * Getter de la map interne d'enfants inclus dans l'objet
+   * @return La map d'enfants inclus dans l'objet
    */
-  protected Bid4WinMap<String, CHILD> getChildMap()
+  private Bid4WinMap<String, CHILD> getChildMapInternal()
   {
-    return this.childMap;
+    return this.childMapInternal;
   }
   /**
-   * Setter de la map d'enfants inclus dans l'objet parent
-   * @param childMap Map d'enfants inclus dans l'objet parent à positionner
+   * Setter de la map interne d'enfants inclus dans l'objet
+   * @param childMap Map d'enfants inclus dans l'objet à positionner
+   * @throws ProtectionException Si l'objet est protégé contre les modifications
    */
-  private void setChildMap(Bid4WinMap<String, CHILD> childMap)
+  private void setChildMapInternal(Map<String, CHILD> childMap) throws ProtectionException
   {
-    this.childMap = childMap;
+    this.childMapInternal = new Bid4WinMap<String, CHILD>(childMap, true);
+    this.childMapInternal.protectFromExisting();
   }
 
+  /** #################################################################### **/
+  /** ########################### PERSISTENCE ############################ **/
+  /** #################################################################### **/
   /**
-   * Getter de la map interne d'objets inclus dans l'objet
-   * @return La map interne d'objets inclus dans l'objet
+   * Getter de la map d'enfants inclus dans l'objet pour la persistence
+   * @return La  map d'enfants inclus dans l'objet pour la persistence
    */
-  protected Map<String, CHILD> getChildMapInternal()
+  private Map<String, CHILD> getChildMap()
   {
-    return this.getChildMap().getInternal();
+    return this.getChildMapInternal().getInternal();
   }
   /**
-   * Setter de la map interne d'objets inclus dans l'objet
-   * @param internalChildMap Map interne d'objets inclus dans l'objet à positionner
+   * Setter de la map d'enfants inclus dans l'objet
+   * @param childMap Map d'enfants inclus dans l'objet à positionner
    */
-  protected void setChildMapInternal(Map<String, CHILD> internalChildMap)
+  @SuppressWarnings("unused")
+  private void setChildMap(Map<String, CHILD> childMap)
   {
-    this.setChildMap(new Bid4WinMap<String, CHILD>(internalChildMap, true));
+    this.setChildMapInternal(childMap);
   }
 }

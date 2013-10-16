@@ -19,7 +19,10 @@ import com.bid4win.commons.core.Bid4WinObject;
 import com.bid4win.commons.core.UtilBoolean;
 import com.bid4win.commons.core.UtilObject;
 import com.bid4win.commons.core.UtilString;
+import com.bid4win.commons.core.collection.Bid4WinCollectionAbstract;
 import com.bid4win.commons.core.collection.Bid4WinList;
+import com.bid4win.commons.core.collection.Bid4WinMap;
+import com.bid4win.commons.core.collection.Bid4WinSet;
 import com.bid4win.commons.core.comparator.Bid4WinComparator;
 import com.bid4win.commons.core.exception.Bid4WinRuntimeException;
 import com.bid4win.commons.core.exception.UserException;
@@ -52,37 +55,16 @@ import com.bid4win.commons.persistence.entity.renderer.Bid4WinEntityRenderer;
 public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
        extends Bid4WinObject<CLASS>
 {
-  /**
-   *
-   * TODO A COMMENTER
-   * @param entity TODO A COMMENTER
-   * @param entityClass TODO A COMMENTER
-   * @return TODO A COMMENTER
-   */
-  public static <ENTITY extends Bid4WinEntity<ENTITY, ID>, ID> ENTITY getEntityNotProxy(ENTITY entity, Class<ENTITY> entityClass)
-  {
-    if(entity == null || entity.getClass().equals(entityClass))
-    {
-      return entity;
-    }
-    return entity.getEntityEncapsulator().getEntity();
-  }
-
   /** Identifiant de l'entité */
-  @Transient
-  private ID id = null;
+  @Transient private ID id = null;
   /** Version de l'entité */
-  @Transient
-  private int version = -1;
+  @Transient private int version = -1;
   /** Date de création de l'entité */
-  @Transient
-  private Bid4WinDate createDate = null;
+  @Transient private Bid4WinDate createDate = null;
   /** Date de modification de l'entité */
-  @Transient
-  private Bid4WinDate updateDate = null;
-  /** Champs permettant le forçage de la modification de l'entité */
-  @Transient
-  private int updateForce = 0;
+  @Transient private Bid4WinDate updateDate = null;
+  /** champ permettant le forçage de la modification de l'entité */
+  @Transient private int updateForce = 0;
 
   /**
    * Constructeur par défaut
@@ -111,14 +93,14 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
     return this.getVersion() == -1;
   }
   /**
-   *
-   * TODO A COMMENTER
-   * @return TODO A COMMENTER
+   * Cette méthode permet d'être sûr de récupérer l'entité réelle et non pas un
+   * potentiel proxy
+   * @return L'entité réelle et non un potentiel proxy
    */
   @SuppressWarnings("unchecked")
-  protected EntityEncapsulator<CLASS> getEntityEncapsulator()
+  public CLASS self()
   {
-    return new EntityEncapsulator<CLASS>((CLASS)this);
+    return (CLASS)this;
   }
 
   /**
@@ -270,10 +252,10 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return True si l'entité en paramètre est considérée équivalente à l'entité
    * courante (liens éventuels avec d'autres entités pris en compte), false sinon
    */
-  protected final boolean sameInternal(CLASS toBeCompared,
-                                       Bid4WinList<Bid4WinRelationNode> nodeList,
-                                       Bid4WinMatchReferenceMap referenced,
-                                       boolean identical)
+  public final boolean sameInternal(CLASS toBeCompared,
+                                    Bid4WinList<Bid4WinRelationNode> nodeList,
+                                    Bid4WinMatchReferenceMap referenced,
+                                    boolean identical)
   {
     // Les entités ont déjà été comparées, on ne fera que retourner le résultat
     // précédent
@@ -335,10 +317,10 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return True si les relations de l'entité en paramètre sont considérées
    * équivalentes à celles de l'entité courante, false sinon
    */
-  protected final boolean sameRelationInternal(CLASS toBeCompared,
-                                               Bid4WinList<Bid4WinRelationNode> nodeList,
-                                               Bid4WinMatchReferenceMap referenced,
-                                               boolean identical)
+  private boolean sameRelationInternal(CLASS toBeCompared,
+                                       Bid4WinList<Bid4WinRelationNode> nodeList,
+                                       Bid4WinMatchReferenceMap referenced,
+                                       boolean identical)
   {
     // TODO verifier pour le null ...
     if(nodeList == null)
@@ -371,10 +353,10 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return True si la relation de l'entité en paramètre est considérée équivalente
    * à celle de l'entité courante, false sinon
    */
-  protected final boolean sameRelationInternal(CLASS toBeCompared,
-                                               Bid4WinRelationNode node,
-                                               Bid4WinMatchReferenceMap referenced,
-                                               boolean identical)
+  private boolean sameRelationInternal(CLASS toBeCompared,
+                                       Bid4WinRelationNode node,
+                                       Bid4WinMatchReferenceMap referenced,
+                                       boolean identical)
   {
     Bid4WinRelation relation = node.getRelation();
     // Compare la relation
@@ -414,12 +396,12 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return True si la relation de type simple de l'entité en paramètre est considérée
    * équivalente à celle de l'entité courante, false sinon
    */
-  protected final boolean sameRelationSimpleInternal(CLASS toBeCompared,
-                                                     Bid4WinRelationNode node,
-                                                     Bid4WinMatchReferenceMap referenced,
-                                                     boolean identical)
+  private boolean sameRelationSimpleInternal(CLASS toBeCompared,
+                                             Bid4WinRelationNode node,
+                                             Bid4WinMatchReferenceMap referenced,
+                                             boolean identical)
   {
-    //
+    // Récupère les deux relations de type simple et les compare
     Bid4WinEntity<?, ?> entity1 = this.getRelationSimple(node.getRelation());
     Bid4WinEntity<?, ?> entity2 = toBeCompared.getRelationSimple(node.getRelation());
     return Bid4WinEntityComparator.getInstanceEntity().same(
@@ -440,12 +422,12 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return True si la relation de type set de l'entité en paramètre est considérée
    * équivalente à celle de l'entité courante, false sinon
    */
-  protected final boolean sameRelationSetInternal(CLASS toBeCompared,
-                                                  Bid4WinRelationNode node,
-                                                  Bid4WinMatchReferenceMap referenced,
-                                                  boolean identical)
+  private boolean sameRelationSetInternal(CLASS toBeCompared,
+                                          Bid4WinRelationNode node,
+                                          Bid4WinMatchReferenceMap referenced,
+                                          boolean identical)
   {
-    //
+    // Récupère les deux relations de type set et les compare
     Set<? extends Bid4WinEntity<?, ?>> set1 = this.getRelationSet(node.getRelation());
     Set<? extends Bid4WinEntity<?, ?>> set2 = toBeCompared.getRelationSet(node.getRelation());
     return Bid4WinEntitySetComparator.getInstanceEntitySet().same(
@@ -466,12 +448,12 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return True si la relation de type liste de l'entité en paramètre est considérée
    * équivalente à celle de l'entité courante, false sinon
    */
-  protected final boolean sameRelationListInternal(CLASS toBeCompared,
-                                                   Bid4WinRelationNode node,
-                                                   Bid4WinMatchReferenceMap referenced,
-                                                   boolean identical)
+  private boolean sameRelationListInternal(CLASS toBeCompared,
+                                           Bid4WinRelationNode node,
+                                           Bid4WinMatchReferenceMap referenced,
+                                           boolean identical)
   {
-    //
+    // Récupère les deux relations de type liste et les compare
     List<? extends Bid4WinEntity<?, ?>> list1 = this.getRelationList(node.getRelation());
     List<? extends Bid4WinEntity<?, ?>> list2 = toBeCompared.getRelationList(node.getRelation());
     return Bid4WinEntityListComparator.getInstanceEntityList().same(
@@ -492,12 +474,12 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return True si la relation de map liste de l'entité en paramètre est considérée
    * équivalente à celle de l'entité courante, false sinon
    */
-  protected final boolean sameRelationMapInternal(CLASS toBeCompared,
-                                                  Bid4WinRelationNode node,
-                                                  Bid4WinMatchReferenceMap referenced,
-                                                  boolean identical)
+  private boolean sameRelationMapInternal(CLASS toBeCompared,
+                                          Bid4WinRelationNode node,
+                                          Bid4WinMatchReferenceMap referenced,
+                                          boolean identical)
   {
-    //
+    // Récupère les deux relations de type map et les compare
     Map<?, ? extends Bid4WinEntity<?, ?>> map1 = this.getRelationMap(node.getRelation());
     Map<?, ? extends Bid4WinEntity<?, ?>> map2 = toBeCompared.getRelationMap(node.getRelation());
     return Bid4WinEntityMapComparator.getInstanceEntityMap().same(
@@ -592,7 +574,7 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * courant
    * @return Le rendu de l'identification de l'objet en chaîne de caractères
    */
-  public final StringBuffer renderId()
+  private StringBuffer renderId()
   {
     StringBuffer buffer = new StringBuffer();
     buffer.append("ID=").append(this.getId());
@@ -608,8 +590,8 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return Le rendu des relations définies par la liste de noeuds en argument
    * en même temps que leur profondeur
    */
-  protected final StringBuffer renderRelation(Bid4WinList<Bid4WinRelationNode> nodeList,
-                                              Bid4WinEntityReferenceSet referenced)
+  private StringBuffer renderRelation(Bid4WinList<Bid4WinRelationNode> nodeList,
+                                      Bid4WinEntityReferenceSet referenced)
   {
     StringBuffer buffer = new StringBuffer("RELATIONS");
     // Ajoute le rendu des relations
@@ -628,8 +610,8 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @param referenced Set d'entités référencées comme ayant déjà participé au rendu
    * @return Le rendu de la relation définie par le noeud en argument
    */
-  protected final StringBuffer renderRelation(Bid4WinRelationNode node,
-                                              Bid4WinEntityReferenceSet referenced)
+  private StringBuffer renderRelation(Bid4WinRelationNode node,
+                                      Bid4WinEntityReferenceSet referenced)
   {
     Bid4WinRelation relation = node.getRelation();
     // Effectue le rendu de la relation
@@ -658,8 +640,8 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return Le rendu de la relation de type objet simple définie par le noeud en
    * argument
    */
-  protected StringBuffer renderRelationSimple(Bid4WinRelationNode node,
-                                              Bid4WinEntityReferenceSet referenced)
+  private StringBuffer renderRelationSimple(Bid4WinRelationNode node,
+                                            Bid4WinEntityReferenceSet referenced)
   {
     // Récupère l'entité associée
     Bid4WinEntity<?, ?> toRender = this.getRelationSimple(node.getRelation());
@@ -687,8 +669,8 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return Le rendu de la relation de type collection définie par le noeud en
    * argument
    */
-  protected StringBuffer renderRelationCollection(Bid4WinRelationNode node,
-                                                  Bid4WinEntityReferenceSet referenced)
+  private StringBuffer renderRelationCollection(Bid4WinRelationNode node,
+                                                Bid4WinEntityReferenceSet referenced)
   {
     // Récupère la collection associée
     Collection<? extends Bid4WinEntity<?, ?>> toRender = this.getRelationCollection(node.getRelation());
@@ -704,8 +686,8 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @param referenced Set d'entités référencées comme ayant déjà participé au rendu
    * @return Le rendu de la relation de type map définie par le noeud en argument
    */
-  protected StringBuffer renderRelationMap(Bid4WinRelationNode node,
-                                           Bid4WinEntityReferenceSet referenced)
+  private StringBuffer renderRelationMap(Bid4WinRelationNode node,
+                                         Bid4WinEntityReferenceSet referenced)
   {
     // Récupère la map associée
     Map<?, ? extends Bid4WinEntity<?, ?>> toRender = this.getRelationMap(node.getRelation());
@@ -776,8 +758,7 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @param node Noeud de la relation à charger
    * @param referenced Set d'entités référencées comme ayant déjà été chargées
    */
-  protected final void loadRelation(Bid4WinRelationNode node,
-                                    Bid4WinEntityReferenceSet referenced)
+  private void loadRelation(Bid4WinRelationNode node, Bid4WinEntityReferenceSet referenced)
   {
     Bid4WinRelation relation = node.getRelation();
     // Charge la relation selon son type
@@ -802,8 +783,7 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @param node Noeud de la relation de type simple à charger
    * @param referenced Set d'entités référencées comme ayant déjà été chargées
    */
-  protected final void loadRelationSimple(Bid4WinRelationNode node,
-                                          Bid4WinEntityReferenceSet referenced)
+  private void loadRelationSimple(Bid4WinRelationNode node, Bid4WinEntityReferenceSet referenced)
   {
     // Récupère la relation
     Bid4WinEntity<?, ?> entity = this.getRelationSimple(node.getRelation());
@@ -818,8 +798,7 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @param node Noeud de la relation de type collection à charger
    * @param referenced Set d'entités référencées comme ayant déjà été chargées
    */
-  protected final void loadRelationCollection(Bid4WinRelationNode node,
-                                              Bid4WinEntityReferenceSet referenced)
+  private void loadRelationCollection(Bid4WinRelationNode node, Bid4WinEntityReferenceSet referenced)
   {
     // Récupère la relation
     Collection<? extends Bid4WinEntity<?, ?>> collection = this.getRelationCollection(
@@ -835,61 +814,12 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @param node Noeud de la relation de type map à charger
    * @param referenced Set d'entités référencées comme ayant déjà été chargées
    */
-  protected final void loadRelationMap(Bid4WinRelationNode node,
-                                       Bid4WinEntityReferenceSet referenced)
+  private void loadRelationMap(Bid4WinRelationNode node, Bid4WinEntityReferenceSet referenced)
   {
     // Récupère la relation
     Map<?, ? extends Bid4WinEntity<?, ?>> map = this.getRelationMap(node.getRelation());
     // Charge la relation et propage le chargement si nécessaire
     Bid4WinEntityLoader.getInstance().loadRelation(map, node.getNodeList(), referenced);
-  }
-
-  /**
-   * Getter de l'identifiant de l'entité
-   * @return L'identifiant de l'entité
-   */
-  public ID getId()
-  {
-    return this.id;
-  }
-  /**
-   * Setter de l'identifiant de l'entité
-   * @param id Identifiant de l'entité à positionner
-   */
-  private void setId(ID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Cette méthode permet de forcer, si ce champs est implémenté, la modification
-   * de l'entité courante impliquant l'incrémentation de sa version
-   * @return L'entité modifiée seulement si ce champs est implémenté
-   * @throws ProtectionException Si l'entité courante est protégée
-   */
-  @SuppressWarnings("unchecked")
-  public CLASS forceUpdate() throws ProtectionException
-  {
-    // Vérifie la protection de l'entité
-    this.checkProtection();
-    this.setUpdateForce(this.getVersion() + 1);
-    return (CLASS)this;
-  }
-  /**
-   * Getter du champs permettant le forçage de la modification de l'entité
-   * @return Le champs permettant le forçage de la modification de l'entité
-   */
-  public int getUpdateForce()
-  {
-    return this.updateForce;
-  }
-  /**
-   * Setter du champs permettant le forçage de la modification de l'entité
-   * @param updateForce Champs permettant le forçage de la modification de l'entité
-   */
-  private void setUpdateForce(int updateForce)
-  {
-    this.updateForce = updateForce;
   }
 
   /**
@@ -903,6 +833,8 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
   {
     return new Bid4WinList<Bid4WinRelationNode>();
   }
+
+  // TODO les get et set relations sont accessibles au travers du même package
   /**
    * Cette fonction permet de récupérer l'entité correspondant à la relation en
    * argument. Elle doit être redéfinie pour toute nouvelle relation de type simple
@@ -940,8 +872,7 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return La collection correspondant à la relation en argument ou null le cas
    * échéant
    */
-  protected final Collection<? extends Bid4WinEntity<?, ?>>
-            getRelationCollection(Bid4WinRelation relation)
+  private Bid4WinCollectionAbstract<? extends Bid4WinEntity<?, ?>, ?, ?> getRelationCollection(Bid4WinRelation relation)
   {
     if(relation.getType().belongsTo(Type.SET))
     {
@@ -963,7 +894,7 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return Le set correspondant à la relation en argument ou null le cas échéant
    * @throws Bid4WinRuntimeException Si la relation n'est pas gérée par l'entité
    */
-  protected Set<? extends Bid4WinEntity<?, ?>> getRelationSet(Bid4WinRelation relation)
+  protected Bid4WinSet<? extends Bid4WinEntity<?, ?>> getRelationSet(Bid4WinRelation relation)
             throws Bid4WinRuntimeException
   {
     throw new Bid4WinRuntimeException("Unknown relation " + relation.toString());
@@ -977,7 +908,7 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return La liste correspondant à la relation en argument ou null le cas échéant
    * @throws Bid4WinRuntimeException Si la relation n'est pas gérée par l'entité
    */
-  protected List<? extends Bid4WinEntity<?, ?>> getRelationList(Bid4WinRelation relation)
+  protected Bid4WinList<? extends Bid4WinEntity<?, ?>> getRelationList(Bid4WinRelation relation)
   {
     throw new Bid4WinRuntimeException("Unknown relation " + relation.toString());
   }
@@ -988,13 +919,13 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @return La map correspondant à la relation en argument ou null le cas échéant
    * @throws Bid4WinRuntimeException Si la relation n'est pas gérée par l'entité
    */
-  protected Map<?, ? extends Bid4WinEntity<?, ?>> getRelationMap(Bid4WinRelation relation)
+  protected Bid4WinMap<?, ? extends Bid4WinEntity<?, ?>> getRelationMap(Bid4WinRelation relation)
   {
     throw new Bid4WinRuntimeException("Unknown relation " + relation.toString());
   }
   /**
    * Cette méthode permet de récupérer la clé associée à l'entité en paramètre pour
-   * sont classement dans la map correspondant à la relation en argument
+   * son classement dans la map correspondant à la relation en argument
    * @param relation Définition de la relation à laquelle participe la map pour
    * laquelle récupérer la clé de classement de l'entité en argument
    * @param value Entité pour laquelle récupérer la clé de classement dans la map
@@ -1027,7 +958,7 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @param partialCodes TODO A COMMENTER
    * @return TODO A COMMENTER
    */
-  public final MessageRef gettMessageRef(Bid4WinRelation relation, String ... partialCodes)
+  public final MessageRef getMessageRef(Bid4WinRelation relation, String ... partialCodes)
   {
     return this.getMessageRefBase(relation).getMessageRef(partialCodes);
   }
@@ -1035,7 +966,7 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
   /**
    * Cette méthode permet de positionner l'entité en argument sur la relation de
    * type simple donnée de l'entité courante. Cette fonction ne doit pas être
-   * appelée directement mais fait partie de la création du lien inversion d'une
+   * appelée directement mais fait partie de la création du lien inverse d'une
    * relation bidirectionnelle
    * @param link Définition de la relation de type simple de l'entité courante sur
    * laquelle positionner celle en argument
@@ -1046,11 +977,10 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @throws UserException Si l'entité en argument est nulle ou ne référence pas
    * l'entité courante ou si la relation donnée référence déjà une entité
    */
-  @SuppressWarnings("unchecked")
-  protected void addRelationSimple(Bid4WinRelation link,
-                                   Bid4WinRelation backLink,
-                                   Bid4WinEntity<?, ?> toBeAdded)
-            throws ProtectionException, UserException
+  private void addRelationSimple(Bid4WinRelation link,
+                                 Bid4WinRelation backLink,
+                                 Bid4WinEntity<?, ?> toBeAdded)
+          throws ProtectionException, UserException
   {
     // Vérifie la protection de l'entité courante
     this.checkProtection();
@@ -1063,17 +993,17 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
     UtilObject.checkNull("linked", this.getRelationSimple(link),
                          base.getMessageRef(MessageRef.SUFFIX_DEFINED_ERROR));
     // Vérifie que l'entité courante est référencée par l'entité en argument
-    CLASS entity = Bid4WinEntity.getEntityNotProxy((CLASS)toBeAdded.getRelationSimple(backLink),
-                                                   (Class<CLASS>) this.getClass());
-    UtilBoolean.checkTrue("referenced", this == entity,
-                          this.getMessageRef(MessageRef.SUFFIX_UNDEFINED_ERROR));
+    Bid4WinEntity<?, ?> entity = toBeAdded.getRelationSimple(backLink);
+    UtilObject.checkNotNull("referenced", entity, this.getMessageRef(MessageRef.SUFFIX_MISSING_ERROR));
+    UtilBoolean.checkTrue("referenced", this == entity.self(),
+                          this.getMessageRef(MessageRef.SUFFIX_INVALID_ERROR));
     // Définie la relation entre l'entité courante et l'entité en argument
     this.setRelationSimple(link, toBeAdded);
   }
   /**
    * Cette méthode permet de retirer l'entité en argument de la relation de type
    * simple donnée de l'entité courante. Cette fonction ne doit pas être appelée
-   * directement mais fait partie de la suppression du lien inversion d'une relation
+   * directement mais fait partie de la suppression du lien inverse d'une relation
    * bidirectionnelle
    * @param link Définition de la relation de type simple de l'entité courante de
    * laquelle retirer celle en argument
@@ -1084,10 +1014,10 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * @throws UserException Si l'entité en argument est nulle, référence une entité
    * ou n'est pas référencée par la relation donnée
    */
-  protected void removeRelationSimple(Bid4WinRelation link,
-                                      Bid4WinRelation backLink,
-                                      Bid4WinEntity<?, ?> toBeRemoved)
-            throws ProtectionException, UserException
+  private void removeRelationSimple(Bid4WinRelation link,
+                                    Bid4WinRelation backLink,
+                                    Bid4WinEntity<?, ?> toBeRemoved)
+          throws ProtectionException, UserException
   {
     // Vérifie la protection de l'entité courante
     this.checkProtection();
@@ -1097,8 +1027,10 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
     UtilObject.checkNotNull("toBeRemoved", toBeRemoved,
                             base.getMessageRef(MessageRef.SUFFIX_MISSING_ERROR));
     // Vérifie que l'entité courante référence bien l'entité en argument
-    UtilBoolean.checkTrue("contained", toBeRemoved == this.getRelationSimple(link),
-                          base.getMessageRef(MessageRef.SUFFIX_UNDEFINED_ERROR));
+    Bid4WinEntity<?, ?> entity = this.getRelationSimple(link);
+    UtilObject.checkNotNull("contained", entity, this.getMessageRef(MessageRef.SUFFIX_UNDEFINED_ERROR));
+    UtilBoolean.checkTrue("contained", toBeRemoved == entity.self(),
+                          this.getMessageRef(MessageRef.SUFFIX_INVALID_ERROR));
     // Vérifie que l'entité en argument ne référence plus d'entité
     UtilObject.checkNull("referenced", toBeRemoved.getRelationSimple(backLink),
                          this.getMessageRef(MessageRef.SUFFIX_DEFINED_ERROR));
@@ -1108,45 +1040,38 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
   /**
    * Cette méthode permet d'ajouter l'entité en argument à la collection de l'
    * entité courante définie par la relation donnée. Cette fonction ne doit pas
-   * être appelée directement mais fait partie de la création du lien inversion
-   * d'une relation bidirectionnelle
+   * être appelée directement mais fait partie de la création du lien inverse d'
+   * une relation bidirectionnelle
    * @param link Relation définissant la collection de l'entité courante à laquelle
    * ajouter celle en argument
    * @param backLink Relation de type simple définissant le lien inverse de l'entité
    * en argument vers l'entité courante
    * @param toBeAdded Entité à ajouter à la collection définie par la relation
    * donnée
-   * @throws ProtectionException Si l'entité courante est protégée
+   * @throws ProtectionException Si la collection à laquelle ajouter l'entité est
+   * protégée
    * @throws UserException Si l'entité en argument est nulle, ne référence pas l'
    * entité courante ou est déjà référencée par la collection définie par la relation
    */
   @SuppressWarnings("unchecked")
-  protected void addRelationCollection(Bid4WinRelation link,
-                                       Bid4WinRelation backLink,
-                                       Bid4WinEntity<?, ?> toBeAdded)
-            throws ProtectionException, UserException
+  private void addRelationCollection(Bid4WinRelation link,
+                                     Bid4WinRelation backLink,
+                                     Bid4WinEntity<?, ?> toBeAdded)
+          throws ProtectionException, UserException
   {
     // Vérifie que l'entité courante est référencée par l'entité en argument
-    CLASS entity = Bid4WinEntity.getEntityNotProxy((CLASS)toBeAdded.getRelationSimple(backLink),
-                                                   (Class<CLASS>) this.getClass());
-    UtilBoolean.checkTrue("referenced", this == entity,
-                          this.getMessageRef(MessageRef.SUFFIX_UNDEFINED_ERROR));
-/*    if(toBeAdded != null)
-    {
-      Bid4WinEntity<?, ?> entity = UtilObject.checkNotNull(
-          "referenced", toBeAdded.getRelationSimple(backLink),
-          this.getMessageRef(MessageRef.SUFFIX_UNDEFINED_ERROR));
-      UtilBoolean.checkTrue("referenced", this == entity.getEntityEncapsulator().getEntity(),
-                            this.getMessageRef(MessageRef.SUFFIX_UNDEFINED_ERROR));
-    }*/
+    Bid4WinEntity<?, ?> entity = toBeAdded.getRelationSimple(backLink);
+    UtilObject.checkNotNull("referenced", entity, this.getMessageRef(MessageRef.SUFFIX_MISSING_ERROR));
+    UtilBoolean.checkTrue("referenced", this == entity.self(),
+                          this.getMessageRef(MessageRef.SUFFIX_INVALID_ERROR));
     // Ajoute l'entité en argument à la relation de collection de l'entité courante
-    this.add((Collection<Bid4WinEntity<?,?>>)this.getRelationCollection(link),
+    this.add((Bid4WinCollectionAbstract<Bid4WinEntity<?,?>, ?, ?>)this.getRelationCollection(link),
              toBeAdded, this.getMessageRefBase(link));
   }
   /**
    * Cette méthode permet de retirer l'entité en argument de la collection de l'
    * entité courante définie par la relation donnée. Cette fonction ne doit pas
-   * être appelée directement mais fait partie de la suppression du lien inversion
+   * être appelée directement mais fait partie de la suppression du lien inverse
    * d'une relation bidirectionnelle
    * @param link Relation définissant la collection de l'entité courante de laquelle
    * retirer celle en argument
@@ -1154,15 +1079,16 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
    * en argument vers l'entité courante
    * @param toBeRemoved Entité à retirer de la collection définie par la relation
    * donnée
-   * @throws ProtectionException Si l'entité courante est protégée
+   * @throws ProtectionException Si la collection de laquelle retirer l'entité est
+   * protégée
    * @throws UserException Si l'entité en argument est nulle, référence une entité
    * ou n'est pas référencée par la collection définie par la relation
    */
   @SuppressWarnings("unchecked")
-  protected void removeRelationCollection(Bid4WinRelation link,
-                                          Bid4WinRelation backLink,
-                                          Bid4WinEntity<?, ?> toBeRemoved)
-            throws ProtectionException, UserException
+  private void removeRelationCollection(Bid4WinRelation link,
+                                        Bid4WinRelation backLink,
+                                        Bid4WinEntity<?, ?> toBeRemoved)
+          throws ProtectionException, UserException
   {
     // Vérifie que l'entité en argument ne référence plus d'entité
     if(toBeRemoved != null)
@@ -1171,65 +1097,57 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
                            this.getMessageRef(MessageRef.SUFFIX_DEFINED_ERROR));
     }
     // Retire l'entité en argument de la relation de collection de l'entité courante
-    this.remove((Collection<Bid4WinEntity<?,?>>)this.getRelationCollection(link),
+    this.remove((Bid4WinCollectionAbstract<Bid4WinEntity<?,?>, ?, ?>)this.getRelationCollection(link),
                 toBeRemoved, this.getMessageRefBase(link));
   }
   /**
    * Cette méthode permet d'ajouter l'entité en argument à la map de l'entité courante
    * définie par la relation donnée. Cette fonction ne doit pas être appelée directement
-   * mais fait partie de la création du lien inversion d'une relation bidirectionnelle
+   * mais fait partie de la création du lien invere d'une relation bidirectionnelle
    * @param link Relation définissant la map de l'entité courante à laquelle ajouter
    * celle en argument
    * @param backLink Relation de type simple définissant le lien inverse de l'entité
    * en argument vers l'entité courante
    * @param toBeAdded Entité à ajouter à la map définie par la relation donnée
-   * @throws ProtectionException Si l'entité courante est protégée
+   * @throws ProtectionException Si la map à laquelle ajouter l'entité est protégée
    * @throws UserException Si l'entité en argument est nulle ne référence pas l'
    * entité courante ou est déjà référencée par la map définie par la relation
    */
   @SuppressWarnings("unchecked")
-  protected void addRelationMap(Bid4WinRelation link,
-                                Bid4WinRelation backLink,
-                                Bid4WinEntity<?, ?> toBeAdded)
-            throws ProtectionException, UserException
+  private void addRelationMap(Bid4WinRelation link,
+                              Bid4WinRelation backLink,
+                              Bid4WinEntity<?, ?> toBeAdded)
+          throws ProtectionException, UserException
   {
     // Vérifie que l'entité courante est référencée par l'entité en argument
-    CLASS entity = Bid4WinEntity.getEntityNotProxy((CLASS)toBeAdded.getRelationSimple(backLink),
-                                                   (Class<CLASS>) this.getClass());
-    UtilBoolean.checkTrue("referenced", this == entity,
+    Bid4WinEntity<?, ?> entity = toBeAdded.getRelationSimple(backLink);
+    UtilObject.checkNotNull("referenced", entity, this.getMessageRef(MessageRef.SUFFIX_MISSING_ERROR));
+    UtilBoolean.checkTrue("referenced", this == entity.self(),
                           this.getMessageRef(MessageRef.SUFFIX_UNDEFINED_ERROR));
-/*    if(toBeAdded != null)
-    {
-      Bid4WinEntity<?, ?> entity = UtilObject.checkNotNull(
-          "referenced", toBeAdded.getRelationSimple(backLink),
-          this.getMessageRef(MessageRef.SUFFIX_UNDEFINED_ERROR));
-      UtilBoolean.checkTrue("referenced", this == entity.getEntityEncapsulator().getEntity(),
-                            this.getMessageRef(MessageRef.SUFFIX_UNDEFINED_ERROR));
-    }*/
     // Ajoute l'entité en argument à la relation de map de l'entité courante
-    this.add((Map<Object, Bid4WinEntity<?, ?>>)this.getRelationMap(link),
+    this.add((Bid4WinMap<Object, Bid4WinEntity<?, ?>>)this.getRelationMap(link),
              this.getRelationMapKey(link, toBeAdded), toBeAdded,
              this.getMessageRefBase(link));
   }
   /**
    * Cette méthode permet de retirer l'entité en argument de la map de l'entité
    * courante définie par la relation donnée. Cette fonction ne doit pas être
-   * appelée directement mais fait partie de la suppression du lien inversion d'
-   * une relation bidirectionnelle
+   * appelée directement mais fait partie de la suppression du lien inverse d'une
+   * relation bidirectionnelle
    * @param link Relation définissant la map de l'entité courante de laquelle retirer
    * celle en argument
    * @param backLink Relation de type simple définissant le lien inverse de l'entité
    * en argument vers l'entité courante
    * @param toBeRemoved Entité à retirer de la map définie par la relation donnée
-   * @throws ProtectionException Si l'entité courante est protégée
+   * @throws ProtectionException Si la map de laquelle retirer l'entité est protégée
    * @throws UserException Si l'entité en argument est nulle, référence une entité
    * ou n'est pas référencée par la map définie par la relation
    */
   @SuppressWarnings("unchecked")
-  protected void removeRelationMap(Bid4WinRelation link,
-                                   Bid4WinRelation backLink,
-                                   Bid4WinEntity<?, ?> toBeRemoved)
-            throws ProtectionException, UserException
+  private void removeRelationMap(Bid4WinRelation link,
+                                 Bid4WinRelation backLink,
+                                 Bid4WinEntity<?, ?> toBeRemoved)
+          throws ProtectionException, UserException
   {
     // Vérifie que l'entité en argument ne référence plus d'entité
     if(toBeRemoved != null)
@@ -1238,7 +1156,7 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
                            this.getMessageRef(MessageRef.SUFFIX_DEFINED_ERROR));
     }
     // Retire l'entité en argument de la relation de collection de l'entité courante
-    this.remove((Map<Object, Bid4WinEntity<?, ?>>)this.getRelationMap(link),
+    this.remove((Bid4WinMap<Object, Bid4WinEntity<?, ?>>)this.getRelationMap(link),
                 this.getRelationMapKey(link, toBeRemoved), toBeRemoved,
                 this.getMessageRefBase(link));
   }
@@ -1389,9 +1307,58 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
     }
   }
 
+  /**
+   * Cette méthode permet de forcer, si ce champ est implémenté, la modification
+   * de l'entité courante impliquant l'incrémentation de sa version
+   * @return L'entité modifiée seulement si ce champ est implémenté
+   * @throws ProtectionException Si l'entité courante est protégée
+   */
+  @SuppressWarnings("unchecked")
+  public CLASS forceUpdate() throws ProtectionException
+  {
+    // Vérifie la protection de l'entité
+    this.checkProtection();
+    this.setUpdateForce(this.getVersion() + 1);
+    return (CLASS)this;
+  }
+
   /** #################################################################### **/
   /** ########################### PERSISTENCE ############################ **/
   /** #################################################################### **/
+  /**
+   * Getter de l'identifiant de l'entité
+   * @return L'identifiant de l'entité
+   */
+  public ID getId()
+  {
+    return this.id;
+  }
+  /**
+   * Setter de l'identifiant de l'entité
+   * @param id Identifiant de l'entité à positionner
+   */
+  private void setId(ID id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Getter du champ permettant le forçage de la modification de l'entité
+   * @return Le champ permettant le forçage de la modification de l'entité
+   */
+  public int getUpdateForce()
+  {
+    return this.updateForce;
+  }
+  /**
+   * Setter du champ permettant le forçage de la modification de l'entité
+   * @param updateForce Champ permettant le forçage de la modification de l'entité
+   */
+  private void setUpdateForce(int updateForce)
+  {
+    this.updateForce = updateForce;
+  }
+
   /**
    * Getter de la version de l'entité
    * @return La version de l'entité
@@ -1480,26 +1447,34 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
   }
 
   //*************************************************************************//
-  //************** TODO A COMMENTER ******************//
+  //************ Définition de la classe de comparaison donnant *************//
+  //************     accès aux méthodes internes des entités    *************//
   //*************************************************************************//
   /**
-   *
-   * TODO A COMMENTER<BR>
+   * Cette classe donne accès aux méthodes internes de comparaison des entités<BR>
    * <BR>
    * @author Emeric Fillâtre
    */
   public static class InternalEntityComparator extends InternalObjectComparator
   {
     /**
-     *
-     * TODO A COMMENTER
-     * @param <TYPE> TODO A COMMENTER
-     * @param object1 TODO A COMMENTER
-     * @param object2 TODO A COMMENTER
-     * @param nodeList TODO A COMMENTER
-     * @param referenced TODO A COMMENTER
-     * @param identical TODO A COMMENTER
-     * @return TODO A COMMENTER
+     * Cette méthode permet de tester l'équivalence entre les deux entités en paramètre,
+     * c'est à dire si tous leurs champs, identifiants et versions compris selon
+     * les cas d'utilisation, sont eux aussi équivalents, de même que les relations
+     * définies en paramètre en même temps que leur profondeur, sans avoir à vérifier
+     * autre chose (nullité, classe) car ces tests doivent être effectués par les
+     * méthodes appelantes. Le flag identical indique le context d'utilisation de
+     * la méthode. Elle se basera sur le retour de l'appel à la méthode sameInternal(CLASS ...)
+     * de la première entité à comparer
+     * @param <TYPE> Définition du type des objets à comparer
+     * @param object1 Premier objet à comparer
+     * @param object2 Deuxième objet à comparer
+     * @param nodeList Liste de noeuds de relations participants à la comparaison
+     * @param referenced Map de résultats de comparaisons entre entités déjà référencés
+     * @param identical Flag indiquant le context d'utilisation de la méthode, c'est
+     * à dire identicité ou équivalence
+     * @return True si les deux objets en paramètre sont considérés équivalents
+     * (liens éventuels avec d'autres entités pris en compte), false sinon
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public <TYPE extends Bid4WinEntity> boolean sameInternal(
@@ -1507,39 +1482,6 @@ public abstract class Bid4WinEntity<CLASS extends Bid4WinEntity<CLASS, ID>, ID>
         Bid4WinMatchReferenceMap referenced, boolean identical)
     {
       return object1.sameInternal(object2, nodeList, referenced, identical);
-    }
-  }
-
-  //*************************************************************************//
-  //************** TODO A COMMENTER ******************//
-  //*************************************************************************//
-  /**
-   *
-   * TODO A COMMENTER<BR>
-   * <BR>
-   * @author Emeric Fillâtre
-   */
-  protected static class EntityEncapsulator<ENTITY extends Bid4WinEntity<?, ?>>
-  {
-    /** TODO A COMMENTER */
-    private ENTITY entity;
-    /**
-     *
-     * TODO A COMMENTER
-     * @param entity TODO A COMMENTER
-     */
-    public EntityEncapsulator(ENTITY entity)
-    {
-      this.entity = entity;
-    }
-    /**
-     *
-     * TODO A COMMENTER
-     * @return TODO A COMMENTER
-     */
-    public ENTITY getEntity()
-    {
-      return this.entity;
     }
   }
 }

@@ -6,10 +6,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.bid4win.commons.core.Bid4WinCoreTester;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.UserException;
-import com.bid4win.commons.persistence.entity.Bid4WinEntityTester;
-import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
-import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
 import com.bid4win.commons.persistence.entity.account.security.UtilLogin;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
@@ -20,7 +19,7 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
  */
 @RunWith(Bid4WinJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-commons.xml")
-public class UtilEmailTest extends Bid4WinEntityTester<AccountAbstractStub, EntityGeneratorStub>
+public class UtilEmailTest extends Bid4WinCoreTester
 {
   /** Email le plus complexe autorisé */
   public final static String EMAIL = "a1_2b-3c4.d5e+f%g@h1-2i.3j4-k5l.mn";
@@ -82,7 +81,7 @@ public class UtilEmailTest extends Bid4WinEntityTester<AccountAbstractStub, Enti
     }
     try
     {
-      UtilEmail.checkAddress("");
+      UtilEmail.checkAddress(UtilString.EMPTY);
       fail("Check should have failed with invalid address");
     }
     catch(UserException ex)

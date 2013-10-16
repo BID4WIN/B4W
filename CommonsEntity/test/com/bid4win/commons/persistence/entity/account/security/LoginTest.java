@@ -79,4 +79,16 @@ public class LoginTest extends Bid4WinEntityTester<AccountAbstractStub, EntityGe
     assertFalse(login2.equalsInternal(login1));
     assertTrue(login1.equalsInternal(login1));
   }
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.core.security.ProtectableObjectTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    // Pas de méthode protégée à tester
+  }
 }

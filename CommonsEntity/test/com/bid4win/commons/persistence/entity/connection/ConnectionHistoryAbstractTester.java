@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import com.bid4win.commons.core.Bid4WinDate;
 import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.UserException;
@@ -30,6 +31,9 @@ public abstract class ConnectionHistoryAbstractTester<HISTORY extends Connection
                                                       GENERATOR extends EntityGenerator<ACCOUNT>>
        extends AccountBasedEntityTester<HISTORY, ACCOUNT, GENERATOR>
 {
+  /** TODO A COMMENTER */
+  private Bid4WinDate date = new Bid4WinDate();
+
   /**
    *
    * TODO A COMMENTER
@@ -53,11 +57,30 @@ public abstract class ConnectionHistoryAbstractTester<HISTORY extends Connection
    */
   protected CONNECTION createConnection(ACCOUNT account, boolean stopped) throws UserException
   {
+    return this.createConnection(account, stopped, false);
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param account TODO A COMMENTER
+   * @param stopped TODO A COMMENTER
+   * @param randomId TODO A COMMENTER
+   * @return TODO A COMMENTER
+   * @throws UserException TODO A COMMENTER
+   */
+  protected CONNECTION createConnection(ACCOUNT account, boolean stopped, boolean randomId) throws UserException
+  {
     try
     {
-      CONNECTION connection = this.createConnection(
-          IdGenerator.generateId(UtilString.createRepeatedString('H', 32).toString()),
-          account, this.getGenerator().createIpAddress(false), false);
+      String sessionId = "01234567890123456789012345678932";
+      if(randomId)
+      {
+        sessionId = IdGenerator.generateId(UtilString.createRepeatedString('H', 32).toString());
+      }
+      ConnectionData data = new ConnectionData(sessionId, this.getGenerator().createIpAddress(false), false);
+      data = new ConnectionDataStub(data, this.date);
+
+      CONNECTION connection = this.createConnection(data, account);
       if(stopped)
       {
         return connection.endConnection(DisconnectionReason.MANUAL);
@@ -83,8 +106,8 @@ public abstract class ConnectionHistoryAbstractTester<HISTORY extends Connection
    * @return TODO A COMMENTER
    * @throws UserException TODO A COMMENTER
    */
-  protected abstract CONNECTION createConnection(String sessionId, ACCOUNT account,
-                                                 IpAddress ipAddress, boolean remanent)
+  protected abstract CONNECTION createConnection(ConnectionData data/*String sessionId*/, ACCOUNT account/*,
+                                                 IpAddress ipAddress, boolean remanent*/)
             throws UserException;
   /**
    *
@@ -107,10 +130,10 @@ public abstract class ConnectionHistoryAbstractTester<HISTORY extends Connection
     super.testConstructor_etc();
 
     ACCOUNT account = this.getGenerator().createAccount("123");
-    IpAddress ipAddress = this.getGenerator().createIpAddress(false);
-    String sessionId = IdGenerator.generateId(32);
-    DisconnectionReason reason = DisconnectionReason.REMANENCE;
-    CONNECTION connection = this.createConnection(sessionId, account, ipAddress, true);
+    ConnectionData data = new ConnectionData(IdGenerator.generateId(UtilString.createRepeatedString('H', 32).toString()),
+                                             this.getGenerator().createIpAddress(false), true);
+    data = new ConnectionDataStub(data, new Bid4WinDate());
+    CONNECTION connection = this.createConnection(data, account/*, ipAddress, true*/);
     try
     {
       this.createHistory(connection);
@@ -120,16 +143,17 @@ public abstract class ConnectionHistoryAbstractTester<HISTORY extends Connection
     {
       System.out.println(ex.getMessage());
     }
+    DisconnectionReason reason = DisconnectionReason.REMANENCE;
     connection.endConnection(reason);
     try
     {
       HISTORY history = this.createHistory(connection);
       assertTrue("Bad account", account == history.getAccount());
-      assertTrue("Bad sessionId", sessionId == history.getSessionId());
-      assertTrue("Bad remanence", connection.isRemanent() == history.isRemanent());
-      assertTrue("Bad IP address", ipAddress == history.getIpAddress());
-      assertTrue("Bad start date", connection.getStartDate() == history.getStartDate());
-      assertTrue("Bad disconnection reason", reason == history.getDisconnectionReason());
+      assertTrue("Bad sessionId", data.getSessionId() == history.getData().getSessionId());
+      assertTrue("Bad remanence", data.isRemanent() == history.getData().isRemanent());
+      assertTrue("Bad IP address", data.getIpAddress() == history.getData().getIpAddress());
+      assertTrue("Bad start date", data.getStartDate() == history.getData().getStartDate());
+      assertTrue("Bad disconnection reason", reason == history.getData().getDisconnectionReason());
     }
     catch(UserException ex)
     {
@@ -137,7 +161,10 @@ public abstract class ConnectionHistoryAbstractTester<HISTORY extends Connection
       fail("Instanciation should not fail: " + ex.getMessage());
     }
 
-    connection = this.createConnection(sessionId, account, ipAddress, false);
+    data = new ConnectionData(IdGenerator.generateId(UtilString.createRepeatedString('H', 32).toString()),
+                                                     this.getGenerator().createIpAddress(false), false);
+    data = new ConnectionDataStub(data, new Bid4WinDate());
+    connection = this.createConnection(data, account/*, ipAddress, true*/);
     try
     {
       this.createHistory(connection);
@@ -152,11 +179,11 @@ public abstract class ConnectionHistoryAbstractTester<HISTORY extends Connection
     {
       HISTORY history = this.createHistory(connection);
       assertTrue("Bad account", account == history.getAccount());
-      assertTrue("Bad sessionId", sessionId == history.getSessionId());
-      assertTrue("Bad remanence", connection.isRemanent() == history.isRemanent());
-      assertTrue("Bad IP address", ipAddress == history.getIpAddress());
-      assertTrue("Bad start date", connection.getStartDate() == history.getStartDate());
-      assertTrue("Bad disconnection reason", reason == history.getDisconnectionReason());
+      assertTrue("Bad sessionId", data.getSessionId() == history.getData().getSessionId());
+      assertTrue("Bad remanence", data.isRemanent() == history.getData().isRemanent());
+      assertTrue("Bad IP address", data.getIpAddress() == history.getData().getIpAddress());
+      assertTrue("Bad start date", data.getStartDate() == history.getData().getStartDate());
+      assertTrue("Bad disconnection reason", reason == history.getData().getDisconnectionReason());
     }
     catch(UserException ex)
     {

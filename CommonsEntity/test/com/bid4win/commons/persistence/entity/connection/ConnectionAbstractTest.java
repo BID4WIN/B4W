@@ -21,19 +21,16 @@ public class ConnectionAbstractTest
   /**
    *
    * TODO A COMMENTER
-   * @param sessionId {@inheritDoc}
+   * @param data {@inheritDoc}
    * @param account {@inheritDoc}
-   * @param ipAddress {@inheritDoc}
-   * @param remanent {@inheritDoc}
    * @return {@inheritDoc}
    * @throws UserException {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.connection.ConnectionAbstractTester#createConnection(java.lang.String, com.bid4win.commons.persistence.entity.account.AccountAbstract, com.bid4win.commons.persistence.entity.connection.IpAddress, boolean)
+   * @see com.bid4win.commons.persistence.entity.connection.ConnectionAbstractTester#createConnection(com.bid4win.commons.persistence.entity.connection.ConnectionData, com.bid4win.commons.persistence.entity.account.AccountAbstract)
    */
   @Override
-  protected ConnectionAbstractStub createConnection(String sessionId, AccountAbstractStub account,
-                                                    IpAddress ipAddress, boolean remanent)
+  protected ConnectionAbstractStub createConnection(ConnectionData data, AccountAbstractStub account)
             throws UserException
   {
-    return new ConnectionAbstractStub(sessionId, account, ipAddress, remanent);
+    return new ConnectionAbstractStub(data, account);
   }
 }

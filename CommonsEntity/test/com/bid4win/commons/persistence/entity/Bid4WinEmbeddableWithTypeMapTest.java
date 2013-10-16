@@ -9,11 +9,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.bid4win.commons.core.Bid4WinCoreTester;
 import com.bid4win.commons.core.Bid4WinObjectTypeStub1;
 import com.bid4win.commons.core.collection.Bid4WinSet;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.UserException;
-import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
 /**
@@ -24,7 +24,7 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
  */
 @RunWith(Bid4WinJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-commons.xml")
-public class Bid4WinEmbeddableWithTypeMapTest extends Bid4WinEntityTester<AccountAbstractStub, EntityGeneratorStub>
+public class Bid4WinEmbeddableWithTypeMapTest extends Bid4WinCoreTester
 {
   /**
    * Test of Bid4WinEmbeddableWithTypeMap(EMBEDDED) method, of class Bid4WinEmbeddableWithTypeMap.

@@ -9,7 +9,7 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonsCore"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonsJ2EE"/>
-	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/hibernate-3.6.0.Final.jar" sourcepath="C:/bid4win/TOOLS/hibernate-distribution-3.6.0.Final/project/core/src/main/java"/>
 	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="/CommonsLib/lib/jars/persistence/hibernate-3.6.0.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

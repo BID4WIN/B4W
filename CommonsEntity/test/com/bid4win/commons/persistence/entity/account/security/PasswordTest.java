@@ -79,4 +79,30 @@ public class PasswordTest extends Bid4WinEntityTester<AccountAbstractStub, Entit
     assertFalse(password2.equalsInternal(password1));
     assertTrue(password1.equalsInternal(password1));
   }
+  /**
+   * Test of equalsInternal(Login), of class Login.
+   * @throws Bid4WinException Issue not expected during this test
+   */
+  @Test
+  public void testEqualsInternal_Login() throws Bid4WinException
+  {
+    Login login1 = new Login("123456");
+    Login login2 = new Login("1234567");
+
+    assertFalse(login1.equalsInternal(login2));
+    assertFalse(login2.equalsInternal(login1));
+    assertTrue(login1.equalsInternal(login1));
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.core.security.ProtectableObjectTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    // Pas de méthode protégée à tester
+  }
 }

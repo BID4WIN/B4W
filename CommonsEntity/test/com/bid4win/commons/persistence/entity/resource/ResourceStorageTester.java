@@ -1,6 +1,7 @@
 package com.bid4win.commons.persistence.entity.resource;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -8,6 +9,7 @@ import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.UserException;
+import com.bid4win.commons.core.security.exception.ProtectionException;
 import com.bid4win.commons.persistence.entity.EntityGenerator;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
 
@@ -109,5 +111,32 @@ public abstract class ResourceStorageTester<STORAGE extends ResourceStorage<STOR
     this.checkSame(storage2, storage1);
     this.checkIdentical(storage1, storage2);
     this.checkIdentical(storage2, storage1);
+  }
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.persistence.entity.resource.ResourceTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    super.testCheckProtection();
+
+    this.startProtection();
+    STORAGE storage = this.createResource("path", "name", this.getType());
+    this.stopProtection();
+    try
+    {
+      this.createUsage("usagePath", "usageName", storage);
+      fail("Should fail with protected storage");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    assertEquals("Wrong usages", 0, storage.getUsages().size());
   }
 }

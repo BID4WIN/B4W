@@ -3,6 +3,7 @@ package com.bid4win.commons.persistence.entity.comparator;
 import java.util.Collection;
 
 import com.bid4win.commons.core.Bid4WinObject;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.comparator.Bid4WinObjectCollectionComparator;
 import com.bid4win.commons.core.comparator.Bid4WinObjectComparator;
@@ -21,11 +22,17 @@ import com.bid4win.commons.persistence.entity.collection.Bid4WinMatchReferenceMa
  * <BR>
  * @author Emeric Fillâtre
  */
-public abstract class Bid4WinEntityCollectionComparator<ENTITY extends Bid4WinEntity<?, ?>,
-                                                        COLLECTION extends Collection<? extends ENTITY>,
-                                                        COMPARATOR extends Bid4WinEntityComparator<ENTITY>>
+public class Bid4WinEntityCollectionComparator<ENTITY extends Bid4WinEntity<?, ?>,
+                                               COLLECTION extends Collection<? extends ENTITY>,
+                                               COMPARATOR extends Bid4WinEntityComparator<ENTITY>>
        extends Bid4WinObjectCollectionComparator<ENTITY, COLLECTION, COMPARATOR>
 {
+  /** C'est l'instance utilisée comme singleton */
+  private final static Bid4WinEntityCollectionComparator<Bid4WinEntity<?, ?>, Collection<? extends Bid4WinEntity<?, ?>>,
+                                                         Bid4WinEntityComparator<Bid4WinEntity<?, ?>>>
+      instance = new Bid4WinEntityCollectionComparator<Bid4WinEntity<?, ?>, Collection<? extends Bid4WinEntity<?, ?>>,
+                                                       Bid4WinEntityComparator<Bid4WinEntity<?, ?>>>(
+          Bid4WinEntityComparator.getInstanceEntity());
   /**
    *
    * TODO A COMMENTER
@@ -39,6 +46,17 @@ public abstract class Bid4WinEntityCollectionComparator<ENTITY extends Bid4WinEn
          getInstanceObjectCollection()
   {
     throw new Bid4WinRuntimeException("Deprecated");
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @return TODO A COMMENTER
+   */
+  public static Bid4WinEntityCollectionComparator<Bid4WinEntity<?, ?>, Collection<? extends Bid4WinEntity<?, ?>>,
+                                                  Bid4WinEntityComparator<Bid4WinEntity<?, ?>>>
+         getInstanceEntityCollection()
+  {
+    return Bid4WinEntityCollectionComparator.instance;
   }
 
   /**
@@ -138,7 +156,48 @@ public abstract class Bid4WinEntityCollectionComparator<ENTITY extends Bid4WinEn
    * @return True si les deux listes d'entités sont considérées équivalentes ou
    * identiques, false sinon
    */
-  public abstract boolean same(COLLECTION collection1, COLLECTION collection2,
-                               COMPARATOR compatator, Bid4WinList<Bid4WinRelationNode> nodeList,
-                               Bid4WinMatchReferenceMap referenced, boolean identical);
+  public boolean same(COLLECTION collection1, COLLECTION collection2,
+                      COMPARATOR compatator, Bid4WinList<Bid4WinRelationNode> nodeList,
+                      Bid4WinMatchReferenceMap referenced, boolean identical)
+  {
+    // Pour comparer plus rapidement
+    if(collection1 == collection2)
+    {
+      return true;
+    }
+    // Prend en compte les valeurs nulles
+    if(collection1 == null || collection2 == null)
+    {
+      return false;
+    }
+    // Pour que deux collections soit similaires, il faut qu'elles aient les même tailles
+    if(collection1.size() != collection2.size())
+    {
+      return false;
+    }
+    // Parcours la première collection et recherche les entités similaires dans
+    // la deuxième
+    Bid4WinCollection<ENTITY> collection = new Bid4WinCollection<ENTITY>(collection2);
+    for(ENTITY entity1 : collection1)
+    {
+      boolean found = false;
+      for(ENTITY entity2 : collection)
+      {
+        // On a trouvé une entité similaire
+        if(compatator.same(entity1, entity2, nodeList, referenced, identical))
+        {
+          found = true;
+          // On diminue la collection de recherche
+          collection.remove(entity2);
+          break;
+        }
+      }
+      // Aucune entité similaire n'a été trouvée, les collections ne le sont donc pas
+      if(!found)
+      {
+        return false;
+      }
+    }
+    return true;
+  }
 }

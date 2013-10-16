@@ -3,7 +3,7 @@ package com.bid4win.commons.persistence.usertype;
 import java.io.Serializable;
 
 import org.hibernate.HibernateException;
-import org.hibernate.usertype.EnhancedUserType;
+import org.hibernate.usertype.UserType;
 
 import com.bid4win.commons.core.comparator.Bid4WinComparator;
 
@@ -16,8 +16,11 @@ import com.bid4win.commons.core.comparator.Bid4WinComparator;
  * @author Emeric Fillâtre
  */
 public abstract class Bid4WinUserType<TYPE extends Serializable>
-       implements EnhancedUserType // TODO SEE CustomType !!!
+       implements UserType, Serializable//implements EnhancedUserType // TODO SEE CustomType !!!
 {
+  /** TODO A COMMENTER */
+  private static final long serialVersionUID = -5111402495440473384L;
+
   /** Classe du type complexe géré */
   private Class<TYPE> typeClass;
 

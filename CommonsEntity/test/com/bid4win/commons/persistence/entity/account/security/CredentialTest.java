@@ -11,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.UserException;
-import com.bid4win.commons.core.security.ObjectProtector;
 import com.bid4win.commons.core.security.exception.ProtectionException;
 import com.bid4win.commons.persistence.entity.Bid4WinEntityTester;
 import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
@@ -144,29 +143,6 @@ public class CredentialTest extends Bid4WinEntityTester<AccountAbstractStub, Ent
 
     assertTrue(credential1.equalsInternal(credential1));
   }
-  /**
-   * Test of hasRole(Role), of class Credential.
-   * @throws Bid4WinException Issue not expected during this test
-   */
-  @Test
-  public void testHasRole_Role() throws Bid4WinException
-  {
-    Login login = this.getGenerator().createLogin();
-    Password password = this.getGenerator().createPassword();
-    Credential credential = new Credential(login, password, Role.ADMIN);
-    assertFalse("Bad result", credential.hasRole(Role.NONE));
-    assertTrue("Bad result", credential.hasRole(Role.BASIC));
-    assertFalse("Bad result", credential.hasRole(Role.WAIT));
-    assertTrue("Bad result", credential.hasRole(Role.ADMIN));
-    assertFalse("Bad result", credential.hasRole(Role.SUPER));
-
-    credential = new Credential(login, password, Role.SUPER);
-    assertFalse("Bad result", credential.hasRole(Role.NONE));
-    assertTrue("Bad result", credential.hasRole(Role.BASIC));
-    assertFalse("Bad result", credential.hasRole(Role.WAIT));
-    assertTrue("Bad result", credential.hasRole(Role.ADMIN));
-    assertTrue("Bad result", credential.hasRole(Role.SUPER));
-  }
 
   /**
    * Test of definePassword(Password), of class Credential.
@@ -178,31 +154,21 @@ public class CredentialTest extends Bid4WinEntityTester<AccountAbstractStub, Ent
     Login login = this.getGenerator().createLogin();
     int i = 0;
     Password password = this.getGenerator().createPassword(i++);
-    String protectionId = ObjectProtector.startProtection();
-    Credential credential = null;
+    Credential credential = new Credential(login, password);
+    password = this.getGenerator().createPassword(i++);
+    credential.definePassword(password);
+    assertEquals("Wrong password", password, credential.getPassword());
     try
     {
-      credential = new Credential(login, password);
-      password = this.getGenerator().createPassword(i++);
-      credential.definePassword(password);
-      assertEquals("Wrong password", password, credential.getPassword());
+      credential.definePassword(null);
+      fail("Should fail with null password");
     }
-    finally
-    {
-      ObjectProtector.stopProtection(protectionId);
-    }
-    try
-    {
-      credential.definePassword(this.getGenerator().createPassword(i++));
-      fail("Should fail with protected object");
-    }
-    catch(ProtectionException ex)
+    catch(UserException ex)
     {
       System.out.println(ex.getMessage());
       assertEquals("Wrong password", password, credential.getPassword());
     }
   }
-
   /**
    * Test of defineRole(Role), of class Credential.
    * @throws Bid4WinException Issue not expected during this test
@@ -213,18 +179,48 @@ public class CredentialTest extends Bid4WinEntityTester<AccountAbstractStub, Ent
     Login login = this.getGenerator().createLogin();
     Password password = this.getGenerator().createPassword();
     Role role = Role.NONE;
-    String protectionId = ObjectProtector.startProtection();
-    Credential credential = null;
+    Credential credential = new Credential(login, password, role);
+    role = Role.BASIC;
+    credential.defineRole(role);
+    assertEquals("Wrong role", role, credential.getRole());
     try
     {
-      credential = new Credential(login, password, role);
-      role = Role.BASIC;
-      credential.defineRole(role);
+      credential.defineRole(null);
+      fail("Should fail with null role");
+    }
+    catch(UserException ex)
+    {
+      System.out.println(ex.getMessage());
       assertEquals("Wrong role", role, credential.getRole());
     }
-    finally
+  }
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.core.security.ProtectableObjectTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    this.startProtection();
+    int i = 0;
+    Login login = this.getGenerator().createLogin(i);
+    Password password = this.getGenerator().createPassword(i);
+    Role role = Role.BASIC;
+    Credential credential = new Credential(login, password, role);
+    this.stopProtection();
+    i++;
+    try
     {
-      ObjectProtector.stopProtection(protectionId);
+      credential.definePassword(this.getGenerator().createPassword(i));
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
     }
     try
     {
@@ -234,7 +230,8 @@ public class CredentialTest extends Bid4WinEntityTester<AccountAbstractStub, Ent
     catch(ProtectionException ex)
     {
       System.out.println(ex.getMessage());
-      assertEquals("Wrong role", role, credential.getRole());
     }
+    assertEquals("Wrong password", password, credential.getPassword());
+    assertEquals("Wrong role", role, credential.getRole());
   }
 }

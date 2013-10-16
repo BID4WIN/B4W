@@ -31,11 +31,9 @@ public class AccountAbstract<CLASS extends AccountAbstract<CLASS>>
        extends Bid4WinEntityGeneratedID<CLASS>
 {
   /** Certificat de connexion du compte utilisateur */
-  @Transient
-  private Credential credential = null;
+  @Transient private Credential credential = null;
   /** Email du compte utilisateur */
-  @Transient
-  private Email email = null;
+  @Transient private Email email = null;
 
   /**
    * Constructeur pour création par introspection ou en proxy pour chargement différé
@@ -108,7 +106,6 @@ public class AccountAbstract<CLASS extends AccountAbstract<CLASS>>
     // Retourne le rendu
     return buffer;
   }
-
   /**
    *
    * TODO A COMMENTER
@@ -128,7 +125,7 @@ public class AccountAbstract<CLASS extends AccountAbstract<CLASS>>
    */
   public boolean hasRole(Role role)
   {
-    return this.getCredential().hasRole(role);
+    return this.getCredential().getRole().belongsTo(role);
   }
 
   /**

@@ -47,9 +47,9 @@ public class FooParent1 extends FooParent<FooParent1, FooChild1>
   /** ########################### PERSISTENCE ############################ **/
   /** #################################################################### **/
   /**
-   * Getter de la map interne d'objets inclus dans l'objet
+   * Getter de la map d'enfants inclus dans l'objet pour la persistence
    * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.foo.not_cached.FooParent#getChildMapInternal()
+   * @see com.bid4win.commons.persistence.entity.foo.not_cached.FooParent#getChildMap()
    */
   @Override
   // Annotation pour la persistence
@@ -58,8 +58,8 @@ public class FooParent1 extends FooParent<FooParent1, FooChild1>
   @MapKey(name = "value")
   // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
   @OptimisticLock(excluded = false)
-  protected Map<String, FooChild1> getChildMapInternal()
+  protected Map<String, FooChild1> getChildMap()
   {
-    return super.getChildMapInternal();
+    return super.getChildMap();
   }
 }

@@ -22,7 +22,7 @@ public class SessionException extends UserException
    */
   public SessionException()
   {
-    this(ConnectionRef.CONNECTION_SESSION_UNDEFINED_ERROR);
+    this(ConnectionRef.SESSION_UNDEFINED_ERROR);
   }
   /**
    * Constructeur

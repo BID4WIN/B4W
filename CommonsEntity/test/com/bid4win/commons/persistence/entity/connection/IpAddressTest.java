@@ -78,4 +78,16 @@ public class IpAddressTest extends Bid4WinEntityTester<AccountAbstractStub, Enti
     assertFalse(ipAddress2.equalsInternal(ipAddress1));
     assertTrue(ipAddress1.equalsInternal(ipAddress1));
   }
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.core.security.ProtectableObjectTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    // TODO Auto-generated method stub
+  }
 }

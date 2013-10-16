@@ -3,6 +3,7 @@ package com.bid4win.commons.persistence.usertype.core;
 import java.util.Properties;
 
 import com.bid4win.commons.core.Bid4WinDate;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.persistence.usertype.Bid4WinStringUserTypeTester;
 
@@ -28,7 +29,7 @@ public abstract class Bid4WinDateUserTypeTester
   {
     Bid4WinDateUserType userType = new Bid4WinDateUserType();
     Properties properties = new Properties();
-    properties.put(Bid4WinDateUserType.TIME_PARAMETER, "" + this.isTimeNeeded());
+    properties.put(Bid4WinDateUserTypeAbstract.TIME_PARAMETER, UtilString.EMPTY + this.isTimeNeeded());
     userType.setParameterValues(properties);
     return userType;
   }

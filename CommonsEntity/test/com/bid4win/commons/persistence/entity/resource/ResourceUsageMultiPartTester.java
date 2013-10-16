@@ -65,7 +65,7 @@ public abstract class ResourceUsageMultiPartTester<USAGE extends ResourceUsageMu
       assertEquals("Bad resource name", name, usage.getName());
       assertEquals("Bad resource type", storage.getType(), usage.getType());
       assertTrue("Bad resource storage", storage == usage.getStorage());
-      assertEquals("Bad part type set", storage.getPartTypeSet(), usage.getPartTypeSet());
+      assertEquals("Bad part type set", storage.getPartTypes(), usage.getPartTypes());
     }
     catch(UserException ex)
     {

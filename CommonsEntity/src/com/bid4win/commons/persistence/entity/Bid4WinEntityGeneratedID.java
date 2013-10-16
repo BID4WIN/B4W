@@ -62,7 +62,7 @@ public class Bid4WinEntityGeneratedID<CLASS extends Bid4WinEntityGeneratedID<CLA
    */
   protected Bid4WinEntityGeneratedID(String id)
   {
-    super((UtilString.trimNotNull(id).equals("") ? null : UtilString.trimNotNull(id)));
+    super((UtilString.trimNotNull(id).equals(UtilString.EMPTY) ? null : UtilString.trimNotNull(id)));
   }
 
   /** #################################################################### **/

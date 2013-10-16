@@ -33,8 +33,7 @@ public class AccountBasedEntity<CLASS extends AccountBasedEntity<CLASS, ID, ACCO
        extends Bid4WinEntity<CLASS, ID>
 {
   /** Compte utilisateur de l'entité */
-  @Transient
-  private ACCOUNT account = null;
+  @Transient private ACCOUNT account = null;
 
   /**
    * Constructeur pour création par introspection
@@ -71,23 +70,6 @@ public class AccountBasedEntity<CLASS extends AccountBasedEntity<CLASS, ID, ACCO
   {
     this(id);
     this.linkToAccount(account);
-  }
-
-  /**
-   *
-   * TODO A COMMENTER
-   * @param relation {@inheritDoc}
-   * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getMessageRefBase(com.bid4win.commons.persistence.entity.Bid4WinRelation)
-   */
-  @Override
-  protected MessageRef getMessageRefBase(Bid4WinRelation relation)
-  {
-    if(relation.equals(AccountBasedEntity_Relations.RELATION_ACCOUNT))
-    {
-      return AccountRef.ACCOUNT;
-    }
-    return super.getMessageRefBase(relation);
   }
 
   /**
@@ -140,6 +122,22 @@ public class AccountBasedEntity<CLASS extends AccountBasedEntity<CLASS, ID, ACCO
     {
       super.setRelationSimple(relation, entity);
     }
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param relation {@inheritDoc}
+   * @return {@inheritDoc}
+   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getMessageRefBase(com.bid4win.commons.persistence.entity.Bid4WinRelation)
+   */
+  @Override
+  protected MessageRef getMessageRefBase(Bid4WinRelation relation)
+  {
+    if(relation.equals(AccountBasedEntity_Relations.RELATION_ACCOUNT))
+    {
+      return AccountRef.ACCOUNT;
+    }
+    return super.getMessageRefBase(relation);
   }
 
   /**

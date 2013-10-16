@@ -1,6 +1,7 @@
 package com.bid4win.commons.persistence.entity;
 
 import com.bid4win.commons.core.CoreGenerator;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.security.IdGenerator;
 import com.bid4win.commons.persistence.entity.account.AccountAbstract;
@@ -210,7 +211,7 @@ public abstract class EntityGenerator<ACCOUNT extends AccountAbstract<ACCOUNT>>
       String address = IdGenerator.generateId("HHHH-HHHH-HHHH-HHHH-HHHH-HHHH-HHHH-HHHH");
       return new IpAddress(address.replaceAll("-", ":"));
     }
-    String address = "";
+    String address = UtilString.EMPTY;
     for(int i = 0 ; i < 4 ; i++)
     {
       int number = Integer.valueOf(IdGenerator.generateId("NNN"));

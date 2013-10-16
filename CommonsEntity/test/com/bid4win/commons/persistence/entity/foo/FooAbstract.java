@@ -3,17 +3,15 @@ package com.bid4win.commons.persistence.entity.foo;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import com.bid4win.commons.core.Bid4WinDate;
 import com.bid4win.commons.core.comparator.Bid4WinComparator;
-import com.bid4win.commons.persistence.entity.Bid4WinEntity;
-import com.bid4win.commons.persistence.entity.core.EmbeddableDate;
+import com.bid4win.commons.core.security.exception.ProtectionException;
+import com.bid4win.commons.persistence.entity.Bid4WinEntityAutoID;
+import com.bid4win.commons.persistence.entity.account.security.Role;
+import com.bid4win.commons.persistence.entity.core.Bid4WinDateForRequest;
 
 /**
  *
@@ -27,7 +25,7 @@ import com.bid4win.commons.persistence.entity.core.EmbeddableDate;
 @MappedSuperclass
 @Access(AccessType.FIELD)
 public abstract class FooAbstract<CLASS extends FooAbstract<CLASS>>
-       extends Bid4WinEntity<CLASS, Integer>
+       extends Bid4WinEntityAutoID<CLASS>
 {
   /** Valeur de l'objet */
   @Transient
@@ -35,9 +33,9 @@ public abstract class FooAbstract<CLASS extends FooAbstract<CLASS>>
   /** Date de l'objet */
   @Transient
   private Bid4WinDate date = null;
-  /** Date de l'objet */
+  /** Rôle de l'objet */
   @Transient
-  private EmbeddableDate embeddedDate = null;
+  private Role role = null;
 
   /**
    * Constructeur
@@ -50,13 +48,23 @@ public abstract class FooAbstract<CLASS extends FooAbstract<CLASS>>
    * Constructeur
    * @param value Valeur de l'objet
    * @param date Date de l'objet
-   * @throws IllegalArgumentException TODO A COMMENTER
    */
-  public FooAbstract(String value, Bid4WinDate date) throws IllegalArgumentException
+  public FooAbstract(String value, Bid4WinDate date)
   {
     this();
-    this.setValue(value);
+    this.defineValue(value);
     this.defineDate(date);
+  }
+  /**
+   * Constructeur
+   * @param value Valeur de l'objet
+   * @param date Date de l'objet
+   * @param role Rôle de l'objet
+   */
+  public FooAbstract(String value, Bid4WinDate date, Role role)
+  {
+    this(value, date);
+    this.defineRole(role);
   }
 
   /**
@@ -71,7 +79,8 @@ public abstract class FooAbstract<CLASS extends FooAbstract<CLASS>>
   {
     return super.sameRelationNoneInternal(toBeCompared, identical) &&
            Bid4WinComparator.getInstance().equals(this.getValue(), toBeCompared.getValue()) &&
-           Bid4WinComparator.getInstance().equals(this.getDate(), toBeCompared.getDate());
+           Bid4WinComparator.getInstance().equals(this.getDate(), toBeCompared.getDate()) &&
+           Bid4WinComparator.getInstance().equals(this.getRole(), toBeCompared.getRole());
   }
   /**
    * Permet de transformer l'objet en une chaîne de caractères lisible
@@ -84,41 +93,49 @@ public abstract class FooAbstract<CLASS extends FooAbstract<CLASS>>
     StringBuffer buffer = super.renderRelationNone();
     buffer.append(" Value=").append(this.getValue());
     buffer.append(" Date=").append(this.getDate().formatDDIMMIYYYY_HHIMMISSISSS());
+    buffer.append(" Role=").append(this.getRole());
     return buffer;
   }
+  /**
+  *
+  * TODO A COMMENTER
+  * @param value TODO A COMMENTER
+  * @throws ProtectionException TODO A COMMENTER
+  */
+ public void defineValue(String value) throws ProtectionException
+ {
+   // Vérifie la protection de l'objet courant
+   this.checkProtection();
+   this.setValue(value);
+ }
   /**
    *
    * TODO A COMMENTER
    * @param date TODO A COMMENTER
-   * @throws IllegalArgumentException TODO A COMMENTER
+   * @throws ProtectionException TODO A COMMENTER
    */
-  public void defineDate(Bid4WinDate date) throws IllegalArgumentException
+  public void defineDate(Bid4WinDate date) throws ProtectionException
   {
     // Vérifie la protection de l'objet courant
     this.checkProtection();
-    this.setEmbeddedDate(new EmbeddableDate(date));
-    this.setDate(this.getEmbeddedDate().getDate());
+    this.setDate(date);
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param role TODO A COMMENTER
+   * @throws ProtectionException TODO A COMMENTER
+   */
+  public void defineRole(Role role) throws ProtectionException
+  {
+    // Vérifie la protection de l'objet courant
+    this.checkProtection();
+    this.setRole(role);
   }
 
   /** #################################################################### **/
   /** ########################### PERSISTENCE ############################ **/
   /** #################################################################### **/
-  /**
-   * Getter de l'identifiant de l'objet
-   * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getId()
-   */
-  @Override
-  // Annotation pour la persistence
-  @Access(AccessType.PROPERTY)
-  @Id()
-  @Column(name = "ID", length = 10, nullable = false, unique = true)
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  public Integer getId()
-  {
-    return super.getId();
-  }
-
   /**
    * Getter de la valeur de l'objet
    * @return La valeur de l'objet
@@ -134,7 +151,7 @@ public abstract class FooAbstract<CLASS extends FooAbstract<CLASS>>
    * Setter de la valeur de l'objet
    * @param value Valeur de l'objet à positionner
    */
-  public void setValue(String value)
+  private void setValue(String value)
   {
     this.value = value;
   }
@@ -145,7 +162,7 @@ public abstract class FooAbstract<CLASS extends FooAbstract<CLASS>>
    */
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
-  @Column(name = "DATE_", nullable = false, unique = false)
+  @Column(name = "DATE_", nullable = true, unique = false)
   public Bid4WinDate getDate()
   {
     return this.date;
@@ -160,24 +177,45 @@ public abstract class FooAbstract<CLASS extends FooAbstract<CLASS>>
   }
 
   /**
-   *
-   * TODO A COMMENTER
-   * @return TODO A COMMENTER
+   * Getter de la date de l'objet pour les requêtes
+   * @return La date de l'objet pour les requêtes
    */
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
-  @Embedded()
-  public EmbeddableDate getEmbeddedDate()
+  @Column(name = "DATE_", nullable = true, unique = false,
+          // Utilise la même colonne que la date réelle
+          insertable = false, updatable = false)
+  public Bid4WinDateForRequest getDateForRequest()
   {
-    return this.embeddedDate;
+    return Bid4WinDateForRequest.getDateForRequest(this.getDate());
   }
   /**
-   *
-   * TODO A COMMENTER
-   * @param embeddedDate TODO A COMMENTER
+   * Setter inutilisé car la date est positionnée par ailleurs
+   * @param date Date de l'objet  pour les requêtes à positionner
    */
-  private void setEmbeddedDate(EmbeddableDate embeddedDate)
+  @SuppressWarnings("unused")
+  private void setDateForRequest(Bid4WinDateForRequest date)
   {
-    this.embeddedDate = embeddedDate;
+    // Ne fait rien
+  }
+
+  /**
+   * Getter du rôle de l'objet
+   * @return Le rôle de l'objet
+   */
+  // Annotation pour la persistence
+  @Access(AccessType.PROPERTY)
+  @Column(name = "ROLE", nullable = true, unique = false)
+  public Role getRole()
+  {
+    return this.role;
+  }
+  /**
+   * Setter du rôle de l'objet
+   * @param role Rôle de l'objet à positionner
+   */
+  private void setRole(Role role)
+  {
+    this.role = role;
   }
 }

@@ -27,11 +27,6 @@ public class DisconnectionReason extends Bid4WinObjectType<DisconnectionReason>
   /** Déconnexion due au changement de mot de passe sur une autre session */
   public final static DisconnectionReason PASSWORD = new DisconnectionReason("PASSWORD", NORMAL);
 
-  /** Déconnexion pour raison technique */
-  public final static DisconnectionReason TECHNICAL = new DisconnectionReason("TECHNICAL");
-  /** Déconnexion pour utilisation d'une adresse IP différente */
-  public final static DisconnectionReason IP = new DisconnectionReason("IP", TECHNICAL);
-
   /** Déconnexion pour raison de sécurité */
   public final static DisconnectionReason SECURITY = new DisconnectionReason("SECURITY");
   /** Déconnexion pour problème de rémanence invalide */

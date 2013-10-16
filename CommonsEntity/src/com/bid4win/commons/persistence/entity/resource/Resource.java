@@ -33,14 +33,11 @@ public abstract class Resource<CLASS extends Resource<CLASS, TYPE>,
        extends Bid4WinEntityAutoID<CLASS> implements Bid4WinResource<TYPE>, Cloneable
 {
   /** Emplacement de stockage de la ressource */
-  @Transient
-  private String path = null;
+  @Transient private String path = null;
   /** Nom de la ressource */
-  @Transient
-  private String name = null;
+  @Transient private String name = null;
   /** Type de la ressource */
-  @Transient
-  private TYPE type = null;
+  @Transient private TYPE type = null;
 
   /**
    * Constructeur pour création par introspection
@@ -184,7 +181,7 @@ public abstract class Resource<CLASS extends Resource<CLASS, TYPE>,
   /** ########################### PERSISTENCE ############################ **/
   /** #################################################################### **/
   /**
-   * Getter du champs permettant le forçage de la modification de la ressource
+   * Getter du champ permettant le forçage de la modification de la ressource
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getUpdateForce()
    */

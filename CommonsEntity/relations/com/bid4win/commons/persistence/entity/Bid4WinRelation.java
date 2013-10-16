@@ -23,7 +23,7 @@ public class Bid4WinRelation extends Bid4WinObject<Bid4WinRelation>
    */
   public Bid4WinRelation()
   {
-    this("", null);
+    this(UtilString.EMPTY, null);
   }
   /**
    * Constructeur

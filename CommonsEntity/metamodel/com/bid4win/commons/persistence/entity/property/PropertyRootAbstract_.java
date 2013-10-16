@@ -19,7 +19,7 @@ public abstract class PropertyRootAbstract_ extends PropertyBase_
   /** Définition du champ permettant le forçage de la modification de la propriété racine */
   public static volatile SingularAttribute<PropertyRootAbstract<?, ?>, Integer> updateForce;
   /** Definition de la map de sous-propriétés de la propriété racine */
-  public static volatile MapAttribute<PropertyRootAbstract<?, ?>, String, PropertyAbstract<?, ?>> propertyMapInternal;
+  public static volatile MapAttribute<PropertyRootAbstract<?, ?>, String, PropertyAbstract<?, ?>> propertyMapDatabase;
 
   // Définition de la profondeur des relations
   static

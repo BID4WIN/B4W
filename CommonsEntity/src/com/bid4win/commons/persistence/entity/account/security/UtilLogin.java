@@ -14,7 +14,6 @@ public class UtilLogin
   /** Pattern des valeurs d'identifiants */
   private final static String LOGIN_PATTERN = "[0-9a-z_\\Q-.$\\E]{5,30}";
 
-
   /**
    * Cette méthode permet de tester que la chaîne de caractères en paramètre est
    * un login valide
@@ -26,6 +25,6 @@ public class UtilLogin
   public static String checkLogin(String login) throws UserException
   {
     return UtilString.checkPattern("login", login, UtilLogin.LOGIN_PATTERN,
-                                   ConnectionRef.CONNECTION_LOGIN_INVALID_ERROR, 1);
+                                   ConnectionRef.LOGIN_INVALID_ERROR, 1);
   }
 }

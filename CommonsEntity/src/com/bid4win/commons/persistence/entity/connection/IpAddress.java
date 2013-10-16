@@ -22,8 +22,7 @@ import com.bid4win.commons.persistence.entity.Bid4WinEmbeddable;
 public class IpAddress extends Bid4WinEmbeddable<IpAddress>
 {
   /** Valeur de l'adresse IP */
-  @Transient
-  private String value = null;
+  @Transient private String value = null;
 
   /**
    * Constructeur pour création par introspection

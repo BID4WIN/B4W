@@ -6,11 +6,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.bid4win.commons.core.Bid4WinCoreTester;
+import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.reference.MessageRef.PropertyRef;
-import com.bid4win.commons.persistence.entity.Bid4WinEntityTester;
-import com.bid4win.commons.persistence.entity.EntityGeneratorStub;
-import com.bid4win.commons.persistence.entity.account.AccountAbstractStub;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 
 /**
@@ -20,7 +19,7 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
  */
 @RunWith(Bid4WinJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-commons.xml")
-public class UtilPropertyTest extends Bid4WinEntityTester<AccountAbstractStub, EntityGeneratorStub>
+public class UtilPropertyTest extends Bid4WinCoreTester
 {
   /**
    * Test of checkSimpleKey(String, MessageRef), of class Property.
@@ -41,7 +40,7 @@ public class UtilPropertyTest extends Bid4WinEntityTester<AccountAbstractStub, E
     }
     try
     {
-      UtilProperty.checkSimpleKey("", PropertyRef.PROPERTY);
+      UtilProperty.checkSimpleKey(UtilString.EMPTY, PropertyRef.PROPERTY);
       fail("Check should have failed with invalid key");
     }
     catch(UserException ex)
@@ -113,7 +112,7 @@ public class UtilPropertyTest extends Bid4WinEntityTester<AccountAbstractStub, E
     }
     try
     {
-      UtilProperty.checkFullKey("", PropertyRef.PROPERTY);
+      UtilProperty.checkFullKey(UtilString.EMPTY, PropertyRef.PROPERTY);
       fail("Check should have failed with invalid key");
     }
     catch(UserException ex)

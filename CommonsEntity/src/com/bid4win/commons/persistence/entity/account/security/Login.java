@@ -22,8 +22,7 @@ import com.bid4win.commons.persistence.entity.Bid4WinEmbeddable;
 public class Login extends Bid4WinEmbeddable<Login>
 {
   /** Valeur de l'identifiant de connexion */
-  @Transient
-  private String value = null;
+  @Transient private String value = null;
 
   /**
    * Constructeur pour création par introspection

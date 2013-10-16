@@ -12,7 +12,7 @@ CREATE TABLE `CONNECTION_HISTORY_STUB`
   `IP`              varchar(39) NOT NULL                COMMENT 'Adresse IP de connexion',
   `START_DATE`      varchar(23) NOT NULL                COMMENT 'Date de début de connexion',
   `REASON`          varchar(12) NOT NULL                COMMENT 'Raison de fin de connexion',
-  `REUSE_ATTEMPTED` int(1)      NOT NULL                COMMENT 'Flag si une reutilisation a deja ete tentee',
+--  `REUSE_ATTEMPTED` int(1)      NOT NULL                COMMENT 'Flag si une reutilisation a deja ete tentee',
   -- Définition de la clé primaire de la table CONNECTION_HISTORY_STUB
   PRIMARY KEY (`ID`),
   -- Définition de la clé étrangère de la table CONNECTION_HISTORY_STUB vers la table ACCOUNT_STUB

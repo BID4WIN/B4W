@@ -41,7 +41,7 @@ public class Bid4WinEntityCacheMap<KEY, VALUE>
    *
    * TODO A COMMENTER
    */
-  protected void clear()
+  protected synchronized void clear()
   {
     this.getMap().clear();
   }
@@ -55,7 +55,7 @@ public class Bid4WinEntityCacheMap<KEY, VALUE>
    * <BR>
    * @author Emeric Fillâtre
    */
-  public static class EntityMap <ENTITY extends Bid4WinEntity<?, ID>, ID>
+  public static class EntityMap<ENTITY extends Bid4WinEntity<?, ID>, ID>
          extends Bid4WinEntityCacheMap<ID, ENTITY>
   {
     /**
@@ -68,7 +68,7 @@ public class Bid4WinEntityCacheMap<KEY, VALUE>
     {
       // Récupère la potentielle entité cachée
       ENTITY cached = this.get(entity.getId());
-      // L'entité caché est moins récente que l'entité à cacher, on la met à jour
+      // L'entité cachée est moins récente que l'entité à cacher, on la met à jour
       if(cached == null || cached.getVersion() < entity.getVersion())
       {
         this.getMap().put(entity.getId(), entity);

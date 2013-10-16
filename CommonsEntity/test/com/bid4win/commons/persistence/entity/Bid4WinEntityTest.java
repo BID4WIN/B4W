@@ -422,4 +422,17 @@ public class Bid4WinEntityTest extends Bid4WinEntityTester<AccountAbstractStub, 
       assertTrue("Wrong result", parent2 == son.getParent());
     }
   }
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.core.security.ProtectableObjectTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    // Pas de méthode protégée à tester
+  }
 }

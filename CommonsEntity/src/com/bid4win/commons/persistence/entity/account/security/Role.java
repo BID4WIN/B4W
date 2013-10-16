@@ -1,7 +1,7 @@
 package com.bid4win.commons.persistence.entity.account.security;
 
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectTypeGroup;
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 
 /**
  * Cette classe défini un rôle comparable à une énumération ayant la notion d'
@@ -24,7 +24,6 @@ public class Role extends Bid4WinObjectTypeGroup<Role>
   public final static Role WAIT = new Role("WAIT", Role.BASIC);
   /** Rôle utilisateur */
   public final static Role USER = new Role("USER", Role.BASIC);
-
   /** Rôle de gestionnaire */
   public final static Role MANAGER = new Role("MNGR", BASIC);
   /** Rôle de linguiste */
@@ -34,7 +33,7 @@ public class Role extends Bid4WinObjectTypeGroup<Role>
   /** Rôle technique */
   public final static Role TECH = new Role("TECH", Role.MANAGER);
   /** Rôle administrateur */
-  public final static Role ADMIN = new Role("ADMIN", Role.BIZ, TECH);
+  public final static Role ADMIN = new Role("ADMIN", Role.BIZ, Role.TECH);
   /** Rôle super */
   public final static Role SUPER = new Role("SUPER", Role.USER, Role.ADMIN);
 
@@ -43,11 +42,11 @@ public class Role extends Bid4WinObjectTypeGroup<Role>
 
   /**
    * Cette méthode permet de récupérer tous les rôles existants
-   * @return Le set complet de tous les rôles définis
+   * @return Tous les rôles définis
    */
-  public static Bid4WinSet<Role> getRoleSet()
+  public static Bid4WinCollection<Role> getRoles()
   {
-    return Bid4WinObjectType.getTypeSet(Role.class);
+    return Bid4WinObjectType.getTypes(Role.class);
   }
 
   /**

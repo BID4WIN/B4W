@@ -5,6 +5,8 @@ import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
+import com.bid4win.commons.persistence.entity.Bid4WinEntity_;
+
 /**
  * Metamodel de la class FooComplex<BR>
  * <BR>
@@ -19,4 +21,11 @@ public abstract class FooComplex_ extends Foo_
   public static volatile SetAttribute<FooComplex, FooEmbeddable> embeddedSetInternal;
   /** Définition de la liste d'objets inclus dans l'objet */
   public static volatile ListAttribute<FooComplex, FooEmbeddable> embeddedListInternal;
+
+  // Définition de la profondeur des relations
+  static
+  {
+    Bid4WinEntity_.startProtection();
+    Bid4WinEntity_.stopProtection();
+  }
 }

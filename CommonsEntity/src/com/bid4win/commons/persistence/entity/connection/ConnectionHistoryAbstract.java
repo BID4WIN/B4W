@@ -9,7 +9,7 @@ import javax.persistence.Transient;
 
 import com.bid4win.commons.core.Bid4WinDate;
 import com.bid4win.commons.core.UtilObject;
-import com.bid4win.commons.core.UtilString;
+import com.bid4win.commons.core.comparator.Bid4WinComparator;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.reference.MessageRef.ConnectionRef;
 import com.bid4win.commons.core.security.exception.ProtectionException;
@@ -30,18 +30,19 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
                                        ACCOUNT extends AccountAbstract<ACCOUNT>>
        extends AccountBasedEntityMultipleAutoID<CLASS, ACCOUNT>
 {
+  /** Données de la connexion historisées */
+  @Transient private ConnectionData data = null;
+
   /** Identifiant de la session liée à la connexion */
-  @Transient private String sessionId = null;
+//  @Transient private String sessionId = null;
   /** Flag indiquant la rémanence de la connexion */
-  @Transient private boolean remanent = false;
+//  @Transient private boolean remanent = false;
   /** Adresse IP de connexion */
-  @Transient private IpAddress ipAddress = null;
+//  @Transient private IpAddress ipAddress = null;
   /** Date de début de connexion */
-  @Transient private Bid4WinDate startDate = null;
+//  @Transient private Bid4WinDate startDate = null;
   /** Raison de fin de connexion */
-  @Transient private DisconnectionReason disconnectionReason = null;
-  /** Flag indiquant si une réutilisation de la rémanence a déjà été tentée */
-  @Transient private boolean reuseAttempted = false;
+//  @Transient private DisconnectionReason disconnectionReason = null;
 
   /**
    * Constructeur pour création par introspection
@@ -61,7 +62,7 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * @param disconnectionReason Raison de fin de connexion
    * @throws UserException Si les paramètres sont invalides
    */
-  protected ConnectionHistoryAbstract(ACCOUNT account, String sessionId, boolean remanent,
+ /* protected ConnectionHistoryAbstract(ACCOUNT account, String sessionId, boolean remanent,
                                       IpAddress ipAddress, Bid4WinDate startDate,
                                       DisconnectionReason disconnectionReason)
          throws UserException
@@ -72,18 +73,63 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
     this.defineIpAddress(ipAddress);
     this.defineStart(startDate);
     this.defineDisconnectionReason(disconnectionReason);
-  }
+  }*/
   /**
    * Constructeur à partir d'une connexion à historiser
    * @param connection Connexion dont il faut construire l'historique
    * @throws UserException Si les paramètres sont invalides
    */
-  protected ConnectionHistoryAbstract(ConnectionAbstract<?, ?, ACCOUNT> connection)
+  protected ConnectionHistoryAbstract(//ConnectionAbstract<?, ?, ACCOUNT> connection)
+      ConnectionData data, ACCOUNT account)
          throws UserException
   {
-    this(connection.getAccount(), connection.getId(), connection.isRemanent(),
+    super(account);
+    this.defineData(data);
+    /*this(connection.getAccount(), connection.getId(), connection.isRemanent(),
          connection.getIpAddress(), connection.getStartDate(),
-         connection.getDisconnectionReason());
+         connection.getDisconnectionReason());*/
+  }
+
+  /**
+   * Redéfini l'équivalence interne de deux historiques de connexions sans prise
+   * en compte de leurs relations afin d'y ajouter le test de leurs données propres
+   * @param toBeCompared {@inheritDoc}
+   * @param identical {@inheritDoc}
+   * @return {@inheritDoc}
+   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#sameRelationNoneInternal(com.bid4win.commons.persistence.entity.Bid4WinEntity, boolean)
+   */
+  @Override
+  protected boolean sameRelationNoneInternal(CLASS toBeCompared, boolean identical)
+  {
+    return super.sameRelationNoneInternal(toBeCompared, identical) &&
+           Bid4WinComparator.getInstance().equals(this.getData(), toBeCompared.getData());
+
+  }
+  /**
+   * Permet d'effectuer le rendu simple de l'historique de connexion courant sans
+   * prise en compte de ses relations
+   * @return {@inheritDoc}
+   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#renderRelationNone()
+   */
+  @Override
+  protected StringBuffer renderRelationNone()
+  {
+    // Effectue le rendu de base sans lien d'une entité
+    StringBuffer buffer = super.renderRelationNone();
+    // Ajoute les éléments de l'historique de connexion
+    buffer.append(" ").append(this.getData().render());
+    buffer.append(" END_DATE=").append(this.getEndDate().formatYYYYIMMIDD());
+    // Retourne le rendu
+    return buffer;
+  }
+
+  private void defineData(ConnectionData data) throws ProtectionException, UserException
+  {
+    this.checkProtection();
+    UtilObject.checkNotNull("data", data, ConnectionRef.CONNECTION_INVALID_ERROR);
+    UtilObject.checkNotNull("disconnectionReason", data.getDisconnectionReason(),
+                            ConnectionRef.CONNECTION_INVALID_ERROR);
+    this.setData(data);
   }
 
   /**
@@ -91,7 +137,7 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * @param sessionId Définition de l'identifiant de la session liée à la connexion
    * @throws ProtectionException Si l'historique de connexion courant est protégé
    */
-  private void defineSessionId(String sessionId) throws ProtectionException
+/*  private void defineSessionId(String sessionId) throws ProtectionException
   {
     // Vérifie la protection de la connexion courante
     this.checkProtection();
@@ -103,12 +149,12 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * @throws ProtectionException Si l'historique de connexion courant est protégé
    * @throws UserException Si on défini une adresse IP nulle
    */
-  private void defineIpAddress(IpAddress ipAddress) throws ProtectionException, UserException
+/*  private void defineIpAddress(IpAddress ipAddress) throws ProtectionException, UserException
   {
     // Vérifie la protection de la connexion courante
     this.checkProtection();
     this.setIpAddress(UtilObject.checkNotNull("ipAddress", ipAddress,
-                      ConnectionRef.CONNECTION_IP_MISSING_ERROR));
+                      ConnectionRef.IP_MISSING_ERROR));
   }
   /**
    * Cette méthode permet de définir la raison de fin de connexion
@@ -116,7 +162,7 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * @throws ProtectionException Si l'historique de connexion courant est protégé
    * @throws UserException Si on défini une raison de fin de connexion nulle
    */
-  private void defineDisconnectionReason(DisconnectionReason disconnectionReason)
+/*  private void defineDisconnectionReason(DisconnectionReason disconnectionReason)
           throws ProtectionException, UserException
   {
     // Vérifie la protection de la connexion courante
@@ -130,36 +176,38 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * @throws ProtectionException Si l'historique de connexion courant est protégé
    * @throws UserException Si on défini une date de début de connexion nulle
    */
-  private void defineStart(Bid4WinDate startDate)
+/*  private void defineStart(Bid4WinDate startDate)
           throws ProtectionException, UserException
   {
     // Vérifie la protection de la connexion courante
     this.checkProtection();
     UtilObject.checkNotNull("startDate", startDate, ConnectionRef.CONNECTION_INVALID_ERROR);
     this.setStartDate(startDate);
-  }
-  /**
-   * Cette méthode permet de noter la rémanence de la connexion associée à l'historique
-   * courante a tenté d'être utilisée
-   * @return L'historique de connexion notifié de la tentative d'utilisation de
-   * la rémanence de la connexion associée
-   */
-  @SuppressWarnings("unchecked")
-  public CLASS reuse()
-  {
-    this.setReuseAttempted(true);
-    return (CLASS)this;
-  }
+  }*/
 
   /** #################################################################### **/
   /** ########################### PERSISTENCE ############################ **/
   /** #################################################################### **/
+
+  // Annotation pour la persistence
+  @Access(AccessType.PROPERTY)
+  @Embedded
+  public ConnectionData getData()
+  {
+    return this.data;
+  }
+  private void setData(ConnectionData data)
+  {
+    this.data = data;
+  }
+
+
   /**
    * Getter de l'identifiant de la session liée à la connexion
    * @return L'identifiant de la session liée à la connexion
    */
   // Annotation pour la persistence
-  @Access(AccessType.PROPERTY)
+/*  @Access(AccessType.PROPERTY)
   @Column(name = "SESSION_ID", length = 32 , nullable = false, unique = false)
   public String getSessionId()
   {
@@ -169,16 +217,16 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * Setter de l'identifiant de la session liée à la connexion
    * @param sessionId Identifiant de la session liée à la connexion à positionner
    */
-  private void setSessionId(String sessionId)
+/*  private void setSessionId(String sessionId)
   {
     this.sessionId = sessionId;
-  }
+  }*/
 
   /**
    * Getter du flag indiquant la rémanence de la connexion
    * @return Le flag indiquant la rémanence de la connexion
    */
-  // Annotation pour la persistence
+/*  // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @Column(name = "REMAMENT", nullable = false, unique = false)
   public boolean isRemanent()
@@ -189,16 +237,16 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * Setter du flag indiquant la rémanence de la connexion
    * @param remanent Flag indiquant la rémanence de la connexion à positionner
    */
-  private void setRemanent(boolean remanent)
+/*  private void setRemanent(boolean remanent)
   {
     this.remanent = remanent;
-  }
+  }*/
 
   /**
    * Getter de l'adresse IP de connexion
    * @return L'adresse IP de connexion
    */
-  // Annotation pour la persistence
+/*  // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @Embedded()
   public IpAddress getIpAddress()
@@ -209,16 +257,16 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * Setter de l'adresse IP de connexion
    * @param ipAddress Adresse IP de connexion à positionner
    */
-  private void setIpAddress(IpAddress ipAddress)
+/*  private void setIpAddress(IpAddress ipAddress)
   {
     this.ipAddress = ipAddress;
-  }
+  }*/
 
   /**
    * Getter de la date de début de connexion
    * @return La date de début de connexion
    */
-  // Annotation pour la persistence
+/*  // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @Column(name = "START_DATE", nullable = false, unique = false)
   public Bid4WinDate getStartDate()
@@ -229,10 +277,10 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * Setter de la date de début de connexion
    * @param startDate Date de début de connexion à positionner
    */
-  private void setStartDate(Bid4WinDate startDate)
+/*  private void setStartDate(Bid4WinDate startDate)
   {
     this.startDate = startDate;
-  }
+  }*/
 
   /**
    * Getter de la date de fin de connexion qui se basera sur la date de création
@@ -263,7 +311,7 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * Getter de la raison de fin de connexion
    * @return La raison de fin de connexion
    */
-  // Annotation pour la persistence
+/*  // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @Column(name = "REASON", nullable = false, unique = false)
   public DisconnectionReason getDisconnectionReason()
@@ -274,16 +322,16 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * Setter de la raison de fin de connexion
    * @param disconnectionReason Raison de fin de connexion à positionner
    */
-  private void setDisconnectionReason(DisconnectionReason disconnectionReason)
+/*  private void setDisconnectionReason(DisconnectionReason disconnectionReason)
   {
     this.disconnectionReason = disconnectionReason;
-  }
+  }*/
 
   /**
    * Getter du flag indiquant si une réutilisation de la rémanence a déjà été tentée
    * @return Le flag indiquant si une réutilisation de la rémanence a déjà été tentée
    */
-  // Annotation pour la persistence
+/*  // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @Column(name = "REUSE_ATTEMPTED", nullable = false, unique = false)
   public boolean isReuseAttempted()
@@ -295,8 +343,8 @@ public class ConnectionHistoryAbstract<CLASS extends ConnectionHistoryAbstract<C
    * @param reuseAttempted Flag indiquant si une réutilisation de la rémanence a
    * déjà été tentée à positionner
    */
-  private void setReuseAttempted(boolean reuseAttempted)
+/*  private void setReuseAttempted(boolean reuseAttempted)
   {
     this.reuseAttempted = reuseAttempted;
-  }
+  }*/
 }
