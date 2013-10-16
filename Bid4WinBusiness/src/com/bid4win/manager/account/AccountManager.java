@@ -123,7 +123,7 @@ public class AccountManager extends AccountAbstractManager_<Account>
   public UsedCredit useCredit(String accountId, int nb)
          throws PersistenceException, NotFoundEntityException, UserException
   {
-    UtilNumber.checkMinValue("nb", nb, 1, true, AccountRef.ACCOUNT_CREDIT_NB_INVALID_ERROR);
+    UtilNumber.checkMinValue("nb", nb, 1, true, AccountRef.CREDIT_NB_INVALID_ERROR);
     // Block le compte utilisateur
     Account account = this.lockById(accountId);
     // Utilise les crédits

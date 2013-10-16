@@ -8,18 +8,8 @@
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-  <!-- ####################################################################### -->
-  <!-- Logging definition -->
-  <bean id="log4jInitialization"
-        class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-    <property name="targetClass" value="org.springframework.util.Log4jConfigurer" />
-    <property name="targetMethod" value="initLogging" />
-    <property name="arguments">
-      <list>
-        <value>classpath:log4j.properties</value>
-      </list>
-    </property>
-  </bean>
+  <!-- ######################### LOGGING DEFINITION ######################## -->
+  <import resource="classpath:META-INF/config/logging/spring-logging-b4w.xml"/>
 
   <!-- ####################### DATA SOURCE DEFINITION ###################### -->
   <import resource="classpath:META-INF/config/persistence/spring-data-source-test-CommonsPersistence.xml"/>

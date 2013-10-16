@@ -91,7 +91,7 @@ public abstract class AuctionManager_<AUCTION extends Auction<AUCTION, BID, SCHE
   {
     AUCTION auction = this.getAuctionDao().lockById(auctionId);
     UtilObjectType.checkBelongsTo("status", auction.getStatus(), Status.OPENED,
-                                  AuctionRef.AUCTION_STATUS_NOT_STARTED_ERROR);
+                                  AuctionRef.STATUS_NOT_STARTED_ERROR);
     Account account = this.getAccountManager().getById(accountId);
     BOT bot = this.createBotEntity(auction, account, minBid, maxBid, maxBidNb);
     return this.getBotDao().add(bot);
@@ -115,7 +115,7 @@ public abstract class AuctionManager_<AUCTION extends Auction<AUCTION, BID, SCHE
   {
     AUCTION auction = this.getAuctionDao().lockById(auctionId);
     UtilObjectType.checkBelongsTo("status", auction.getStatus(), Status.OPENED,
-                                  AuctionRef.AUCTION_STATUS_NOT_STARTED_ERROR);
+                                  AuctionRef.STATUS_NOT_STARTED_ERROR);
     BOT bot = this.getBotDao().getOneByAuctionIdAndAccountId(auctionId, accountId);
     UtilObject.checkEquals("auctionId", bot.getAuction().getId(), auctionId,
                            AuctionRef.AUCTION_INVALID_ERROR);
@@ -140,7 +140,7 @@ public abstract class AuctionManager_<AUCTION extends Auction<AUCTION, BID, SCHE
   {
     AUCTION auction = this.getAuctionDao().lockById(auctionId);
     UtilObjectType.checkBelongsTo("status", auction.getStatus(), Status.OPENED,
-                                  AuctionRef.AUCTION_STATUS_NOT_STARTED_ERROR);
+                                  AuctionRef.STATUS_NOT_STARTED_ERROR);
     BOT bot = this.getBotDao().getOneByAuctionIdAndAccountId(auctionId, accountId);
     return this.getBotDao().remove(bot);
   }

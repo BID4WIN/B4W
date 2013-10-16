@@ -12,6 +12,7 @@ import com.bid4win.commons.persistence.entity.resource.ResourceUsage;
 import com.bid4win.manager.resource.IRootPathPropertyInitializer;
 import com.bid4win.persistence.entity.EntityGenerator;
 import com.bid4win.persistence.entity.account.Account;
+import com.bid4win.persistence.entity.connection.Connection;
 import com.bid4win.service.connection.SessionData;
 
 /**
@@ -27,7 +28,7 @@ import com.bid4win.service.connection.SessionData;
 public abstract class ResourceRepositoryServiceTester<STORAGE extends ResourceStorage<STORAGE, TYPE, USAGE>,
                                                       USAGE extends ResourceUsage<USAGE, TYPE, STORAGE>,
                                                       TYPE extends ResourceType<TYPE>>
-       extends com.bid4win.commons.service.resource.ResourceRepositoryServiceTester<STORAGE, USAGE, TYPE, SessionData, Account, EntityGenerator>
+       extends com.bid4win.commons.service.resource.ResourceRepositoryServiceTester<STORAGE, USAGE, TYPE, SessionData, Account, Connection, EntityGenerator>
 {
   /**
    *

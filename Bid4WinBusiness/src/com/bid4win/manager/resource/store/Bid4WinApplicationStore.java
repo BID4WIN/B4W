@@ -50,7 +50,7 @@ public abstract class Bid4WinApplicationStore<RESOURCE extends Bid4WinFileResour
     }
     catch(Bid4WinException ex)
     {
-      throw new UserException(ResourceRef.RESOURCE_STORAGE_ROOT_PROPERTY_MISSING_ERROR);
+      throw new UserException(ResourceRef.STORAGE_ROOT_PROPERTY_MISSING_ERROR);
     }
   }
   /**

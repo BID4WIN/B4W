@@ -25,6 +25,12 @@ public class PropertyInternalService
        extends PropertyAbstractInternalService_<Property, PropertyRoot, SessionData,
                                                 Account, PropertyInternalService>
 {
+  private static PropertyInternalService instance = null;
+  public static PropertyInternalService getInstance()
+  {
+    return PropertyInternalService.instance;
+  }
+
   /** Référence du manager de gestion des propriétés */
   @Autowired
   @Qualifier("PropertyManager")
@@ -50,5 +56,17 @@ public class PropertyInternalService
   protected PropertyManager getManager()
   {
     return this.manager;
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param self {@inheritDoc}
+   * @see com.bid4win.commons.j2ee.Bid4WinSelfReferencedBean#setSelf(com.bid4win.commons.j2ee.Bid4WinSelfReferencedBean)
+   */
+  @Override
+  protected void setSelf(PropertyInternalService self)
+  {
+    super.setSelf(self);
+    PropertyInternalService.instance = this.self();
   }
 }

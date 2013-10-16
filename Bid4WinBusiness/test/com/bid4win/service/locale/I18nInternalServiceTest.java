@@ -10,6 +10,7 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 import com.bid4win.persistence.dao.locale.I18nRootDaoStub;
 import com.bid4win.persistence.entity.EntityGenerator;
 import com.bid4win.persistence.entity.account.Account;
+import com.bid4win.persistence.entity.connection.Connection;
 import com.bid4win.persistence.entity.locale.I18n;
 import com.bid4win.persistence.entity.locale.I18nRoot;
 import com.bid4win.service.connection.SessionData;
@@ -23,8 +24,8 @@ import com.bid4win.service.connection.SessionData;
 @RunWith(Bid4WinJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-bid4win.xml")
 public class I18nInternalServiceTest
-       extends PropertyAbstractInternalServiceTester<I18n, I18nRoot,
-                                                     SessionData, Account, EntityGenerator>
+       extends PropertyAbstractInternalServiceTester<I18n, I18nRoot, SessionData,
+                                                     Account, Connection, EntityGenerator>
 {
   /** Référence du service à tester */
   @Autowired

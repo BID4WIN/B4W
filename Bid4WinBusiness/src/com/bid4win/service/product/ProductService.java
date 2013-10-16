@@ -1,5 +1,7 @@
 package com.bid4win.service.product;
 
+import javax.annotation.PreDestroy;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -586,5 +588,15 @@ public class ProductService extends Bid4WinService_<SessionData, Account, Produc
   {
     super.setSelf(self);
     ProductService.instance = this.self();
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   */
+  @SuppressWarnings("unused")
+  @PreDestroy
+  private void unregister()
+  {
+    ProductService.instance = null;
   }
 }

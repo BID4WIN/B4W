@@ -4,6 +4,7 @@ import com.bid4win.commons.persistence.entity.account.security.exception.Session
 import com.bid4win.commons.persistence.entity.connection.IpAddress;
 import com.bid4win.commons.service.connection.SessionDataAbstract;
 import com.bid4win.persistence.entity.account.Account;
+import com.bid4win.persistence.entity.connection.Connection;
 
 /**
  *
@@ -11,7 +12,7 @@ import com.bid4win.persistence.entity.account.Account;
  * <BR>
  * @author Emeric Fillâtre
  */
-public class SessionData extends SessionDataAbstract<Account>
+public class SessionData extends SessionDataAbstract<Account, Connection>
 {
   /**
    *

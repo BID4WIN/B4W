@@ -10,6 +10,7 @@ import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 import com.bid4win.persistence.dao.account.AccountDaoStub;
 import com.bid4win.persistence.entity.EntityGenerator;
 import com.bid4win.persistence.entity.account.Account;
+import com.bid4win.persistence.entity.connection.Connection;
 import com.bid4win.service.connection.SessionData;
 
 /**
@@ -21,7 +22,7 @@ import com.bid4win.service.connection.SessionData;
 @RunWith(Bid4WinJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/config/spring-test-bid4win.xml")
 public class AccountServiceTest
-       extends AccountAbstractServiceTester<SessionData, Account, EntityGenerator>
+       extends AccountAbstractServiceTester<SessionData, Account, Connection, EntityGenerator>
 {
   /** Référence du manager à tester */
   @Autowired

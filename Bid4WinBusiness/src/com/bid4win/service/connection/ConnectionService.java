@@ -1,5 +1,7 @@
 package com.bid4win.service.connection;
 
+import javax.annotation.PreDestroy;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,5 +112,15 @@ public class ConnectionService
   {
     super.setSelf(self);
     ConnectionService.instance = this.self();
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   */
+  @SuppressWarnings("unused")
+  @PreDestroy
+  private void unregister()
+  {
+    ConnectionService.instance = null;
   }
 }

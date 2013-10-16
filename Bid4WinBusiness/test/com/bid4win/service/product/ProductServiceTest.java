@@ -103,13 +103,6 @@ public class ProductServiceTest extends Bid4WinServiceTester<Product, String>
   /** TODO A COMMENTER */
   private long innerContentStorageId;
 
-
-  /** TODO A COMMENTER */
-  @Autowired
-  @Qualifier("ProductServiceReferer")
-  private ProductServiceReferer referer;
-
-
   /**
    * Test of createProduct(String, I18nGroup, I18nGroup, Price), of class ProductManager.
    * @throws Exception Issue not expected during this test

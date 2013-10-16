@@ -112,7 +112,7 @@ public class ConnectionManager
     // L'inscription ne doit pas déjà être validée
     if(subscription.isValidated())
     {
-      throw new UserException(ConnectionRef.CONNECTION_SUBSCRIPTION_VALIDATED_ERROR);
+      throw new UserException(ConnectionRef.SUBSCRIPTION_VALIDATED_ERROR);
     }
     Account account = subscription.getAccount();
     // L'identifiant du compte utilisateur doit correspondre à celui en argument

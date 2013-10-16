@@ -4,6 +4,7 @@ import com.bid4win.commons.persistence.entity.Bid4WinEntity;
 import com.bid4win.persistence.dao.account.AccountInitializer;
 import com.bid4win.persistence.entity.EntityGenerator;
 import com.bid4win.persistence.entity.account.Account;
+import com.bid4win.persistence.entity.connection.Connection;
 import com.bid4win.service.connection.SessionData;
 
 /**
@@ -16,7 +17,7 @@ import com.bid4win.service.connection.SessionData;
  * @author Emeric Fillâtre
  */
 public abstract class Bid4WinServiceTester<ENTITY extends Bid4WinEntity<ENTITY, ID>, ID>
-       extends com.bid4win.commons.service.Bid4WinServiceTester<ENTITY, ID, SessionData, Account, EntityGenerator>
+       extends com.bid4win.commons.service.Bid4WinServiceTester<ENTITY, ID, SessionData, Account, Connection, EntityGenerator>
 {
   /**
    *

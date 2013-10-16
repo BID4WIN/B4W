@@ -7,6 +7,7 @@ import com.bid4win.commons.persistence.entity.account.security.exception.Session
 import com.bid4win.commons.persistence.entity.connection.IpAddress;
 import com.bid4win.commons.service.connection.SessionHandlerAbstract;
 import com.bid4win.persistence.entity.account.Account;
+import com.bid4win.persistence.entity.connection.Connection;
 
 /**
  *
@@ -16,9 +17,13 @@ import com.bid4win.persistence.entity.account.Account;
  */
 @Component("SessionHandler")
 @Scope("singleton")
-public class SessionHandler extends SessionHandlerAbstract<SessionData, Account>
+public class SessionHandler extends SessionHandlerAbstract<SessionData, Account, Connection>
 {
   private static SessionHandler instance = null;
+  static
+  {
+    new SessionHandler();
+  }
   public static SessionHandler getInstance()
   {
     return SessionHandler.instance;

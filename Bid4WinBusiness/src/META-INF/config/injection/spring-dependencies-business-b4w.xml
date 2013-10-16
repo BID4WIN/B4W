@@ -10,7 +10,7 @@
   <!-- Injection de tous les managers et magasins de gestion de ressources -->
   <context:component-scan base-package="com.bid4win.manager">
     <context:include-filter type="regex" expression=".*Manager"/>
-    <context:include-filter type="regex" expression=".*Referer"/>
+    <!--context:include-filter type="regex" expression=".*Referer"/-->
     <context:include-filter type="regex" expression=".*Repository*"/>
     <context:include-filter type="regex" expression=".*UsageStore*"/>
     <context:exclude-filter type="regex" expression=".*Stub"/>
@@ -19,7 +19,7 @@
   <!-- Injection de tous les services et handlers nécessaires -->
   <context:component-scan base-package="com.bid4win.service">
     <context:include-filter type="regex" expression=".*Service"/>
-    <context:include-filter type="regex" expression=".*Referer"/>
+    <!--context:include-filter type="regex" expression=".*Referer"/-->
     <context:include-filter type="regex" expression=".*Handler"/>
     <context:exclude-filter type="regex" expression=".*InternalHandler"/>
     <context:exclude-filter type="regex" expression=".*Stub"/>
