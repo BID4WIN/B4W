@@ -48,9 +48,9 @@ public abstract class Account_ extends AccountAbstract_
   /** Définition du nombre de crédits utilisés par le compte utilisateur */
   public static volatile SingularAttribute<Account, Integer> usedCreditNb;
   /** Définition de la liste de lots de crédits du compte utilisateur */
-  public static volatile ListAttribute<Account, CreditBundle> creditBundleListInternal;
+  public static volatile ListAttribute<Account, CreditBundle> creditBundleListDatabase;
   /** Définition de la map des implications de crédits dans des ventes aux enchères normales */
-  public static volatile MapAttribute<Account, String, CreditInvolvementNormal> involvementNormalMapInternal;
+  public static volatile MapAttribute<Account, String, CreditInvolvementNormal> involvementNormalMapDatabase;
 
   // Définition de la profondeur des relations
   static

@@ -191,7 +191,7 @@ public abstract class AuctionAbstract<CLASS extends AuctionAbstract<CLASS, BID, 
   {
     // La vente aux enchères doit être en construction
     UtilBoolean.checkTrue("working", this.isWorking(),
-                          AuctionRef.AUCTION_STATUS_INVALID_ERROR);
+                          AuctionRef.STATUS_INVALID_ERROR);
     // Positionne le nouveau prix
     super.validateProductPrice();
   }
@@ -215,9 +215,9 @@ public abstract class AuctionAbstract<CLASS extends AuctionAbstract<CLASS, BID, 
   {
     // La vente aux enchères doit être démarrée
     UtilBoolean.checkTrue("started", this.isStarted(),
-                          AuctionRef.AUCTION_STATUS_NOT_STARTED_ERROR);
+                          AuctionRef.STATUS_NOT_STARTED_ERROR);
     // La date d'enchères ne doit pas être nulle
-    UtilObject.checkNotNull("bidDate", bidDate, AuctionRef.AUCTION_SCHEDULE_INVALID_ERROR);
+    UtilObject.checkNotNull("bidDate", bidDate, AuctionRef.SCHEDULE_INVALID_ERROR);
     // Crée l'enchère et l'ajoute à la vente
     BID bid = this.createBid(this.checkBidder(account), bidDate);
     // Augmente le nombre d'enchères de la vente
@@ -316,9 +316,9 @@ public abstract class AuctionAbstract<CLASS extends AuctionAbstract<CLASS, BID, 
          throws ProtectionException, UserException
   {
     UtilObject.checkNotNull("cancelPolicy", cancelPolicy,
-                            AuctionRef.AUCTION_TERMS_MISSING_ERROR);
+                            AuctionRef.TERMS_MISSING_ERROR);
     UtilObject.checkNotNull("exchangeRates", exchangeRates,
-                            CurrencyRef.CURRENCY_EXCHANGE_RATE_MISSING_ERROR);
+                            CurrencyRef.EXCHANGE_RATE_MISSING_ERROR);
     CLASS result = this.defineStatus(Status.WAITING);
     this.setCancelPolicy(cancelPolicy);
     this.setExchangeRates(exchangeRates);
@@ -349,8 +349,8 @@ public abstract class AuctionAbstract<CLASS extends AuctionAbstract<CLASS, BID, 
    */
   public CLASS unvalidate(SCHEDULE schedule, TERMS terms) throws ProtectionException, UserException
   {
-    UtilObject.checkNotNull("schedule", schedule, AuctionRef.AUCTION_SCHEDULE_MISSING_ERROR);
-    UtilObject.checkNotNull("terms", terms, AuctionRef.AUCTION_TERMS_MISSING_ERROR);
+    UtilObject.checkNotNull("schedule", schedule, AuctionRef.SCHEDULE_MISSING_ERROR);
+    UtilObject.checkNotNull("terms", terms, AuctionRef.TERMS_MISSING_ERROR);
     CLASS auction = this.defineStatus(Status.WORKING);
     this.setSchedule(schedule);
     this.setTerms(terms);
@@ -404,29 +404,29 @@ public abstract class AuctionAbstract<CLASS extends AuctionAbstract<CLASS, BID, 
   {
     // Vérifie la protection de la vente aux enchères courante
     this.checkProtection();
-    UtilObject.checkNotNull("status", status, AuctionRef.AUCTION_STATUS_MISSING_ERROR);
+    UtilObject.checkNotNull("status", status, AuctionRef.STATUS_MISSING_ERROR);
     if(status.equals(Status.WORKING) || status.equals(Status.WAITING))
     {
       UtilObject.checkAmong("status", this.getStatus(),
                             new Bid4WinSet<Status>(Status.WORKING, Status.WAITING),
-                            AuctionRef.AUCTION_STATUS_INVALID_ERROR);
+                            AuctionRef.STATUS_INVALID_ERROR);
     }
     else if(status.equals(Status.PAUSED))
     {
       UtilObject.checkEquals("status", this.getStatus(), Status.STARTED,
-                             AuctionRef.AUCTION_STATUS_INVALID_ERROR);
+                             AuctionRef.STATUS_INVALID_ERROR);
     }
     else if(status.belongsTo(Status.OPENED))
     {
       UtilObjectType.checkBelongsTo("status", this.getStatus(), Status.VALID,
-                                    AuctionRef.AUCTION_STATUS_INVALID_ERROR);
+                                    AuctionRef.STATUS_INVALID_ERROR);
     }
     else
     {
       UtilObjectType.checkBelongsTo("status", this.getStatus(), Status.OPENED,
-                                    AuctionRef.AUCTION_STATUS_INVALID_ERROR);
+                                    AuctionRef.STATUS_INVALID_ERROR);
       UtilObjectType.checkNotBelongsTo("status", this.getStatus(), Status.PAUSED,
-                                       AuctionRef.AUCTION_STATUS_INVALID_ERROR);
+                                       AuctionRef.STATUS_INVALID_ERROR);
     }
     this.setAuctionStatus(new AuctionStatus(status));
     return (CLASS)this;
@@ -446,7 +446,7 @@ public abstract class AuctionAbstract<CLASS extends AuctionAbstract<CLASS, BID, 
     if(step != null && !step.belongsTo(Step.PROCESSING))
     {
       UtilObjectType.checkBelongsTo("status", this.getStatus(), Status.ENDED,
-                                    AuctionRef.AUCTION_STATUS_INVALID_ERROR);
+                                    AuctionRef.STATUS_INVALID_ERROR);
     }
     return super.defineStep(step);
   }
@@ -461,7 +461,7 @@ public abstract class AuctionAbstract<CLASS extends AuctionAbstract<CLASS, BID, 
     // Vérifie la protection de la vente aux enchères courante
     this.checkProtection();
     this.setBidNb(UtilNumber.checkMinValue("bidNb", bidNb, 0, true,
-                  AuctionRef.AUCTION_BID_NB_INVALID_ERROR));
+                  AuctionRef.BID_NB_INVALID_ERROR));
   }
   /**
    * Cette méthode permet de définir que les enchères de la vente courante sont
@@ -478,7 +478,7 @@ public abstract class AuctionAbstract<CLASS extends AuctionAbstract<CLASS, BID, 
     this.checkProtection();
     // La vente aux enchères doit être terminée
     UtilBoolean.checkTrue("ended", this.isEnded(),
-                          AuctionRef.AUCTION_STATUS_NOT_ENDED_ERROR);
+                          AuctionRef.STATUS_NOT_ENDED_ERROR);
     UtilBoolean.checkFalse("bidHistorized", this.isBidHistorized(),
                            AuctionRef.AUCTION_HISTORIZED_ERROR);
     this.setBidHistorized(true);
@@ -497,7 +497,7 @@ public abstract class AuctionAbstract<CLASS extends AuctionAbstract<CLASS, BID, 
     // Vérifie la protection de la vente aux enchères courante
     this.checkProtection();
     UtilBoolean.checkTrue("opened", this.isOpened(),
-                          AuctionRef.AUCTION_STATUS_NOT_STARTED_ERROR);
+                          AuctionRef.STATUS_NOT_STARTED_ERROR);
     if(creditMap == null)
     {
       return;
@@ -524,11 +524,11 @@ public abstract class AuctionAbstract<CLASS extends AuctionAbstract<CLASS, BID, 
     this.checkProtection();
     // La vente aux enchères doit être terminée
     UtilBoolean.checkTrue("ended", this.isEnded(),
-                          AuctionRef.AUCTION_STATUS_NOT_ENDED_ERROR);
+                          AuctionRef.STATUS_NOT_ENDED_ERROR);
     UtilBoolean.checkFalse("involvementHistorized", this.isInvolvementHistorized(),
                            AuctionRef.AUCTION_HISTORIZED_ERROR);
     UtilObject.checkNotNull("invovlvementValue", invovlvementValue,
-                            AuctionRef.AUCTION_VALUE_MISSING_ERROR);
+                            AuctionRef.VALUE_MISSING_ERROR);
     this.setInvolvementHistorized(true);
     this.setInvolvementValue(invovlvementValue);
     return (CLASS)this;

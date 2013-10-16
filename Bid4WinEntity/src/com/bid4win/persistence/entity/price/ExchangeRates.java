@@ -61,7 +61,7 @@ public class ExchangeRates extends AmountMap<ExchangeRates>
   @Override
   protected MessageRef getMessageRefBase()
   {
-    return CurrencyRef.CURRENCY_EXCHANGE_RATE;
+    return CurrencyRef.EXCHANGE_RATE;
   }
 
   /**
@@ -116,7 +116,7 @@ public class ExchangeRates extends AmountMap<ExchangeRates>
   public void addEmbedded(Amount amount) throws ProtectionException, UserException
   {
     UtilNumber.checkMinValue("rate", amount.getValue(), 0, false,
-                             CurrencyRef.CURRENCY_EXCHANGE_RATE);
+                             CurrencyRef.EXCHANGE_RATE);
     super.addEmbedded(amount);
   }
 }

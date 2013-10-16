@@ -1,7 +1,7 @@
 package com.bid4win.persistence.entity.account;
 
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 
 /**
  * Cette classe défini le genre d'un individu<BR>
@@ -26,11 +26,11 @@ public class Gender extends Bid4WinObjectType<Gender>
   public final static Gender DEFAULT = Bid4WinObjectType.getDefaultType(Gender.class);
   /**
    * Cette méthode permet de récupérer tous les genres d'individus existants
-   * @return Le set complet de tous les genres d'individus définis
+   * @return Tous les genres d'individus définis
    */
-  public static Bid4WinSet<Gender> getGenderSet()
+  public static Bid4WinCollection<Gender> getGenders()
   {
-    return Bid4WinObjectType.getTypeSet(Gender.class);
+    return Bid4WinObjectType.getTypes(Gender.class);
   }
 
   /**

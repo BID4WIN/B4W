@@ -1,7 +1,7 @@
 package com.bid4win.persistence.entity.locale.inner;
 
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.exception.UserException;
 
 /**
@@ -40,11 +40,11 @@ public class UsageType extends Bid4WinObjectType<UsageType>
   /**
    * Cette méthode permet de récupérer tous les types d'utilisation de contenu
    * existants
-   * @return Le set complet de tous les types d'utilisation de contenu définis
+   * @return Tous les types d'utilisation de contenu définis
    */
-  public static Bid4WinSet<UsageType> getUsageTypeSet()
+  public static Bid4WinCollection<UsageType> getUsageTypes()
   {
-    return Bid4WinObjectType.getTypeSet(UsageType.class);
+    return Bid4WinObjectType.getTypes(UsageType.class);
   }
 
   /**

@@ -1,6 +1,6 @@
 package com.bid4win.persistence.entity.locale.inner;
 
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.persistence.entity.resource.ResourceType;
 
@@ -39,11 +39,11 @@ public class InnerContentType extends ResourceType<InnerContentType>
   /**
    * Cette méthode permet de récupérer tous les types de contenus internationalisés
    * existants
-   * @return Le set complet de tous les types de contenus internationalisé définis
+   * @return Tous les types de contenus internationalisé définis
    */
-  public static Bid4WinSet<InnerContentType> getInnerContentTypeSet()
+  public static Bid4WinCollection<InnerContentType> getInnerContentTypes()
   {
-    return Bid4WinObjectType.getTypeSet(InnerContentType.class);
+    return Bid4WinObjectType.getTypes(InnerContentType.class);
   }
 
   /**

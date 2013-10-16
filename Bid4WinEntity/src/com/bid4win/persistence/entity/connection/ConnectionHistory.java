@@ -4,11 +4,9 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 
-import com.bid4win.commons.core.Bid4WinDate;
 import com.bid4win.commons.core.exception.UserException;
+import com.bid4win.commons.persistence.entity.connection.ConnectionData;
 import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstract;
-import com.bid4win.commons.persistence.entity.connection.DisconnectionReason;
-import com.bid4win.commons.persistence.entity.connection.IpAddress;
 import com.bid4win.persistence.entity.account.Account;
 
 /**
@@ -40,12 +38,12 @@ public class ConnectionHistory
    * @param disconnectionReason Raison de fin de connexion
    * @throws UserException Si les paramètres sont invalides
    */
-  public ConnectionHistory(Account account, String sessionId, boolean remanent,
+  public ConnectionHistory(ConnectionData data, Account account/*, String sessionId, boolean remanent,
                            IpAddress ipAddress, Bid4WinDate startDate,
-                           DisconnectionReason disconnectionReason)
+                           DisconnectionReason disconnectionReason*/)
          throws UserException
   {
-    super(account, sessionId, remanent, ipAddress, startDate, disconnectionReason);
+    super(data, account/*, sessionId, remanent, ipAddress, startDate, disconnectionReason*/);
   }
   /**
    *
@@ -56,7 +54,7 @@ public class ConnectionHistory
   public ConnectionHistory(Connection connection)
          throws UserException
   {
-    super(connection);
+    super(connection.getData(), connection.getAccount());
   }
 
 }

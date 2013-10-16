@@ -36,6 +36,14 @@ public abstract class LocalizedUsage<CLASS extends LocalizedUsage<CLASS, TYPE, S
                                      PART extends LocalizedResource<PART, TYPE>>
        extends FileResourceUsageMultiPart<CLASS, TYPE, STORAGE, Language, PART>
 {
+  /** Présent uniquement pour la définition JPA de la map persistante */
+  @SuppressWarnings("unused")
+  // Annotation pour la persistence
+  @Access(AccessType.PROPERTY)
+  @Column(name = "LANGUAGES", length = 30, nullable = false, unique = false)
+  @Type(type = "LANGUAGE_SET")
+  private Bid4WinSet<Language> partTypeSet;
+
   /**
    * Constructeur pour création par introspection
    */
@@ -65,7 +73,7 @@ public abstract class LocalizedUsage<CLASS extends LocalizedUsage<CLASS, TYPE, S
    */
   public Bid4WinSet<Language> getLanguageSet()
   {
-    return this.getPartTypeSet().clone();
+    return this.getPartTypes();
   }
   /**
    * Getter de la langue par défaut des ressources internationalisées
@@ -86,7 +94,7 @@ public abstract class LocalizedUsage<CLASS extends LocalizedUsage<CLASS, TYPE, S
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.entity.resource.ResourceUsageMultiPart#getPartTypeSet()
    */
-  @Override
+ /* @Override
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @Column(name = "LANGUAGES", length = 30, nullable = false, unique = false)
@@ -94,5 +102,5 @@ public abstract class LocalizedUsage<CLASS extends LocalizedUsage<CLASS, TYPE, S
   protected Bid4WinSet<Language> getPartTypeSet()
   {
     return super.getPartTypeSet();
-  }
+  }*/
 }

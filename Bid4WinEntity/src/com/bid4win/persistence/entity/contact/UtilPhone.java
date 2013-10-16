@@ -28,7 +28,7 @@ public class UtilPhone
   public static String checkCode(String code) throws UserException
   {
     return UtilString.checkPattern("code", code, UtilPhone.CODE_PATTERN,
-                                   AccountRef.ACCOUNT_PHONE_INVALID_ERROR, 1);
+                                   AccountRef.PHONE_INVALID_ERROR, 1);
   }
   /**
    * Cette méthode permet de tester si le numéro de téléphone en paramètre est
@@ -41,6 +41,6 @@ public class UtilPhone
   public static String checkNumber(String number) throws UserException
   {
     return UtilString.checkPattern("number", number, UtilPhone.NUMBER_PATTERN,
-                                   AccountRef.ACCOUNT_PHONE_INVALID_ERROR, 1);
+                                   AccountRef.PHONE_INVALID_ERROR, 1);
   }
 }

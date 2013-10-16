@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
@@ -131,7 +131,7 @@ public class CreditInvolvementNormalTest
     {
       System.out.println(ex.getMessage());
       assertEquals("Account involvement map should be not be modified",
-                   1, account.getInvolvementNormalSet().size());
+                   1, account.getInvolvementNormals().size());
     }
   }
   /**
@@ -179,10 +179,10 @@ public class CreditInvolvementNormalTest
     assertTrue("Wrong account", account == history.getAccount());
     assertTrue("Wrong auction", auction == history.getAuction());
     assertEquals("Wrong used credit nb", involvement.getUsedNb(), history.getUsedNb());
-    Bid4WinSet<CreditUsageNormal> usageSet = involvement.getUsageSet();
-    Bid4WinSet<CreditUsageNormalHistory> historySet = history.getUsageSet();
-    assertEquals("Wrong usage nb", usageSet.size(), historySet.size());
-    for(CreditUsageNormal usage : usageSet)
+    Bid4WinCollection<CreditUsageNormal> usages = involvement.getUsages();
+    Bid4WinCollection<CreditUsageNormalHistory> histories = history.getUsages();
+    assertEquals("Wrong usage nb", usages.size(), histories.size());
+    for(CreditUsageNormal usage : usages)
     {
       CreditUsageNormalHistory usageHistory = history.getUsage(usage.getBundle().getHistory());
       assertTrue("Wrong credit bundle", usageHistory.getBundle() == usage.getBundle().getHistory());

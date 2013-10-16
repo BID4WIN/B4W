@@ -48,10 +48,10 @@ public abstract class CreditInvolvementAuctionHistory<CLASS extends CreditInvolv
   protected CreditInvolvementAuctionHistory(HISTORIZED involvement) throws UserException
   {
     super(involvement.getAccount(), involvement.getAuction());
-    for(CreditUsage<?, ?> usage : involvement.getUsageSet())
+    for(CreditUsage<?, ?> usage : involvement.getUsages())
     {
       this.addUsage(UtilObject.checkNotNull("history", usage.getBundle().getHistory(),
-                                            AccountRef.ACCOUNT_CREDIT_NOT_HISTORIZED_ERROR),
+                                            AccountRef.CREDIT_NOT_HISTORIZED_ERROR),
                     usage.getUsedNb());
     }
   }

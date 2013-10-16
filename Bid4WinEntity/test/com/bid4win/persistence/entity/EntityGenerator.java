@@ -71,7 +71,7 @@ public class EntityGenerator extends com.bid4win.commons.persistence.entity.Enti
    */
   public Language getLanguage(int index)
   {
-    Bid4WinSet<Language> languageSet = Language.getLanguageSet();
+    Bid4WinSet<Language> languageSet = new Bid4WinSet<Language>(Language.getLanguages());
     if(index % languageSet.size() == 0)
     {
       return Language.DEFAULT;
@@ -128,7 +128,7 @@ public class EntityGenerator extends com.bid4win.commons.persistence.entity.Enti
    */
   public Name createName(int index)
   {
-    Bid4WinList<Gender> list = new Bid4WinList<Gender>(Gender.getGenderSet());
+    Bid4WinList<Gender> list = new Bid4WinList<Gender>(Gender.getGenders());
     return this.createName(list.get(index % list.size()), "firstName" + index,
                            "middleName" + index, "lastName" + index);
   }
@@ -382,7 +382,7 @@ public class EntityGenerator extends com.bid4win.commons.persistence.entity.Enti
    */
   public ExchangeRates createExchangeRates(int index) throws Bid4WinException
   {
-    Double[] values = new Double[Currency.getCurrencySet().size() - 1];
+    Double[] values = new Double[Currency.getCurrencies().size() - 1];
     for(int i = 0 ; i < values.length ; i++)
     {
       values[i] = Double.valueOf(index * values.length + i + 1);
@@ -399,7 +399,7 @@ public class EntityGenerator extends com.bid4win.commons.persistence.entity.Enti
   public ExchangeRates createExchangeRates(Double ... values) throws Bid4WinException
   {
     Bid4WinMap<Currency, Double> rateMap = new Bid4WinMap<Currency, Double>(values.length);
-    Iterator<Currency> iterator = Currency.getCurrencySet().iterator();
+    Iterator<Currency> iterator = Currency.getCurrencies().iterator();
     for(int i = 0 ; i < values.length ; i++)
     {
       Currency currency = iterator.next();
@@ -431,7 +431,7 @@ public class EntityGenerator extends com.bid4win.commons.persistence.entity.Enti
    */
   public Price createPrice(int index) throws Bid4WinException
   {
-    Double[] values = new Double[Currency.getCurrencySet().size()];
+    Double[] values = new Double[Currency.getCurrencies().size()];
     for(int i = 0 ; i < values.length ; i++)
     {
       values[i] = Double.valueOf(index * values.length + i);
@@ -449,7 +449,7 @@ public class EntityGenerator extends com.bid4win.commons.persistence.entity.Enti
   {
     Amount[] amounts = new Amount[values.length];
     amounts[0] = new Amount(values[0]);
-    Iterator<Currency> iterator = Currency.getCurrencySet().iterator();
+    Iterator<Currency> iterator = Currency.getCurrencies().iterator();
     for(int i = 1 ; i < values.length ; i++)
     {
       Currency currency = iterator.next();
@@ -513,7 +513,7 @@ public class EntityGenerator extends com.bid4win.commons.persistence.entity.Enti
    */
   public I18nGroup createI18nGroup(int index) throws Bid4WinException
   {
-    String[] values = new String[Language.getLanguageSet().size()];
+    String[] values = new String[Language.getLanguages().size()];
     for(int i = 0 ; i < values.length ; i++)
     {
       values[i] = "language" + i + "." + index;
@@ -531,7 +531,7 @@ public class EntityGenerator extends com.bid4win.commons.persistence.entity.Enti
   {
     I18nElement[] names = new I18nElement[values.length];
     names[0] = new I18nElement(values[0]);
-    Iterator<Language> iterator = Language.getLanguageSet().iterator();
+    Iterator<Language> iterator = Language.getLanguages().iterator();
     for(int i = 1 ; i < values.length ; i++)
     {
       Language language = iterator.next();
@@ -906,7 +906,7 @@ public class EntityGenerator extends com.bid4win.commons.persistence.entity.Enti
    */
   public ImageStorage createImageStorage(int index) throws Bid4WinException
   {
-    Bid4WinList<ImageType> list = new Bid4WinList<ImageType>(ImageType.getImageTypeSet());
+    Bid4WinList<ImageType> list = new Bid4WinList<ImageType>(ImageType.getImageTypes());
     return this.createImageStorage("storagePath" + index, "storageName" + index,
                                    list.get(index % list.size()).getCode());
   }
@@ -944,7 +944,7 @@ public class EntityGenerator extends com.bid4win.commons.persistence.entity.Enti
    */
   public InnerContentStorage createInnerContentStorage(int index) throws Bid4WinException
   {
-    Bid4WinList<InnerContentType> list = new Bid4WinList<InnerContentType>(Bid4WinObjectType.getTypeSet(InnerContentType.class));
+    Bid4WinList<InnerContentType> list = new Bid4WinList<InnerContentType>(Bid4WinObjectType.getTypes(InnerContentType.class));
     return this.createInnerContentStorage("storagePath" + index, "storageName" + index,
                                           list.get(index % list.size()).getCode());
   }

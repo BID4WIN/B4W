@@ -28,8 +28,7 @@ public class PreferenceBundle extends Bid4WinEmbeddable<PreferenceBundle>
   public final static String KEY_LANGUAGE = "language";
 
   /** Langue de préférence pour la communication */
-  @Transient
-  private Language language = Language.DEFAULT;
+  @Transient private Language language = Language.DEFAULT;
 
   /**
    * Constructeur par défaut
@@ -92,7 +91,7 @@ public class PreferenceBundle extends Bid4WinEmbeddable<PreferenceBundle>
     // Création de la racine des préférences
     PreferenceRoot root = new PreferenceRoot();
     // Export des préférences
-    root.addProperty(new Preference(KEY_LANGUAGE, this.getLanguage().getCode()));
+    root.addProperty(KEY_LANGUAGE, this.getLanguage().getCode());
     return root;
   }
   /**

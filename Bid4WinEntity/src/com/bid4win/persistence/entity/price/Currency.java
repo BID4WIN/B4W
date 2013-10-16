@@ -2,7 +2,7 @@ package com.bid4win.persistence.entity.price;
 
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
 import com.bid4win.commons.core.UtilString;
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.reference.MessageRef;
 import com.bid4win.commons.core.reference.MessageRef.CurrencyRef;
@@ -41,11 +41,11 @@ public class Currency extends Bid4WinObjectType<Currency>
   }
   /**
    * Cette méthode permet de récupérer toutes les monnaies existantes
-   * @return Le set complet de toutes les monnaies définies
+   * @return Toutes les monnaies définies
    */
-  public static Bid4WinSet<Currency> getCurrencySet()
+  public static Bid4WinCollection<Currency> getCurrencies()
   {
-    return Bid4WinObjectType.getTypeSet(Currency.class);
+    return Bid4WinObjectType.getTypes(Currency.class);
   }
 
   /** TODO A COMMENTER */

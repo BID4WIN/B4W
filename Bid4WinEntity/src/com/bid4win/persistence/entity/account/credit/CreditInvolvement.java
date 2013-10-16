@@ -19,6 +19,7 @@ import org.hibernate.annotations.OptimisticLock;
 import com.bid4win.commons.core.UtilBoolean;
 import com.bid4win.commons.core.UtilNumber;
 import com.bid4win.commons.core.UtilObject;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.collection.Bid4WinMap;
 import com.bid4win.commons.core.collection.Bid4WinSet;
@@ -55,17 +56,16 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
        extends AccountBasedEntityMultipleAutoID<CLASS, Account>
 {
   /** Map des utilisations de crédits classées selon la référence de leur provenance */
-  @Transient
-  private Bid4WinMap<Long, USAGE> usageMap = new Bid4WinMap<Long, USAGE>();
+  @Transient private Bid4WinMap<Long, USAGE> usageMap;
+  {
+    this.setUsageMapInternal(new Bid4WinMap<Long, USAGE>());
+  }
   /** Nombre de crédits utilisés globalement */
-  @Transient
-  private int usedNb = 0;
+  @Transient private int usedNb = 0;
   /** Identifiant d'historisation de l'implication de crédits */
-  @Transient
-  private Long historyId = null;
+  @Transient private Long historyId = null;
   /** Historisation de l'implication de crédits */
-  @Transient
-  private HISTORY history = null;
+  @Transient private HISTORY history = null;
 
   /**
    * Constructeur pour création par introspection
@@ -136,7 +136,7 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
    * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getRelationMap(com.bid4win.commons.persistence.entity.Bid4WinRelation)
    */
   @Override
-  protected Map<?, ? extends Bid4WinEntity<?, ?>> getRelationMap(Bid4WinRelation relation)
+  protected Bid4WinMap<?, ? extends Bid4WinEntity<?, ?>> getRelationMap(Bid4WinRelation relation)
   {
     if(relation.equals(CreditInvolvement_Relations.RELATION_USAGE_MAP))
     {
@@ -177,39 +177,6 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
     return false;
   }
   /**
-   * Getter de l'identifiant d'historisation de l'implication de crédits
-   * @return L'identifiant d'historisation de l'implication de crédits
-   */
-  public Long getHistoryId()
-  {
-    return this.historyId;
-  }
-  /**
-   * Setter de l'identifiant d'historisation de l'implication de crédits
-   * @param historyId Identifiant d'historisation de l'implication de crédits à
-   * positionner
-   */
-  private void setHistoryId(Long historyId)
-  {
-    this.historyId = historyId;
-  }
-  /**
-   * Getter de l'historisation de l'implication de crédits
-   * @return L'historisation de l'implication de crédits à positionner
-   */
-  public HISTORY getHistory()
-  {
-    return this.history;
-  }
-  /**
-   * Setter de l'historisation de l'implication de crédits
-   * @param history Historisation de l'implication de crédits à positionner
-   */
-  private void setHistory(HISTORY history)
-  {
-    this.history = history;
-  }
-  /**
    * Cette méthode permet d'historiser l'implication de crédits courante
    * @return L'historisation de l'implication de crédits courante
    * @throws ProtectionException Si l'implication de crédit courante est protégée
@@ -242,19 +209,19 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
   public CLASS defineHistoryId() throws UserException
   {
     UtilObject.checkNotNull("history", this.getHistory(),
-                            AccountRef.ACCOUNT_CREDIT_NOT_HISTORIZED_ERROR);
+                            AccountRef.CREDIT_NOT_HISTORIZED_ERROR);
     this.setHistoryId(UtilObject.checkNotNull("historyId", this.getHistory().getId(),
-                      AccountRef.ACCOUNT_CREDIT_NOT_HISTORIZED_ERROR));
+                      AccountRef.CREDIT_NOT_HISTORIZED_ERROR));
     return (CLASS)this;
   }
 
   /**
-   * Getter du set complet des utilisations de crédits pour toutes les provenances
-   * @return Le set complet des utilisations de crédits selon toutes les provenances
+   * Getter des utilisations de crédits pour toutes les provenances
+   * @return Les utilisations de crédits selon toutes les provenances
    */
-  public Bid4WinSet<USAGE> getUsageSet()
+  public Bid4WinCollection<USAGE> getUsages()
   {
-    return new Bid4WinSet<USAGE>(this.getUsageMap().values());
+    return this.getUsageMapInternal().valuesProtected();
   }
   /**
    * Getter de l'utilisation de crédits dont le lot de provenance est en argument
@@ -265,8 +232,8 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
   public USAGE getUsage(BUNDLE bundle) throws UserException
   {
     UtilObject.checkNotNull("bundle", bundle,
-                            AccountRef.ACCOUNT_CREDIT_REFERENCE_MISSING_ERROR);
-    return this.getUsageMap().get(bundle.getId());
+                            AccountRef.CREDIT_REFERENCE_MISSING_ERROR);
+    return this.getUsageMapInternal().get(bundle.getId());
   }
   /**
    * Cette méthode permet d'ajouter à l'implication de crédits courante des crédits
@@ -307,9 +274,9 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
   public USAGE addUsage(BUNDLE bundle, int usedNb) throws ProtectionException, UserException
   {
     // Vérifie la protection de l'utilisation de crédits courante
-    this.checkProtection();
+    // TODO this.checkProtection();
     // Vérifie la provenance des crédits utilisés
-    UtilObject.checkNotNull("bundle", bundle, AccountRef.ACCOUNT_CREDIT_REFERENCE_MISSING_ERROR);
+    UtilObject.checkNotNull("bundle", bundle, AccountRef.CREDIT_REFERENCE_MISSING_ERROR);
     UtilObject.checkEquals("accountId", bundle.getAccount().getId(),
                            this.getAccount().getId(), AccountRef.ACCOUNT_INVALID_ERROR);
     // Recherche une utilisation du même lot déjà référencée
@@ -340,23 +307,24 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
             throws ProtectionException, UserException;
 
   /**
-   * Getter de la map des utilisations de crédits classées selon la référence de
-   * leur provenance
-   * @return La map des utilisations de crédits classées selon la référence de
-   * leur provenance
+   * Getter de la map interne des utilisations de crédits classées selon la référence
+   * de leur provenance
+   * @return La map interne des utilisations de crédits classées selon la référence
+   * de leur provenance
    */
-  private Bid4WinMap<Long, USAGE> getUsageMap()
+  private Bid4WinMap<Long, USAGE> getUsageMapInternal()
   {
     return this.usageMap;
   }
   /**
-   * Setter de la map des utilisations de crédits classées selon la référence de
-   * leur provenance
-   * @param usageMap Map des utilisations de crédits classées selon la référence
-   * de leur provenance à positionner
+   * Setter de la map interne des utilisations de crédits classées selon la référence
+   * de leur provenance
+   * @param usageMap Map interne des utilisations de crédits classées selon la
+   * référence de leur provenance à positionner
    */
-  private void setUsageMap(Bid4WinMap<Long, USAGE> usageMap)
+  private void setUsageMapInternal(Bid4WinMap<Long, USAGE> usageMap)
   {
+    usageMap.protect(this.getProtection());
     this.usageMap = usageMap;
   }
 
@@ -372,7 +340,7 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
     this.checkProtection();
     // Augmente le nombre de crédits utilisés globalement
     this.setUsedNb(this.getUsedNb() + UtilNumber.checkMinValue("usedNb", usedNb, 1, true,
-                                                               AccountRef.ACCOUNT_CREDIT_NB_INVALID_ERROR));
+                                                               AccountRef.CREDIT_NB_INVALID_ERROR));
   }
   /**
    * Cette méthode permet de récupérer la valeur totale des crédits utilisés par
@@ -383,7 +351,7 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
   public Amount getTotalValue() throws UserException
   {
     Amount totalValue = new Amount(0);
-    for(USAGE usage : this.getUsageMap().values())
+    for(USAGE usage : this.getUsageMapInternal().values())
     {
       totalValue = totalValue.add(usage.getBundle().getUnitValue());
     }
@@ -394,11 +362,12 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
   /** ########################### PERSISTENCE ############################ **/
   /** #################################################################### **/
   /**
-   * Getter de la map interne des utilisations de crédits classées selon la référence
-   * de leur provenance
-   * @return La map interne des utilisations de crédits classées selon la référence
-   * de leur provenance
+   * Getter de la map persistante des utilisations de crédits classées selon la
+   * référence de leur provenance
+   * @return La map persistante des utilisations de crédits classées selon la
+   * référence de leur provenance
    */
+  @SuppressWarnings(value = "unused")
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @OneToMany(mappedBy = "involvement", fetch = FetchType.LAZY, cascade = {})
@@ -406,20 +375,20 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
   @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
   // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
   @OptimisticLock(excluded = false)
-  private Map<Long, USAGE> getUsageMapInternal()
+  private Map<Long, USAGE> getUsageMapDatabase()
   {
-    return this.getUsageMap().getInternal();
+    return this.getUsageMapInternal().getInternal();
   }
   /**
-   * Setter de la map interne des utilisations de crédits classées selon la référence
-   * de leur provenance
-   * @param internalUsageMap Map interne des utilisations de crédits classées selon
+   * Setter de la map persistante des utilisations de crédits classées selon la
+   * référence de leur provenance
+   * @param usageMap Map persistante des utilisations de crédits classées selon
    * la référence de leur provenance à positionner
    */
   @SuppressWarnings(value = "unused")
-  private void setUsageMapInternal(Map<Long, USAGE> internalUsageMap)
+  private void setUsageMapDatabase(Map<Long, USAGE> usageMap)
   {
-    this.setUsageMap(new Bid4WinMap<Long, USAGE>(internalUsageMap, true));
+    this.setUsageMapInternal(new Bid4WinMap<Long, USAGE>(usageMap, true));
   }
 
   /**
@@ -440,5 +409,39 @@ public abstract class CreditInvolvement<CLASS extends CreditInvolvement<CLASS, U
   private void setUsedNb(int usedNb)
   {
     this.usedNb = usedNb;
+  }
+
+  /**
+   * Getter de l'identifiant d'historisation de l'implication de crédits
+   * @return L'identifiant d'historisation de l'implication de crédits
+   */
+  public Long getHistoryId()
+  {
+    return this.historyId;
+  }
+  /**
+   * Setter de l'identifiant d'historisation de l'implication de crédits
+   * @param historyId Identifiant d'historisation de l'implication de crédits à
+   * positionner
+   */
+  private void setHistoryId(Long historyId)
+  {
+    this.historyId = historyId;
+  }
+  /**
+   * Getter de l'historisation de l'implication de crédits
+   * @return L'historisation de l'implication de crédits à positionner
+   */
+  public HISTORY getHistory()
+  {
+    return this.history;
+  }
+  /**
+   * Setter de l'historisation de l'implication de crédits
+   * @param history Historisation de l'implication de crédits à positionner
+   */
+  private void setHistory(HISTORY history)
+  {
+    this.history = history;
   }
 }

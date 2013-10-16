@@ -21,11 +21,9 @@ import com.bid4win.commons.persistence.entity.Bid4WinEmbeddable;
 public class Phone extends Bid4WinEmbeddable<Phone>
 {
   /** Indicatif téléphonique */
-  @Transient
-  private String code = null;
+  @Transient private String code = null;
   /** Numéro de téléphone */
-  @Transient
-  private String number = null;
+  @Transient private String number = null;
 
   /**
    * Constructeur pour création par introspection

@@ -219,7 +219,7 @@ public abstract class Bot<CLASS extends Bot<CLASS, AUCTION, BID>,
   public CLASS autoBid(BID bid) throws ProtectionException, UserException
   {
     this.checkProtection();
-    UtilObject.checkNotNull("bid", bid, AuctionRef.AUCTION_BID_MISSING_ERROR);
+    UtilObject.checkNotNull("bid", bid, AuctionRef.BID_MISSING_ERROR);
     UtilObject.checkEquals("auctionId", bid.getAuction().getId(),
                            this.getAuction().getId(), AuctionRef.AUCTION_INVALID_ERROR);
     UtilObject.checkEquals("accountId", bid.getAccount().getId(),

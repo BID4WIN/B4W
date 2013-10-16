@@ -21,10 +21,12 @@ import org.hibernate.annotations.OptimisticLock;
 import com.bid4win.commons.core.UtilNumber;
 import com.bid4win.commons.core.UtilObject;
 import com.bid4win.commons.core.UtilString;
+import com.bid4win.commons.core.collection.Bid4WinCollectionAbstract;
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.comparator.Bid4WinComparator;
 import com.bid4win.commons.core.comparator.Bid4WinObjectComparator;
 import com.bid4win.commons.core.exception.UserException;
+import com.bid4win.commons.core.reference.MessageRef;
 import com.bid4win.commons.core.reference.MessageRef.CurrencyRef;
 import com.bid4win.commons.core.reference.MessageRef.ProductRef;
 import com.bid4win.commons.core.reference.MessageRef.ResourceRef;
@@ -54,23 +56,23 @@ import com.bid4win.persistence.entity.price.Price;
 public class Product extends Bid4WinEntityGeneratedID<Product>
 {
   /** Référence du produit */
-  @Transient
-  private String reference = null;
+  @Transient private String reference = null;
   /** Nom du produit dans différentes langues dont celle définie par défaut */
-  @Transient
-  private I18nGroup names = null;
+  @Transient private I18nGroup names = null;
   /** Résumé de la description du produit dans différentes langues dont celle définie par défaut */
-  @Transient
-  private I18nGroup summaries = null;
+  @Transient private I18nGroup summaries = null;
   /** Prix du produit dans différentes monnaies dont celle définie par défaut */
-  @Transient
-  private Price price = null;
+  @Transient private Price price = null;
   /** Liste des images utilisées par le produit */
-  @Transient
-  private Bid4WinList<ImageUsage> imageUsageList = new Bid4WinList<ImageUsage>();
+  @Transient private Bid4WinList<ImageUsage> imageUsageList;
+  {
+    this.setImageUsageListInternal(new Bid4WinList<ImageUsage>());
+  }
   /** Liste des descriptions utilisées par le produit */
-  @Transient
-  private Bid4WinList<InnerContentUsage> innerContentUsageList = new Bid4WinList<InnerContentUsage>();
+  @Transient private Bid4WinList<InnerContentUsage> innerContentUsageList;
+  {
+    this.setInnerContentUsageListInternal(new Bid4WinList<InnerContentUsage>());
+  }
 
   /**
    * Constructeur pour création par introspection
@@ -98,42 +100,6 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
     this.defineNames(names);
     this.defineSummaries(summaries);
     this.definePrice(price);
-  }
-
-  /**
-   * Ajoute à la liste des noeuds de relations du produit le lien vers ses listes
-   * d'utilisations d'image et de page HTML
-   * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getFullRelationNodeList()
-   */
-  @Override
-  protected Bid4WinList<Bid4WinRelationNode> getFullRelationNodeList()
-  {
-    Bid4WinList<Bid4WinRelationNode> nodeList = super.getFullRelationNodeList();
-    nodeList.add(Product_Relations.NODE_IMAGE_USAGE_LIST);
-    nodeList.add(Product_Relations.NODE_INNER_CONTENT_USAGE_LIST);
-    return nodeList;
-  }
-  /**
-   * Permet de récupérer la liste d'utilisations d'image ou de page HTML du produit
-   * si elles correspondent à la relation en argument. Elle doit être redéfinie
-   * pour toute nouvelle relation de type liste à remonter
-   * @param relation {@inheritDoc}
-   * @return {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getRelationList(com.bid4win.commons.persistence.entity.Bid4WinRelation)
-   */
-  @Override
-  protected List<? extends Bid4WinEntity<?, ?>> getRelationList(Bid4WinRelation relation)
-  {
-    if(relation.equals(Product_Relations.RELATION_IMAGE_USAGE_LIST))
-    {
-      return this.getImageUsageListInternal();
-    }
-    else if(relation.equals(Product_Relations.RELATION_INNER_CONTENT_USAGE_LIST))
-    {
-      return this.getInnerContentUsageListInternal();
-    }
-    return super.getRelationList(relation);
   }
 
   /**
@@ -171,6 +137,91 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
     buffer.append(" PRICES=").append(this.getPrice().render());
     // Retourne le rendu
     return buffer;
+  }
+  /**
+   * Ajoute à la liste des noeuds de relations du produit le lien vers ses listes
+   * d'utilisations d'image et de page HTML
+   * @return {@inheritDoc}
+   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getFullRelationNodeList()
+   */
+  @Override
+  protected Bid4WinList<Bid4WinRelationNode> getFullRelationNodeList()
+  {
+    Bid4WinList<Bid4WinRelationNode> nodeList = super.getFullRelationNodeList();
+    nodeList.add(Product_Relations.NODE_IMAGE_USAGE_LIST);
+    nodeList.add(Product_Relations.NODE_INNER_CONTENT_USAGE_LIST);
+    return nodeList;
+  }
+  /**
+   * Permet de récupérer la liste d'utilisations d'image ou de page HTML du produit
+   * si elles correspondent à la relation en argument. Elle doit être redéfinie
+   * pour toute nouvelle relation de type liste à remonter
+   * @param relation {@inheritDoc}
+   * @return {@inheritDoc}
+   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getRelationList(com.bid4win.commons.persistence.entity.Bid4WinRelation)
+   */
+  @Override
+  protected Bid4WinList<? extends Bid4WinEntity<?, ?>> getRelationList(Bid4WinRelation relation)
+  {
+    if(relation.equals(Product_Relations.RELATION_IMAGE_USAGE_LIST))
+    {
+      return this.getImageUsageListInternal();
+    }
+    else if(relation.equals(Product_Relations.RELATION_INNER_CONTENT_USAGE_LIST))
+    {
+      return this.getInnerContentUsageListInternal();
+    }
+    return super.getRelationList(relation);
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param collection {@inheritDoc}
+   * @param toBeAdded {@inheritDoc}
+   * @param base {@inheritDoc}
+   * @throws ProtectionException {@inheritDoc}
+   * @throws UserException {@inheritDoc}
+   * @see com.bid4win.commons.core.Bid4WinObject#add(com.bid4win.commons.core.collection.Bid4WinCollectionAbstract, java.lang.Object, com.bid4win.commons.core.reference.MessageRef)
+   */
+  @Override
+  protected <TYPE> void add(Bid4WinCollectionAbstract<TYPE, ?, ?> collection,
+                            TYPE toBeAdded, MessageRef base)
+            throws ProtectionException, UserException
+  {
+    super.add(collection, toBeAdded, base);
+    if(collection == this.getImageUsageListInternal())
+    {
+      this.reorderImageUsageList();
+    }
+    else if(collection == this.getInnerContentUsageListInternal())
+    {
+      this.reorderInnerContentUsageList();
+    }
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param collection {@inheritDoc}
+   * @param toBeRemoved {@inheritDoc}
+   * @param base {@inheritDoc}
+   * @throws ProtectionException {@inheritDoc}
+   * @throws UserException {@inheritDoc}
+   * @see com.bid4win.commons.core.Bid4WinObject#remove(com.bid4win.commons.core.collection.Bid4WinCollectionAbstract, java.lang.Object, com.bid4win.commons.core.reference.MessageRef)
+   */
+  @Override
+  protected <TYPE> void remove(Bid4WinCollectionAbstract<TYPE, ?, ?> collection,
+                               TYPE toBeRemoved, MessageRef base)
+            throws ProtectionException, UserException
+  {
+    super.remove(collection, toBeRemoved, base);
+    if(collection == this.getImageUsageListInternal())
+    {
+      this.reorderImageUsageList();
+    }
+    else if(collection == this.getInnerContentUsageListInternal())
+    {
+      this.reorderInnerContentUsageList();
+    }
   }
 
   /**
@@ -233,14 +284,14 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
     // Vérifie la protection de la ressource courante
     this.checkProtection();
     this.setNames(UtilObject.checkNotNull("names", names,
-                                          ProductRef.PRODUCT_NAME_MISSING_ERROR));
+                                          ProductRef.NAME_MISSING_ERROR));
     // Redéfini le nommage des images du produit
-    for(ImageUsage usage : this.getImageUsageList())
+    for(ImageUsage usage : this.getImageUsageListInternal())
     {
       usage.defineName(this.getName());
     }
     // Redéfini le nommage des descriptions du produit
-    for(InnerContentUsage usage : this.getInnerContentUsageList())
+    for(InnerContentUsage usage : this.getInnerContentUsageListInternal())
     {
       usage.defineName(this.getName());
     }
@@ -259,7 +310,7 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
     // Vérifie la protection de la ressource courante
     this.checkProtection();
     this.setSummaries(UtilObject.checkNotNull("summaries", summaries,
-                                               ProductRef.PRODUCT_SUMMARY_MISSING_ERROR));
+                                               ProductRef.SUMMARY_MISSING_ERROR));
   }
   /**
    * Cette méthode permet de définir le prix du produit dans différentes monnaies
@@ -272,7 +323,7 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
     // Vérifie la protection de la ressource courante
     this.checkProtection();
     this.setPrice(UtilObject.checkNotNull("price", price,
-                                           CurrencyRef.CURRENCY_PRICE_MISSING_ERROR));
+                                           CurrencyRef.PRICE_MISSING_ERROR));
   }
 
   /**
@@ -281,7 +332,7 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
    */
   public int getImageNb()
   {
-    return this.getImageUsageList().size();
+    return this.getImageUsageListInternal().size();
   }
   /**
    * Cette méthode permet de récupérer l'image référencée dont l'identifiant
@@ -293,7 +344,7 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
    */
   public ImageUsage getImage(long id) throws UserException
   {
-    for(ImageUsage usage : this.getImageUsageList())
+    for(ImageUsage usage : this.getImageUsageListInternal())
     {
       if(usage.getId().equals(id))
       {
@@ -308,7 +359,7 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
    */
   public Bid4WinList<ImageUsage> getImageList()
   {
-    return this.getImageUsageList().clone();
+    return this.getImageUsageListInternal().clone(true);
   }
   /**
    * Cette méthode permet de connaître le nombre de pages de descriptions référencées
@@ -317,7 +368,7 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
    */
   public int getDescriptionNb()
   {
-    return this.getInnerContentUsageList().size();
+    return this.getInnerContentUsageListInternal().size();
   }
   /**
    * Cette méthode permet de récupérer la page de description référencée dont l'
@@ -330,7 +381,7 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
    */
   public InnerContentUsage getDescription(long id) throws UserException
   {
-    for(InnerContentUsage usage : this.getInnerContentUsageList())
+    for(InnerContentUsage usage : this.getInnerContentUsageListInternal())
     {
       if(usage.getId().equals(id))
       {
@@ -345,7 +396,7 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
    */
   public Bid4WinList<InnerContentUsage> getDescriptionList()
   {
-    return this.getInnerContentUsageList().clone();
+    return this.getInnerContentUsageListInternal().clone(true);
   }
 
   /**
@@ -358,15 +409,13 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
    */
   public void orderImage(int oldIndex, int newIndex) throws ProtectionException, UserException
   {
-    // Vérifie la protection du produit courant
-    this.checkProtection();
     UtilNumber.checkMinValue("oldIndex", oldIndex, 0, true,
                              ResourceRef.IMAGE_USAGE_UNKNOWN_ERROR);
-    UtilNumber.checkMaxValue("oldIndex", oldIndex, this.getImageUsageList().size(),
+    UtilNumber.checkMaxValue("oldIndex", oldIndex, this.getImageUsageListInternal().size(),
                              false, ResourceRef.IMAGE_USAGE_UNKNOWN_ERROR);
     UtilNumber.checkMinValue("newIndex", oldIndex, 0, true,
                              ResourceRef.IMAGE_USAGE_UNKNOWN_ERROR);
-    UtilNumber.checkMaxValue("newIndex", oldIndex, this.getImageUsageList().size(),
+    UtilNumber.checkMaxValue("newIndex", oldIndex, this.getImageUsageListInternal().size(),
                              false, ResourceRef.IMAGE_USAGE_UNKNOWN_ERROR);
     ImageUsage usage = this.getImageUsageListInternal().remove(oldIndex);
     this.getImageUsageListInternal().add(newIndex, usage);
@@ -385,22 +434,6 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
       usage.definePosition(position++);
     }
   }
-  /**
-   * Getter de la liste des utilisations d'images du produit courant
-   * @return La liste des utilisations d'images du produit courant
-   */
-  private Bid4WinList<ImageUsage> getImageUsageList()
-  {
-    return this.imageUsageList;
-  }
-  /**
-   * Setter de la liste des utilisations d'images du produit courant
-   * @param imageUsageList Liste des utilisations d'images à positionner
-   */
-  private void setImageUsageList(Bid4WinList<ImageUsage> imageUsageList)
-  {
-    this.imageUsageList = imageUsageList;
-  }
 
   /**
    * Cette méthode permet de modifier la position d'une description référencée
@@ -416,11 +449,11 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
     this.checkProtection();
     UtilNumber.checkMinValue("oldIndex", oldIndex, 0, true,
                              ResourceRef.RESOURCE_USAGE_UNKNOWN_ERROR);
-    UtilNumber.checkMaxValue("oldIndex", oldIndex, this.getInnerContentUsageList().size(),
+    UtilNumber.checkMaxValue("oldIndex", oldIndex, this.getInnerContentUsageListInternal().size(),
                              false, ResourceRef.RESOURCE_USAGE_UNKNOWN_ERROR);
     UtilNumber.checkMinValue("newIndex", oldIndex, 0, true,
                              ResourceRef.RESOURCE_USAGE_UNKNOWN_ERROR);
-    UtilNumber.checkMaxValue("newIndex", oldIndex, this.getInnerContentUsageList().size(),
+    UtilNumber.checkMaxValue("newIndex", oldIndex, this.getInnerContentUsageListInternal().size(),
                              false, ResourceRef.RESOURCE_USAGE_UNKNOWN_ERROR);
     InnerContentUsage usage = this.getInnerContentUsageListInternal().remove(oldIndex);
     this.getInnerContentUsageListInternal().add(newIndex, usage);
@@ -439,81 +472,52 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
       usage.definePosition(position++);
     }
   }
+
   /**
-   * Getter de la liste des utilisations de contenu du produit courant
-   * @return La liste des utilisations de contenu du produit courant
+   * Getter de la liste interne des utilisations d'images du produit courant
+   * @return La liste interne des utilisations d'images du produit courant
    */
-  private Bid4WinList<InnerContentUsage> getInnerContentUsageList()
+  private Bid4WinList<ImageUsage> getImageUsageListInternal()
+  {
+    return this.imageUsageList;
+  }
+  /**
+   * Setter de la liste interne des utilisations d'images du produit courant
+   * @param imageUsageList Liste interne des utilisations d'images à positionner
+   * @throws ProtectionException Si la protection de la liste en paramètre échoue
+   */
+  private void setImageUsageListInternal(Bid4WinList<ImageUsage> imageUsageList)
+          throws ProtectionException
+  {
+    imageUsageList.protect(this.getProtection());
+    this.imageUsageList = imageUsageList;
+  }
+  /**
+   * Getter de la liste interne des utilisations de contenu du produit courant
+   * @return La liste interne des utilisations de contenu du produit courant
+   */
+  private Bid4WinList<InnerContentUsage> getInnerContentUsageListInternal()
   {
     return this.innerContentUsageList;
   }
   /**
-   * Setter de la liste des utilisations de contenu du produit courant
-   * @param innerContentUsageList Liste des utilisations de contenu à positionner
+   * Setter de la liste interne des utilisations de contenu du produit courant
+   * @param innerContentUsageList Liste interne des utilisations de contenu à positionner
+   * @throws ProtectionException Si la protection de la liste en paramètre échoue
    */
-  private void setInnerContentUsageList(Bid4WinList<InnerContentUsage> innerContentUsageList)
+  private void setInnerContentUsageListInternal(Bid4WinList<InnerContentUsage> innerContentUsageList)
+          throws ProtectionException
   {
+    innerContentUsageList.protect(this.getProtection());
     this.innerContentUsageList = innerContentUsageList;
   }
 
-  /**
-   *
-   * TODO A COMMENTER
-   * @param link {@inheritDoc}
-   * @param backLink {@inheritDoc}
-   * @param toBeAdded {@inheritDoc}
-   * @throws ProtectionException {@inheritDoc}
-   * @throws UserException {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#addRelationCollection(com.bid4win.commons.persistence.entity.Bid4WinRelation, com.bid4win.commons.persistence.entity.Bid4WinRelation, com.bid4win.commons.persistence.entity.Bid4WinEntity)
-   */
-  @Override
-  protected void addRelationCollection(Bid4WinRelation link,
-                                       Bid4WinRelation backLink,
-                                       Bid4WinEntity<?, ?> toBeAdded)
-            throws ProtectionException, UserException
-  {
-    super.addRelationCollection(link, backLink, toBeAdded);
-    if(link.equals(Product_Relations.RELATION_IMAGE_USAGE_LIST))
-    {
-      this.reorderImageUsageList();
-    }
-    else if(link.equals(Product_Relations.RELATION_INNER_CONTENT_USAGE_LIST))
-    {
-      this.reorderInnerContentUsageList();
-    }
-  }
-  /**
-   *
-   * TODO A COMMENTER
-   * @param link {@inheritDoc}
-   * @param backLink {@inheritDoc}
-   * @param toBeAdded {@inheritDoc}
-   * @throws ProtectionException {@inheritDoc}
-   * @throws UserException {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#removeRelationCollection(com.bid4win.commons.persistence.entity.Bid4WinRelation, com.bid4win.commons.persistence.entity.Bid4WinRelation, com.bid4win.commons.persistence.entity.Bid4WinEntity)
-   */
-  @Override
-  protected void removeRelationCollection(Bid4WinRelation link,
-                                          Bid4WinRelation backLink,
-                                          Bid4WinEntity<?, ?> toBeAdded)
-            throws ProtectionException, UserException
-  {
-    super.removeRelationCollection(link, backLink, toBeAdded);
-    if(link.equals(Product_Relations.RELATION_IMAGE_USAGE_LIST))
-    {
-      this.reorderImageUsageList();
-    }
-    else if(link.equals(Product_Relations.RELATION_INNER_CONTENT_USAGE_LIST))
-    {
-      this.reorderInnerContentUsageList();
-    }
-  }
 
   /** #################################################################### **/
   /** ########################### PERSISTENCE ############################ **/
   /** #################################################################### **/
   /**
-   * Getter du champs permettant le forçage de la modification du produit
+   * Getter du champ permettant le forçage de la modification du produit
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getUpdateForce()
    */
@@ -611,9 +615,10 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
   }
 
   /**
-   * Getter de la liste interne des utilisations d'image du produit courant
-   * @return La liste interne des utilisations d'image du produit courant
+   * Getter de la liste persistante des utilisations d'image du produit courant
+   * @return La liste persistante des utilisations d'image du produit courant
    */
+  @SuppressWarnings(value = "unused")
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {})
@@ -621,24 +626,25 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
   @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
   // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
   @OptimisticLock(excluded = false)
-  private List<ImageUsage> getImageUsageListInternal()
+  private List<ImageUsage> getImageUsageListDatabase()
   {
-    return this.getImageUsageList().getInternal();
+    return this.getImageUsageListInternal().getInternal();
   }
   /**
-   * Setter de la liste interne des utilisations d'image du produit courant
-   * @param imageUsageList Liste interne des utilisations d'image à positionner
+   * Setter de la liste persistante des utilisations d'image du produit courant
+   * @param imageUsageList Liste persistante des utilisations d'image à positionner
    */
   @SuppressWarnings(value = "unused")
-  private void setImageUsageListInternal(List<ImageUsage> imageUsageList)
+  private void setImageUsageListDatabase(List<ImageUsage> imageUsageList)
   {
-    this.setImageUsageList(new Bid4WinList<ImageUsage>(imageUsageList, true));
+    this.setImageUsageListInternal(new Bid4WinList<ImageUsage>(imageUsageList, true));
   }
 
   /**
-   * Getter de la liste interne des utilisations de contenu du produit courant
-   * @return La liste interne des utilisations de contenu du produit courant
+   * Getter de la liste persistante des utilisations de contenu du produit courant
+   * @return La liste persistante des utilisations de contenu du produit courant
    */
+  @SuppressWarnings(value = "unused")
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {})
@@ -646,17 +652,17 @@ public class Product extends Bid4WinEntityGeneratedID<Product>
   @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
   // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
   @OptimisticLock(excluded = false)
-  private List<InnerContentUsage> getInnerContentUsageListInternal()
+  private List<InnerContentUsage> getInnerContentUsageListDatabase()
   {
-    return this.getInnerContentUsageList().getInternal();
+    return this.getInnerContentUsageListInternal().getInternal();
   }
   /**
-   * Setter de la liste interne des utilisations de contenu du produit courant
-   * @param innerContentUsageList Liste interne des utilisations de contenu à positionner
+   * Setter de la liste persistante des utilisations de contenu du produit courant
+   * @param innerContentUsageList Liste persistante des utilisations de contenu à positionner
    */
   @SuppressWarnings(value = "unused")
-  private void setInnerContentUsageListInternal(List<InnerContentUsage> innerContentUsageList)
+  private void setInnerContentUsageListDatabase(List<InnerContentUsage> innerContentUsageList)
   {
-    this.setInnerContentUsageList(new Bid4WinList<InnerContentUsage>(innerContentUsageList, true));
+    this.setInnerContentUsageListInternal(new Bid4WinList<InnerContentUsage>(innerContentUsageList, true));
   }
 }

@@ -6,7 +6,7 @@ CREATE TABLE `INNER_CONTENT_USAGE`
   `VERSION`      int(3)       NOT NULL                COMMENT 'Version de l utilisation de contenu',
   `CREATE_DATE`  varchar(23)  NOT NULL                COMMENT 'Date de creation de l utilisation de contenu',
   `UPDATE_DATE`  varchar(23)  NOT NULL                COMMENT 'Date de modification de l utilisation de contenu',
-  `UPDATE_FORCE` int(3)       NOT NULL                COMMENT 'Champs permettant le forcage de la modification de l utilisation de contenu',
+  `UPDATE_FORCE` int(3)       NOT NULL                COMMENT 'Champ permettant le forcage de la modification de l utilisation de contenu',
   `POSITION`     int(3)       DEFAULT 0               COMMENT 'Position de l utilisation de contenu',
   `PATH`         varchar(150) NOT NULL                COMMENT 'Emplacement de stockage de l utilisation de contenu',
   `NAME`         varchar(50)  NOT NULL                COMMENT 'Nom de l utilisation de contenu',

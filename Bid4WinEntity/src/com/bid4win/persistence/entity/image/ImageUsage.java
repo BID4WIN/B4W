@@ -49,14 +49,11 @@ public class ImageUsage
        extends FileResourceUsageMultiPart<ImageUsage, ImageType, ImageStorage, Format, Image>
 {
   /** Type de l'utilisation d'image */
-  @Transient
-  private UsageType usageType = null;
+  @Transient private UsageType usageType = null;
   /** Position de l'utilisation d'image */
-  @Transient
-  private int position = 0;
+  @Transient private int position = 0;
   /** Produit potentiellement associé à cette utilisation d'image */
-  @Transient
-  private Product product = null;
+  @Transient private Product product = null;
 
   /**
    * Constructeur pour création par introspection

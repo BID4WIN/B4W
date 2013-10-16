@@ -70,7 +70,7 @@ public class AuctionAbstractStub
   public BidAbstractStub getWinningBid() throws UserException
   {
     return UtilObject.checkNotNull("winningBid", this.winningBid,
-                                   AuctionRef.AUCTION_BID_MISSING_ERROR);
+                                   AuctionRef.BID_MISSING_ERROR);
   }
   /**
    * TODO A COMMENTER

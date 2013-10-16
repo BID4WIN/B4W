@@ -1,7 +1,7 @@
 package com.bid4win.persistence.entity.image;
 
 import com.bid4win.commons.core.UtilString;
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.io.UtilFile;
 import com.bid4win.commons.core.reference.MessageRef;
@@ -61,11 +61,11 @@ public class ImageType extends ResourceType<ImageType>
   }
   /**
    * Cette méthode permet de récupérer tous les types d'image existants
-   * @return Le set complet de tous les types d'image définis
+   * @return Tous les types d'image définis
    */
-  public static Bid4WinSet<ImageType> getImageTypeSet()
+  public static Bid4WinCollection<ImageType> getImageTypes()
   {
-    return Bid4WinObjectType.getTypeSet(ImageType.class);
+    return Bid4WinObjectType.getTypes(ImageType.class);
   }
 
   /**

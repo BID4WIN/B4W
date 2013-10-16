@@ -130,7 +130,7 @@ public abstract class ScheduleAbstract<CLASS extends ScheduleAbstract<CLASS>>
     // Vérifie la protection de la planification de base courante
     this.checkProtection();
     UtilObject.checkNotNull("startDate", startDate,
-                            AuctionRef.AUCTION_SCHEDULE_INVALID_ERROR);
+                            AuctionRef.SCHEDULE_INVALID_ERROR);
     this.setStartDate(startDate.removeSecondInfo());
   }
   /**
@@ -145,10 +145,10 @@ public abstract class ScheduleAbstract<CLASS extends ScheduleAbstract<CLASS>>
   {
     // Vérifie la protection de la planification de base courante
     this.checkProtection();
-    UtilObject.checkNotNull("endDate", endDate, AuctionRef.AUCTION_SCHEDULE_INVALID_ERROR);
+    UtilObject.checkNotNull("endDate", endDate, AuctionRef.SCHEDULE_INVALID_ERROR);
     endDate = endDate.removeMilliSecondInfo();
     UtilBoolean.checkTrue("endeDate", endDate.after(this.getStartDate()),
-                          AuctionRef.AUCTION_SCHEDULE_INVALID_ERROR);
+                          AuctionRef.SCHEDULE_INVALID_ERROR);
     this.setEndDate(endDate);
   }
 

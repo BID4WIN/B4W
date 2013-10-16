@@ -15,6 +15,7 @@ import com.bid4win.commons.core.comparator.Bid4WinComparator;
 import com.bid4win.commons.core.comparator.Bid4WinObjectComparator;
 import com.bid4win.commons.core.security.exception.ProtectionException;
 import com.bid4win.commons.persistence.entity.Bid4WinEmbeddable;
+import com.bid4win.commons.persistence.entity.core.Bid4WinDateForRequest;
 
 /**
  * Cette classe défini un utilisateur<BR>
@@ -26,11 +27,9 @@ import com.bid4win.commons.persistence.entity.Bid4WinEmbeddable;
 public class User extends Bid4WinEmbeddable<User>
 {
   /** Nom complet de l'utilisateur */
-  @Transient
-  private Name name = null;
+  @Transient private Name name = null;
   /** Date de naissance de l'utilisateur */
-  @Transient
-  private Bid4WinDate birthDate = null;
+  @Transient private Bid4WinDate birthDate = null;
 
   /**
    * Constructeur pour création par introspection
@@ -187,5 +186,30 @@ public class User extends Bid4WinEmbeddable<User>
   private void setBirthDate(Bid4WinDate birthDate)
   {
     this.birthDate = birthDate;
+  }
+
+  /**
+   * Getter de la date de naissance de l'utilisateur pour les requêtes
+   * @return La date de naissance de l'utilisateur pour les requêtes
+   */
+  // Annotation pour la persistence
+  @Access(AccessType.PROPERTY)
+  @Column(name = "BIRTH_DATE", nullable = true, unique = false,
+          // Utilise la même colonne que la date réelle
+          insertable = false, updatable = false)
+  @Type(type = "DATE_REQUEST")
+  public Bid4WinDateForRequest getBirthDateForRequest()
+  {
+    return Bid4WinDateForRequest.getDateForRequest(this.getBirthDate());
+  }
+  /**
+   * Setter inutilisé car la date de naissance de l'utilisateur est positionnée
+   * par ailleurs
+   * @param birthDate Date de naissance de l'utilisateur pour les requêtes à positionner
+   */
+  @SuppressWarnings("unused")
+  private void setBirthDateForRequest(Bid4WinDateForRequest birthDate)
+  {
+    // Ne fait rien
   }
 }

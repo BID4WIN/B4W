@@ -55,6 +55,6 @@ public class Price extends AmountMap<Price>
   @Override
   protected MessageRef getMessageRefBase()
   {
-    return CurrencyRef.CURRENCY_PRICE;
+    return CurrencyRef.PRICE;
   }
 }

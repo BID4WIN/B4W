@@ -197,7 +197,7 @@ public abstract class BidAbstract<CLASS extends BidAbstract<CLASS, AUCTION, HIST
   {
     this.checkProtection();
     this.setPosition(UtilNumber.checkMinValue("position", position, 1, true,
-                                              AuctionRef.AUCTION_BID_INVALID_ERROR));
+                                              AuctionRef.BID_INVALID_ERROR));
   }
 
   /** #################################################################### **/

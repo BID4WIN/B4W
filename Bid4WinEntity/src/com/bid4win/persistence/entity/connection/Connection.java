@@ -10,7 +10,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.persistence.entity.connection.ConnectionAbstract;
-import com.bid4win.commons.persistence.entity.connection.IpAddress;
+import com.bid4win.commons.persistence.entity.connection.ConnectionData;
 import com.bid4win.persistence.entity.account.Account;
 
 /**
@@ -41,10 +41,10 @@ public class Connection extends ConnectionAbstract<Connection, ConnectionHistory
    * @throws UserException Si l'identifiant de session, le compte utilisateur ou
    * l'adresse IP de connexion en argument est nul
    */
-  public Connection(String sessionId, Account account, IpAddress ipAddress, boolean remanent)
+  public Connection(ConnectionData data/*String sessionId*/, Account account/*, IpAddress ipAddress, boolean remanent*/)
          throws UserException
   {
-    super(sessionId, account, ipAddress, remanent);
+    super(/*sessionId*/data, account/*, ipAddress, remanent*/);
   }
 
   /**

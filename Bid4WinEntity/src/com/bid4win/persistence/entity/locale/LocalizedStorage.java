@@ -37,6 +37,14 @@ public abstract class LocalizedStorage<CLASS extends LocalizedStorage<CLASS, TYP
   /** Définition de la langue par défaut des ressource internationalisées */
   public final static Language DEFAULT_LANGUAGE = Language.DEFAULT;
 
+  /** Présent uniquement pour la définition JPA de la map persistante */
+  @SuppressWarnings("unused")
+  // Annotation pour la persistence
+  @Access(AccessType.PROPERTY)
+  @Column(name = "LANGUAGES", length = 30, nullable = false, unique = false)
+  @Type(type = "LANGUAGE_SET")
+  private Bid4WinSet<Language> partTypeSet;
+
   /**
    * Constructeur pour création par introspection
    */
@@ -63,7 +71,7 @@ public abstract class LocalizedStorage<CLASS extends LocalizedStorage<CLASS, TYP
    */
   public Bid4WinSet<Language> getLanguageSet()
   {
-    return this.getPartTypeSet().clone();
+    return this.getPartTypes();
   }
   /**
    * Getter de la langue par défaut des ressources internationalisées
@@ -84,13 +92,13 @@ public abstract class LocalizedStorage<CLASS extends LocalizedStorage<CLASS, TYP
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.entity.resource.ResourceStorageMultiPart#getPartTypeSet()
    */
-  @Override
+  /*@Override
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @Column(name = "LANGUAGES", length = 30, nullable = false, unique = false)
   @Type(type = "LANGUAGE_SET")
   protected Bid4WinSet<Language> getPartTypeSet()
   {
-    return super.getPartTypeSet();
-  }
+    return super.getPartTypes();
+  }*/
 }

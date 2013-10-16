@@ -38,14 +38,11 @@ public class CreditBundleAbstract<CLASS extends CreditBundleAbstract<CLASS>>
   public final static int PRECISION = 4;
 
   /** Provenance des crédits du lot */
-  @Transient
-  private CreditOrigin origin = null;
+  @Transient private CreditOrigin origin = null;
   /** Valeur réelle unitaire des crédits */
-  @Transient
-  private Amount unitValue = null;
+  @Transient private Amount unitValue = null;
   /** Nombre de crédits du lot */
-  @Transient
-  private int nb = 0;
+  @Transient private int nb = 0;
 
   /**
    * Constructeur pour création par introspection
@@ -145,7 +142,7 @@ public class CreditBundleAbstract<CLASS extends CreditBundleAbstract<CLASS>>
   @Override
   public MessageRef getMessageRefBase()
   {
-    return AccountRef.ACCOUNT_CREDIT;
+    return AccountRef.CREDIT;
   }
 
   /**
@@ -159,7 +156,7 @@ public class CreditBundleAbstract<CLASS extends CreditBundleAbstract<CLASS>>
     // Vérifie la protection du lot de crédits courant
     this.checkProtection();
     this.setOrigin(UtilObject.checkNotNull("origin", origin,
-                                           AccountRef.ACCOUNT_CREDIT_REFERENCE_MISSING_ERROR));
+                                           AccountRef.CREDIT_REFERENCE_MISSING_ERROR));
   }
   /**
    * Cette méthode permet de définir la valeur réelle unitaire des crédits
@@ -186,7 +183,7 @@ public class CreditBundleAbstract<CLASS extends CreditBundleAbstract<CLASS>>
     // Vérifie la protection du lot de crédits courant
     this.checkProtection();
     this.setUnitValue(UtilObject.checkNotNull("unitValue", unitValue,
-                                              CurrencyRef.CURRENCY_AMOUNT_MISSING_ERROR));
+                                              CurrencyRef.AMOUNT_MISSING_ERROR));
   }
   /**
    * Cette méthode permet de définir le nombre de crédits du lot
@@ -199,7 +196,7 @@ public class CreditBundleAbstract<CLASS extends CreditBundleAbstract<CLASS>>
     // Vérifie la protection du lot de crédits courant
     this.checkProtection();
     this.setNb(UtilNumber.checkMinValue("nb", nb, 1, true,
-                                        AccountRef.ACCOUNT_CREDIT_NB_INVALID_ERROR));
+                                        AccountRef.CREDIT_NB_INVALID_ERROR));
   }
 
   /** #################################################################### **/

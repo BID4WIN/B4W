@@ -26,8 +26,7 @@ import com.bid4win.persistence.entity.account.Account;
 public class Subscription extends AccountBasedKey<Subscription, Account>
 {
   /** Date de validation de l'inscription */
-  @Transient
-  private Bid4WinDate validationDate = null;
+  @Transient private Bid4WinDate validationDate = null;
 
   /**
    * Constructeur pour création par introspection

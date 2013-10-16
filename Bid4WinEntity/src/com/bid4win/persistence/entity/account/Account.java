@@ -23,9 +23,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OptimisticLock;
 
 import com.bid4win.commons.core.UtilNumber;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
+import com.bid4win.commons.core.collection.Bid4WinCollectionAbstract;
 import com.bid4win.commons.core.collection.Bid4WinList;
 import com.bid4win.commons.core.collection.Bid4WinMap;
-import com.bid4win.commons.core.collection.Bid4WinSet;
 import com.bid4win.commons.core.comparator.Bid4WinObjectComparator;
 import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.UserException;
@@ -44,6 +45,7 @@ import com.bid4win.persistence.entity.account.credit.collection.CreditMap;
 import com.bid4win.persistence.entity.account.preference.PreferenceBundle;
 import com.bid4win.persistence.entity.account.preference.PreferenceRoot;
 import com.bid4win.persistence.entity.auction.normal.NormalAuction;
+import com.sun.istack.internal.Interned;
 
 /**
  * Cette classe défini un compte utilisateur pour l'application BID4WIN<BR>
@@ -59,27 +61,25 @@ import com.bid4win.persistence.entity.auction.normal.NormalAuction;
 public class Account extends AccountAbstract<Account>
 {
   /** Informations sur l'utilisateur du compte */
-  @Transient
-  private User user = null;
+  @Transient private User user = null;
   /** Jeu de préférences du compte utilisateur */
-  @Transient
-  private PreferenceBundle preferenceBundle = null;
+  @Transient private PreferenceBundle preferenceBundle = null;
   /** Compte utilisateur ayant parrainé le compte utilisateur courant */
-  @Transient
-  private Account sponsor = null;
+  @Transient private Account sponsor = null;
   /** Nombre de crédits disponibles pour le compte utilisateur */
-  @Transient
-  private int creditNb = 0;
+  @Transient private int creditNb = 0;
   /** Nombre de crédits utilisés par le compte utilisateur */
-  @Transient
-  private int usedCreditNb = 0;
+  @Transient private int usedCreditNb = 0;
   /** Liste de lots de crédits du compte utilisateur */
-  @Transient
-  private Bid4WinList<CreditBundle> creditBundleList = new Bid4WinList<CreditBundle>();
+  @Transient private Bid4WinList<CreditBundle> creditBundleList;
+  {
+    this.setCreditBundleListInternal(new Bid4WinList<CreditBundle>());
+  }
   /** Map des implications de crédits sur des ventes aux enchères normales */
-  @Transient
-  private Bid4WinMap<String, CreditInvolvementNormal> involvementNormalMap =
-    new Bid4WinMap<String, CreditInvolvementNormal>();
+  @Transient private Bid4WinMap<String, CreditInvolvementNormal> involvementNormalMap;
+  {
+    this.setInvolvementNormalMapInternal(new Bid4WinMap<String, CreditInvolvementNormal>());
+  }
 
   /**
    * Constructeur pour création par introspection ou en proxy pour chargement différé
@@ -103,6 +103,20 @@ public class Account extends AccountAbstract<Account>
    * Constructeur
    * @param credential Certificat de connexion du compte utilisateur
    * @param email Email du compte utilisateur
+   * @param sponsor Compte utilisateur ayant parrainé le compte utilisateur courant
+   * @throws ModelArgumentException Si le certificat de connexion ou l'email du
+   * compte utilisateur en paramètre est nul
+   * @throws UserException TODO A COMMENTER
+   */
+  public Account(Credential credential, Email email, Account sponsor)
+         throws ModelArgumentException, UserException
+  {
+    this(credential, email, null, new PreferenceBundle(), sponsor);
+  }
+  /**
+   * Constructeur
+   * @param credential Certificat de connexion du compte utilisateur
+   * @param email Email du compte utilisateur
    * @param user Informations sur l'utilisateur du compte
    * @param bundle Jeu de préférences du compte utilisateur
    * @throws ModelArgumentException Si le certificat de connexion ou l'email du
@@ -120,6 +134,24 @@ public class Account extends AccountAbstract<Account>
    * @param credential Certificat de connexion du compte utilisateur
    * @param email Email du compte utilisateur
    * @param user Informations sur l'utilisateur du compte
+   * @param bundle Jeu de préférences du compte utilisateur
+   * @param sponsor Compte utilisateur ayant parrainé le compte utilisateur courant
+   * @throws ModelArgumentException Si le certificat de connexion ou l'email du
+   * compte utilisateur en paramètre est nul
+   * @throws UserException TODO A COMMENTER
+   */
+  public Account(Credential credential, Email email, User user,
+                 PreferenceBundle bundle, Account sponsor)
+         throws ModelArgumentException, UserException
+  {
+    this(credential, email, user, bundle);
+    this.linkToSponsor(sponsor);
+  }
+  /**
+   * Constructeur
+   * @param credential Certificat de connexion du compte utilisateur
+   * @param email Email du compte utilisateur
+   * @param user Informations sur l'utilisateur du compte
    * @param preferenceRoot Racine de la liste de préférences du compte utilisateur
    * @throws ModelArgumentException Si le certificat de connexion ou l'email du
    * compte utilisateur en paramètre est nul
@@ -129,6 +161,23 @@ public class Account extends AccountAbstract<Account>
          throws ModelArgumentException, UserException
   {
     this(credential, email, user, new PreferenceBundle(preferenceRoot));
+  }
+  /**
+   * Constructeur
+   * @param credential Certificat de connexion du compte utilisateur
+   * @param email Email du compte utilisateur
+   * @param user Informations sur l'utilisateur du compte
+   * @param preferenceRoot Racine de la liste de préférences du compte utilisateur
+   * @param sponsor Compte utilisateur ayant parrainé le compte utilisateur courant
+   * @throws ModelArgumentException Si le certificat de connexion ou l'email du
+   * compte utilisateur en paramètre est nul
+   * @throws UserException Si l'une des préférences en argument est invalide
+   */
+  public Account(Credential credential, Email email, User user,
+                 PreferenceRoot preferenceRoot, Account sponsor)
+         throws ModelArgumentException, UserException
+  {
+    this(credential, email, user, new PreferenceBundle(preferenceRoot), sponsor);
   }
 
   /**
@@ -248,7 +297,7 @@ public class Account extends AccountAbstract<Account>
    * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getRelationList(com.bid4win.commons.persistence.entity.Bid4WinRelation)
    */
   @Override
-  protected List<? extends Bid4WinEntity<?, ?>> getRelationList(Bid4WinRelation relation)
+  protected Bid4WinList<? extends Bid4WinEntity<?, ?>> getRelationList(Bid4WinRelation relation)
   {
     if(relation.equals(Account_Relations.RELATION_CREDIT_BUNDLE_LIST))
     {
@@ -264,7 +313,7 @@ public class Account extends AccountAbstract<Account>
    * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#getRelationMap(com.bid4win.commons.persistence.entity.Bid4WinRelation)
    */
   @Override
-  protected Map<?, ? extends Bid4WinEntity<?, ?>> getRelationMap(Bid4WinRelation relation)
+  protected Bid4WinMap<?, ? extends Bid4WinEntity<?, ?>> getRelationMap(Bid4WinRelation relation)
   {
     if(relation.equals(Account_Relations.RELATION_INVOLVEMENT_NORMAL_MAP))
     {
@@ -288,6 +337,30 @@ public class Account extends AccountAbstract<Account>
       return ((CreditInvolvementNormal)value).getAuctionId();
     }
     return super.getRelationMapKey(relation, value);
+  }
+  /**
+   *
+   * TODO A COMMENTER
+   * @param collection {@inheritDoc}
+   * @param toBeAdded {@inheritDoc}
+   * @param base {@inheritDoc}
+   * @throws ProtectionException {@inheritDoc}
+   * @throws UserException {@inheritDoc}
+   * @see com.bid4win.commons.core.Bid4WinObject#add(com.bid4win.commons.core.collection.Bid4WinCollectionAbstract, java.lang.Object, com.bid4win.commons.core.reference.MessageRef)
+   */
+  @Override
+  protected <TYPE> void add(Bid4WinCollectionAbstract<TYPE, ?, ?> collection,
+                            TYPE toBeAdded, MessageRef base)
+            throws ProtectionException, UserException
+  {
+    super.add(collection, toBeAdded, base);
+    // A la liaison d'un lot de crédits, il faut augmenter les crédits du compte
+    if(collection == this.getCreditBundleListInternal())
+    {
+      CreditBundle bundle = (CreditBundle)toBeAdded;
+      this.setCreditNb(this.getCreditNb() + bundle.getCurrentNb());
+      this.setUsedCreditNb(this.getUsedCreditNb() + bundle.getUsedNb());
+    }
   }
 
   /**
@@ -324,20 +397,23 @@ public class Account extends AccountAbstract<Account>
    */
   public CreditMap useCredit(int nb) throws ProtectionException, UserException
   {
+    // Vérifie la protection du compte utilisateur courant
+    this.checkProtection();
     // Vérifie la présence des crédits
     UtilNumber.checkMinValue("creditNb", this.getCreditNb(), nb, true,
-                             AccountRef.ACCOUNT_CREDIT_NB_INSUFFICIENT_ERROR);
+                             AccountRef.CREDIT_NB_INSUFFICIENT_ERROR);
     // Récupère les lots de crédits et en utilise une partie
     CreditMap usedCreditMap = new CreditMap();
     while(nb > 0)
     {
+      // Récupère le lot de crédits courant
       CreditBundle usedBundle = this.getCreditBundle();
       int usedNb = Math.min(nb, usedBundle.getCurrentNb());
-      usedCreditMap.put(usedBundle.use(usedNb), usedNb);
       // Valide l'utilisation des crédits
-      nb -= usedNb;
+      usedCreditMap.put(usedBundle.use(usedNb), usedNb);
       this.setCreditNb(this.getCreditNb() - usedNb);
       this.setUsedCreditNb(this.getUsedCreditNb() + usedNb);
+      nb -= usedNb;
     }
     // Retourne les lot de crédits utilisés
     return usedCreditMap;
@@ -348,7 +424,7 @@ public class Account extends AccountAbstract<Account>
    */
   private CreditBundle getCreditBundle()
   {
-    return this.getCreditBundleList().getFirst();
+    return this.getCreditBundleListInternal().getFirst();
   }
 
   /**
@@ -359,15 +435,15 @@ public class Account extends AccountAbstract<Account>
    */
   public CreditInvolvementNormal getInvolvementNormal(NormalAuction auction)
   {
-    return this.getInvolvementNormalMap().get(auction.getId());
+    return this.getInvolvementNormalMapInternal().get(auction.getId());
   }
   /**
-   * Getter du set des implications de crédits sur des ventes aux enchères normales
-   * @return Le set des implications de crédits sur des ventes aux enchères normales
+   * Getter des implications de crédits sur des ventes aux enchères normales
+   * @return Les implications de crédits sur des ventes aux enchères normales
    */
-  public Bid4WinSet<CreditInvolvementNormal> getInvolvementNormalSet()
+  public Bid4WinCollection<CreditInvolvementNormal> getInvolvementNormals()
   {
-    return new Bid4WinSet<CreditInvolvementNormal>(this.getInvolvementNormalMap().values());
+    return this.getInvolvementNormalMapInternal().valuesProtected();
   }
 
   /**
@@ -415,12 +491,21 @@ public class Account extends AccountAbstract<Account>
   }
 
   /**
+   *
+   * TODO A COMMENTER
+   * @return TODO A COMMENTER
+   */
+  public boolean hasSponsor()
+  {
+    return this.getSponsor() != null;
+  }
+  /**
    * Cette méthode permet de définir le parrain du compte utilisateur courant
    * @param sponsor Définition du parrain du compte utilisateur courant
    * @throws ProtectionException Si le compte utilisateur courant est protégé
    * @throws UserException Si on défini un parrain nul ou déjà défini
    */
-  protected void linkToSponsor(Account sponsor) throws ProtectionException, UserException
+  private void linkToSponsor(Account sponsor) throws ProtectionException, UserException
   {
     this.linkTo(Account_Relations.RELATION_SPONSOR, sponsor);
   }
@@ -430,70 +515,53 @@ public class Account extends AccountAbstract<Account>
    * @throws ProtectionException Si le compte utilisateur courant est protégé
    * @throws UserException Si aucun parrain n'est défini
    */
-  protected Account unlinkFromSponsor() throws ProtectionException, UserException
+/*  protected Account unlinkFromSponsor() throws ProtectionException, UserException
   {
     return (Account)this.unlinkFrom(Account_Relations.RELATION_SPONSOR);
-  }
+  }*/
 
   /**
-   * Getter de la liste de lots de crédits du compte utilisateur
-   * @return La liste de lots de crédits du compte utilisateur
+   * Getter de la liste interne de lots de crédits du compte utilisateur
+   * @return La liste interne de lots de crédits du compte utilisateur
    */
-  private Bid4WinList<CreditBundle> getCreditBundleList()
+  private Bid4WinList<CreditBundle> getCreditBundleListInternal()
   {
     return this.creditBundleList;
   }
   /**
-   * Setter de la liste de lots de crédits du compte utilisateur
-   * @param creditBundleList Liste de lots de crédits du compte utilisateur à
-   * positionner
+   * Setter de la liste interne de lots de crédits du compte utilisateur
+   * @param creditBundleList Liste interne de lots de crédits du compte utilisateur
+   * à positionner
+   * @throws ProtectionException Si la protection de la liste en paramètre échoue
    */
-  private void setCreditBundleList(Bid4WinList<CreditBundle> creditBundleList)
+  private void setCreditBundleListInternal(Bid4WinList<CreditBundle> creditBundleList)
+          throws ProtectionException
   {
+    creditBundleList.protect(this.getProtection());
     this.creditBundleList = creditBundleList;
   }
   /**
-   * Getter de la map des implications de crédits sur des ventes aux enchères
+   * Getter de la map {@link Interned} des implications de crédits sur des ventes
+   * aux enchères normales du compte utilisateur courant
+   * @return La map interne des implications de crédits sur des ventes aux enchères
    * normales du compte utilisateur courant
-   * @return La map des implications de crédits sur des ventes aux enchères normales
-   * du compte utilisateur courant
    */
-  private Bid4WinMap<String, CreditInvolvementNormal> getInvolvementNormalMap()
+  private Bid4WinMap<String, CreditInvolvementNormal> getInvolvementNormalMapInternal()
   {
     return this.involvementNormalMap;
   }
   /**
-   * Setter de la map des implications de crédits sur des ventes aux enchères
+   * Setter de la map interne des implications de crédits sur des ventes aux enchères
    * normales du compte utilisateur courant
-   * @param involvementMap Map des implications de crédits sur des ventes aux enchères
-   * normales du compte utilisateur courant à positionner
+   * @param involvementMap Map interne des implications de crédits sur des ventes
+   * aux enchères normales du compte utilisateur courant à positionner
+   * @throws ProtectionException Si la protection de la map en paramètre échoue
    */
-  private void setInvolvementNormalMap(Bid4WinMap<String, CreditInvolvementNormal> involvementMap)
+  private void setInvolvementNormalMapInternal(Bid4WinMap<String, CreditInvolvementNormal> involvementMap)
+          throws ProtectionException
   {
+    involvementMap.protect(this.getProtection());
     this.involvementNormalMap = involvementMap;
-  }
-  /**
-   *
-   * TODO A COMMENTER
-   * @param link {@inheritDoc}
-   * @param backLink {@inheritDoc}
-   * @param toBeAdded {@inheritDoc}
-   * @throws ProtectionException {@inheritDoc}
-   * @throws UserException {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#addRelationCollection(com.bid4win.commons.persistence.entity.Bid4WinRelation, com.bid4win.commons.persistence.entity.Bid4WinRelation, com.bid4win.commons.persistence.entity.Bid4WinEntity)
-   */
-  @Override
-  protected void addRelationCollection(Bid4WinRelation link,
-                                       Bid4WinRelation backLink,
-                                       Bid4WinEntity<?, ?> toBeAdded)
-            throws ProtectionException, UserException
-  {
-    super.addRelationCollection(link, backLink, toBeAdded);
-    // A la liaison d'un lot de crédits, il faut augmenter les crédits du compte
-    if(link.equals(Account_Relations.RELATION_CREDIT_BUNDLE_LIST))
-    {
-      this.setCreditNb(this.getCreditNb() + ((CreditBundle)toBeAdded).getNb());
-    }
   }
 
   /** #################################################################### **/
@@ -604,9 +672,10 @@ public class Account extends AccountAbstract<Account>
   }
 
   /**
-   * Getter de la liste interne de lots de crédits du compte utilisateur
-   * @return La liste interne de lots de crédits du compte utilisateur
+   * Getter de la liste persistante de lots de crédits du compte utilisateur
+   * @return La liste persistante de lots de crédits du compte utilisateur
    */
+  @SuppressWarnings(value = "unused")
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @OneToMany(mappedBy = "accountLink", fetch = FetchType.LAZY, cascade = {})
@@ -614,27 +683,28 @@ public class Account extends AccountAbstract<Account>
   @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
   // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
   @OptimisticLock(excluded = false)
-  private List<CreditBundle> getCreditBundleListInternal()
+  private List<CreditBundle> getCreditBundleListDatabase()
   {
-    return this.getCreditBundleList().getInternal();
+    return this.getCreditBundleListInternal().getInternal();
   }
   /**
-   * Setter de la liste interne de lots de crédits du compte utilisateur
-   * @param internalCreditBundleList Liste interne de lots de crédits du compte
-   * utilisateur à positionner
+   * Setter de la liste persistante de lots de crédits du compte utilisateur
+   * @param creditBundleList Liste persistante de lots de crédits du compte utilisateur
+   * à positionner
    */
   @SuppressWarnings(value = "unused")
-  private void setCreditBundleListInternal(List<CreditBundle> internalCreditBundleList)
+  private void setCreditBundleListDatabase(List<CreditBundle> creditBundleList)
   {
-    this.setCreditBundleList(new Bid4WinList<CreditBundle>(internalCreditBundleList, true));
+    this.setCreditBundleListInternal(new Bid4WinList<CreditBundle>(creditBundleList, true));
   }
 
   /**
-   * Getter de la map interne des implications de crédits sur des ventes aux enchères
-   * normales du compte utilisateur courant
-   * @return La map interne des implications de crédits sur des ventes aux enchères
+   * Getter de la map persistante des implications de crédits sur des ventes aux
+   * enchères normales du compte utilisateur courant
+   * @return La map persistant des implications de crédits sur des ventes aux enchères
    * normales du compte utilisateur courant
    */
+  @SuppressWarnings(value = "unused")
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = {})
@@ -642,19 +712,19 @@ public class Account extends AccountAbstract<Account>
   @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
   // A partir d'Hibernate 4.1.1, l'entité parent n'est pas mise à jour par défaut
   @OptimisticLock(excluded = false)
-  private Map<String, CreditInvolvementNormal> getInvolvementNormalMapInternal()
+  private Map<String, CreditInvolvementNormal> getInvolvementNormalMapDatabase()
   {
-    return this.getInvolvementNormalMap().getInternal();
+    return this.getInvolvementNormalMapInternal().getInternal();
   }
   /**
-   * Setter de la map interne des implications de crédits sur des ventes aux enchères
-   * normales du compte utilisateur courant
-   * @param involvementMap Set interne de la map des implications de crédits sur
-   * des ventes aux enchères normales du compte utilisateur courant à positionner
+   * Setter de la map persistante des implications de crédits sur des ventes aux
+   * enchères normales du compte utilisateur courant
+   * @param involvementMap Map persistante de la map des implications de crédits
+   * sur des ventes aux enchères normales du compte utilisateur courant à positionner
    */
   @SuppressWarnings("unused")
-  private void setInvolvementNormalMapInternal(Map<String, CreditInvolvementNormal> involvementMap)
+  private void setInvolvementNormalMapDatabase(Map<String, CreditInvolvementNormal> involvementMap)
   {
-    this.setInvolvementNormalMap(new Bid4WinMap<String, CreditInvolvementNormal>(involvementMap, true));
+    this.setInvolvementNormalMapInternal(new Bid4WinMap<String, CreditInvolvementNormal>(involvementMap, true));
   }
 }

@@ -2,7 +2,7 @@ package com.bid4win.persistence.entity.locale;
 
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
 import com.bid4win.commons.core.UtilString;
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.reference.MessageRef;
 import com.bid4win.commons.core.reference.MessageRef.LanguageRef;
@@ -43,11 +43,11 @@ public class Language extends Bid4WinObjectType<Language>
   }
   /**
    * Cette méthode permet de récupérer toutes les langues existantes
-   * @return Le set complet de toutes les langues définies
+   * @return Toutes les langues définies
    */
-  public static Bid4WinSet<Language> getLanguageSet()
+  public static Bid4WinCollection<Language> getLanguages()
   {
-    return Bid4WinObjectType.getTypeSet(Language.class);
+    return Bid4WinObjectType.getTypes(Language.class);
   }
 
   /** Nom de la langue */

@@ -10,14 +10,13 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.bid4win.commons.core.UtilNumber;
 import com.bid4win.commons.core.UtilObject;
+import com.bid4win.commons.core.collection.Bid4WinMap;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.UserException;
+import com.bid4win.commons.core.reference.MessageRef;
 import com.bid4win.commons.core.reference.MessageRef.PropertyRef;
 import com.bid4win.commons.core.security.exception.ProtectionException;
-import com.bid4win.commons.persistence.entity.Bid4WinEntity;
-import com.bid4win.commons.persistence.entity.Bid4WinRelation;
-import com.bid4win.commons.persistence.entity.property.PropertyBase_Relations;
 import com.bid4win.commons.persistence.entity.property.PropertyRootAbstract;
 
 /**
@@ -111,7 +110,29 @@ public class I18nRoot extends PropertyRootAbstract<I18nRoot, I18n>
    * @see com.bid4win.commons.persistence.entity.Bid4WinEntity#addRelationMap(com.bid4win.commons.persistence.entity.Bid4WinRelation, com.bid4win.commons.persistence.entity.Bid4WinRelation, com.bid4win.commons.persistence.entity.Bid4WinEntity)
    */
   @Override
-  protected void addRelationMap(Bid4WinRelation link,
+  protected <KEY, VALUE> void add(Bid4WinMap<KEY, VALUE> map, KEY key,
+                                  VALUE value, MessageRef base)
+            throws ProtectionException, UserException
+  {
+    if(this.isPropertyMapInternal(map) && value != null)
+    {
+      I18n i18n = (I18n)value;
+      // On doit obligatoirement ajouter une langue
+      Language language = Language.getLanguage(i18n.getKey());
+      // Vérifie que la propriété en argument est bien vide
+      UtilNumber.checkMaxValue("propertyNb", i18n.getPropertyNb(), 0, true,
+                               PropertyRef.I18N_NOT_EMPTY_ERROR);
+      // Défini la valeur de la langue si nécessaire
+      if(i18n.getValue().equals(""))
+      {
+        i18n.defineValue(language.getName());
+      }
+    }
+    // Ajoute la propriété
+    super.add(map, key, value, base);
+  }
+
+/*  protected void addRelationMap(Bid4WinRelation link,
                                 Bid4WinRelation backLink,
                                 Bid4WinEntity<?, ?> toBeAdded)
             throws ProtectionException, UserException
@@ -132,5 +153,5 @@ public class I18nRoot extends PropertyRootAbstract<I18nRoot, I18n>
     }
     // Ajoute la propriété
     super.addRelationMap(link, backLink, toBeAdded);
-  }
+  }*/
 }

@@ -44,17 +44,13 @@ import com.bid4win.persistence.entity.account.Account_Relations;
 public class CreditBundle extends CreditBundleAbstract<CreditBundle>
 {
   /** Lien vers le compte utilisateur du lot de crédits */
-  @Transient
-  private Account accountLink = null;
+  @Transient private Account accountLink = null;
   /** Nombre courant de crédits du lot */
-  @Transient
-  private int currentNb = 0;
+  @Transient private int currentNb = 0;
   /** Identifiant d'historisation du lot de crédits */
-  @Transient
-  private Long historyId = null;
+  @Transient private Long historyId = null;
   /** Historisation du lot de crédits */
-  @Transient
-  private CreditBundleHistory history = null;
+  @Transient private CreditBundleHistory history = null;
 
   /**
    * Constructeur pour création par introspection
@@ -222,7 +218,7 @@ public class CreditBundle extends CreditBundleAbstract<CreditBundle>
   {
     // Vérification du nombre de crédits à utiliser
     UtilNumber.checkMinValue("nb", nb, 1, true,
-                             AccountRef.ACCOUNT_CREDIT_NB_INVALID_ERROR);
+                             AccountRef.CREDIT_NB_INVALID_ERROR);
     try
     {
       // Diminution du nombre de crédits du lot
@@ -230,7 +226,7 @@ public class CreditBundle extends CreditBundleAbstract<CreditBundle>
     }
     catch(UserException ex)
     {
-      throw new UserException(AccountRef.ACCOUNT_CREDIT_NB_INSUFFICIENT_ERROR, ex);
+      throw new UserException(AccountRef.CREDIT_NB_INSUFFICIENT_ERROR, ex);
     }
     // Si le lot est complètement utilisé, on le retire du compte utilisateur
     if(this.getCurrentNb() == 0)
@@ -262,7 +258,7 @@ public class CreditBundle extends CreditBundleAbstract<CreditBundle>
   {
     if(this.getCurrentNb() == 0)
     {
-      throw new UserException(AccountRef.ACCOUNT_CREDIT_NB_INVALID_ERROR);
+      throw new UserException(AccountRef.CREDIT_NB_INVALID_ERROR);
     }
     this.linkTo(CreditBundle_Relations.RELATION_ACCOUNT_LINK,
                 Account_Relations.RELATION_CREDIT_BUNDLE_LIST,
@@ -283,7 +279,7 @@ public class CreditBundle extends CreditBundleAbstract<CreditBundle>
   {
     if(this.getCurrentNb() != 0)
     {
-      throw new UserException(AccountRef.ACCOUNT_CREDIT_NB_INVALID_ERROR);
+      throw new UserException(AccountRef.CREDIT_NB_INVALID_ERROR);
     }
     return (Account)this.unlinkFrom(CreditBundle_Relations.RELATION_ACCOUNT_LINK,
                                     Account_Relations.RELATION_CREDIT_BUNDLE_LIST);
@@ -298,6 +294,14 @@ public class CreditBundle extends CreditBundleAbstract<CreditBundle>
     return this.getNb();
   }
   /**
+   * Getter du nombre de crédits utilisés sur le lot
+   * @return Le nombre de crédits utilisés sur le lot
+   */
+  public int getUsedNb()
+  {
+    return this.getInitialNb() - this.getCurrentNb();
+  }
+  /**
    * Cette méthode permet de définir le nombre courant de crédits du lot
    * @param currentNb Définition du nombre courant de crédits du lot
    * @throws ProtectionException Si le lot de crédits courant est protégé
@@ -308,7 +312,7 @@ public class CreditBundle extends CreditBundleAbstract<CreditBundle>
     // Vérifie la protection du lot de crédits courant
     this.checkProtection();
     this.setCurrentNb(UtilNumber.checkMinValue("currentNb", currentNb, 0, true,
-                                               AccountRef.ACCOUNT_CREDIT_NB_INVALID_ERROR));
+                                               AccountRef.CREDIT_NB_INVALID_ERROR));
   }
   /**
    * Cette méthode permet de définir la valeur totale des crédits du lot
@@ -321,7 +325,7 @@ public class CreditBundle extends CreditBundleAbstract<CreditBundle>
   public void defineTotalValue(double totalValue) throws ProtectionException, UserException
   {
     UtilBoolean.checkFalse("historized", this.isHistorized(),
-                           AccountRef.ACCOUNT_CREDIT_HISTORIZED_ERROR);
+                           AccountRef.CREDIT_HISTORIZED_ERROR);
     super.defineTotalValue(totalValue);
   }
   /**
@@ -356,9 +360,9 @@ public class CreditBundle extends CreditBundleAbstract<CreditBundle>
   public CreditBundle defineHistoryId() throws UserException
   {
     UtilObject.checkNotNull("history", this.getHistory(),
-                            AccountRef.ACCOUNT_CREDIT_NOT_HISTORIZED_ERROR);
+                            AccountRef.CREDIT_NOT_HISTORIZED_ERROR);
     this.setHistoryId(UtilObject.checkNotNull("historyId", this.getHistory().getId(),
-                      AccountRef.ACCOUNT_CREDIT_NOT_HISTORIZED_ERROR));
+                      AccountRef.CREDIT_NOT_HISTORIZED_ERROR));
     return this;
   }
   /**
@@ -374,7 +378,7 @@ public class CreditBundle extends CreditBundleAbstract<CreditBundle>
     // Vérifie la protection du lot de crédits courant
     this.checkProtection();
     UtilBoolean.checkFalse("historized", this.isHistorized(),
-                           AccountRef.ACCOUNT_CREDIT_HISTORIZED_ERROR);
+                           AccountRef.CREDIT_HISTORIZED_ERROR);
     this.setHistory(history);
     return history;
   }

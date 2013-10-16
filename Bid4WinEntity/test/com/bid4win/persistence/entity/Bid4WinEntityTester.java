@@ -8,7 +8,7 @@ import com.bid4win.persistence.entity.account.Account;
  * <BR>
  * @author Emeric Fillâtre
  */
-public class Bid4WinEntityTester
+public abstract class Bid4WinEntityTester
        extends com.bid4win.commons.persistence.entity.Bid4WinEntityTester<Account, EntityGenerator>
 {
   // Pas de définition spécifique

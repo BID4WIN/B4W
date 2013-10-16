@@ -6,7 +6,7 @@ CREATE TABLE `INNER_CONTENT_STORAGE`
   `VERSION`      int(3)       NOT NULL                COMMENT 'Version de la reference du stockage de contenu',
   `CREATE_DATE`  varchar(23)  NOT NULL                COMMENT 'Date de creation de la reference du stockage de contenu',
   `UPDATE_DATE`  varchar(23)  NOT NULL                COMMENT 'Date de modification de la reference du stockage de contenu',
-  `UPDATE_FORCE` int(5)       NOT NULL                COMMENT 'Champs permettant le forcage de la modification de la reference du stockage de contenu',
+  `UPDATE_FORCE` int(5)       NOT NULL                COMMENT 'Champ permettant le forcage de la modification de la reference du stockage de contenu',
   `PATH`         varchar(150) NOT NULL                COMMENT 'Emplacement de stockage du contenu reference',
   `NAME`         varchar(50)  NOT NULL                COMMENT 'Nom du contenu reference',
   `CONTENT_TYPE` varchar(5)   NOT NULL                COMMENT 'Type de contenu',

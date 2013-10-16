@@ -52,7 +52,7 @@ public class CreditBundleHistory extends CreditBundleAbstract<CreditBundleHistor
   public CreditBundleHistory(CreditBundle bundle) throws UserException
   {
     super(UtilObject.checkNotNull("bundle", bundle,
-                                  AccountRef.ACCOUNT_CREDIT_REFERENCE_MISSING_ERROR).getAccount(),
+                                  AccountRef.CREDIT_REFERENCE_MISSING_ERROR).getAccount(),
           bundle.getOrigin(), bundle.getUnitValue(), bundle.getInitialNb());
   }
 

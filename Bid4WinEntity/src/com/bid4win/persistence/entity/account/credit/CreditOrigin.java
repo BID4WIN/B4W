@@ -33,8 +33,7 @@ public class CreditOrigin extends Bid4WinEmbeddableWithType<CreditOrigin, Origin
   private static final long serialVersionUID = 772628250785504226L;
 
   /** Référence de provenance des crédits */
-  @Transient
-  private String reference = null;
+  @Transient private String reference = null;
 
   /**
    * Constructeur pour création par introspection
@@ -94,7 +93,7 @@ public class CreditOrigin extends Bid4WinEmbeddableWithType<CreditOrigin, Origin
     this.checkProtection();
     reference = UtilString.trimNotNull(reference);
     UtilNumber.checkMinValue("size", reference.length(), 1, true,
-                             AccountRef.ACCOUNT_CREDIT_REFERENCE_INVALID_ERROR);
+                             AccountRef.CREDIT_REFERENCE_INVALID_ERROR);
     this.setReference(reference);
   }
 

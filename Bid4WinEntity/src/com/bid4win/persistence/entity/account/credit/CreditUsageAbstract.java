@@ -37,17 +37,13 @@ public abstract class CreditUsageAbstract<CLASS extends CreditUsageAbstract<CLAS
        extends Bid4WinEntityAutoID<CLASS>
 {
   /** Identifiant du lot de provenance des crédits utilisés */
-  @Transient
-  private Long bundleId = null;
+  @Transient private Long bundleId = null;
   /** Lot de provenance des crédits utilisés */
-  @Transient
-  private BUNDLE bundle = null;
+  @Transient private BUNDLE bundle = null;
   /** Implication des crédits utilisés */
-  @Transient
-  private INVOLVEMENT involvement = null;
+  @Transient private INVOLVEMENT involvement = null;
   /** Nombre de crédits utilisés */
-  @Transient
-  private int usedNb = 0;
+  @Transient private int usedNb = 0;
 
   /**
    * Constructeur pour création par introspection

@@ -98,7 +98,7 @@ public abstract class Schedule<CLASS extends Schedule<CLASS>> extends ScheduleAb
    */
   protected Bid4WinDate defineNewEndDate(Bid4WinDate bidDate) throws UserException
   {
-    UtilObject.checkNotNull("bidDate", bidDate, AuctionRef.AUCTION_SCHEDULE_INVALID_ERROR);
+    UtilObject.checkNotNull("bidDate", bidDate, AuctionRef.SCHEDULE_INVALID_ERROR);
     Bid4WinDate endDate = this.getEndDate();
     if(endDate == null || endDate.equals(Bid4WinDate.FINAL_DATE))
     {
@@ -124,7 +124,7 @@ public abstract class Schedule<CLASS extends Schedule<CLASS>> extends ScheduleAb
     // Vérifie la protection de la planification courante
     this.checkProtection();
     UtilNumber.checkMinValue("initialCountdown", initialCountdown, 1, true,
-                             AuctionRef.AUCTION_SCHEDULE_INVALID_ERROR);
+                             AuctionRef.SCHEDULE_INVALID_ERROR);
     this.setInitialCountdown(initialCountdown);
     this.defineNewEndDate(this.getStartDate());
   }
@@ -141,7 +141,7 @@ public abstract class Schedule<CLASS extends Schedule<CLASS>> extends ScheduleAb
     // Vérifie la protection de la planification courante
     this.checkProtection();
     UtilNumber.checkMinValue("initialCountdown", aditionalCountdown, 1, true,
-                             AuctionRef.AUCTION_SCHEDULE_INVALID_ERROR);
+                             AuctionRef.SCHEDULE_INVALID_ERROR);
     this.setAdditionalCountdown(aditionalCountdown);
   }
 

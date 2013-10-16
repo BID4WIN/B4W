@@ -1,7 +1,7 @@
 package com.bid4win.persistence.entity.auction;
 
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 
 /**
  * Cette classe défini un status de vente aux enchères<BR>
@@ -41,11 +41,11 @@ public class Status extends Bid4WinObjectType<Status>
 
   /**
    * Cette méthode permet de récupérer tous les status existants
-   * @return Le set complet de tous les status définis
+   * @return Tous les status définis
    */
-  public static Bid4WinSet<Status> getStatusSet()
+  public static Bid4WinCollection<Status> getStatus()
   {
-    return Bid4WinObjectType.getTypeSet(Status.class);
+    return Bid4WinObjectType.getTypes(Status.class);
   }
 
   /**

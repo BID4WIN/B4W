@@ -21,17 +21,13 @@ import com.bid4win.commons.persistence.entity.Bid4WinEmbeddable;
 public class Name extends Bid4WinEmbeddable<Name>
 {
   /** Genre de l'individu */
-  @Transient
-  private Gender gender = null;
+  @Transient private Gender gender = null;
   /** Prénom de l'utilisateur */
-  @Transient
-  private String firstName = null;
+  @Transient private String firstName = null;
   /** Deuxième prénom de l'utilisateur */
-  @Transient
-  private String middleName = null;
+  @Transient private String middleName = null;
   /** Nom de famille de l'utilisateur */
-  @Transient
-  private String lastName = null;
+  @Transient private String lastName = null;
 
   /**
    * Constructeur pour création par introspection

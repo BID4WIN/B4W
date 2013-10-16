@@ -4,8 +4,8 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.bid4win.commons.core.exception.UserException;
+import com.bid4win.commons.persistence.entity.connection.ConnectionData;
 import com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractTester;
-import com.bid4win.commons.persistence.entity.connection.IpAddress;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 import com.bid4win.persistence.entity.EntityGenerator;
 import com.bid4win.persistence.entity.account.Account;
@@ -24,18 +24,16 @@ public class ConnectionHistoryTest
   /**
    *
    * TODO A COMMENTER
-   * @param sessionId {@inheritDoc}
+   * @param data {@inheritDoc}
    * @param account {@inheritDoc}
-   * @param ipAddress {@inheritDoc}
-   * @param remanent {@inheritDoc}
    * @return {@inheritDoc}
    * @throws UserException {@inheritDoc}
-   * @see com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractTester#createConnection(java.lang.String, com.bid4win.commons.persistence.entity.account.AccountAbstract, com.bid4win.commons.persistence.entity.connection.IpAddress, boolean)
+   * @see com.bid4win.commons.persistence.entity.connection.ConnectionHistoryAbstractTester#createConnection(com.bid4win.commons.persistence.entity.connection.ConnectionData, com.bid4win.commons.persistence.entity.account.AccountAbstract)
    */
   @Override
-  protected Connection createConnection(String sessionId, Account account, IpAddress ipAddress, boolean remanent) throws UserException
+  protected Connection createConnection(ConnectionData data/*String sessionId*/, Account account/*, IpAddress ipAddress, boolean remanent*/) throws UserException
   {
-    return new ConnectionStub(sessionId, account, ipAddress, remanent);
+    return new ConnectionStub(data/*sessionId*/, account/*, ipAddress, remanent*/);
   }
   /**
    *

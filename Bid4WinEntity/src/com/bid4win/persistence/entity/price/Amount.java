@@ -5,6 +5,7 @@ import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 import com.bid4win.commons.core.UtilNumber;
 import com.bid4win.commons.core.UtilObject;
@@ -32,7 +33,7 @@ public class Amount extends Bid4WinEmbeddableWithType<Amount, Currency>
   public final static int PRECISION = 2;
 
   /** Valeur du montant */
-  private double value = 0;
+  @Transient private double value = 0;
 
   /**
    * Constructeur pour création par introspection
@@ -117,7 +118,7 @@ public class Amount extends Bid4WinEmbeddableWithType<Amount, Currency>
   @Override
   protected MessageRef getMessageRefBase()
   {
-    return CurrencyRef.CURRENCY_AMOUNT;
+    return CurrencyRef.AMOUNT;
   }
   /**
    *
@@ -169,7 +170,7 @@ public class Amount extends Bid4WinEmbeddableWithType<Amount, Currency>
   {
     this.checkProtection();
     value = UtilNumber.checkMinValue("value", value, 0, true,
-                                     CurrencyRef.CURRENCY_AMOUNT_INVALID_ERROR);
+                                     CurrencyRef.AMOUNT_INVALID_ERROR);
     precision = Math.max(0, precision);
     this.setValue(Math.round(value * Math.pow(10, precision)) /
                   Math.pow(10, precision));

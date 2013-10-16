@@ -108,7 +108,7 @@ public abstract class CancelPolicyAbstract<CLASS extends CancelPolicyAbstract<CL
     this.checkProtection();
     this.setCreditNbThreshold(
         UtilNumber.checkMinValue("creditNbThreshold", (int)creditNbThreshold, 0, true,
-                                 AuctionRef.AUCTION_TERMS_INVALID_ERROR));
+                                 AuctionRef.TERMS_INVALID_ERROR));
     if(this.getCreditNbThreshold() < creditNbThreshold)
     {
       this.setCreditNbThreshold(this.getCreditNbThreshold() + 1);
@@ -129,7 +129,7 @@ public abstract class CancelPolicyAbstract<CLASS extends CancelPolicyAbstract<CL
     this.checkProtection();
     this.setCreditNbPaidBonus(
         UtilNumber.checkMinValue("creditNbPaidBonus", creditNbPaidBonus, 0, true,
-                                 AuctionRef.AUCTION_TERMS_INVALID_ERROR));
+                                 AuctionRef.TERMS_INVALID_ERROR));
   }
 
   /** #################################################################### **/

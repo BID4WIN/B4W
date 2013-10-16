@@ -1,7 +1,7 @@
 package com.bid4win.persistence.entity.sale;
 
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 
 /**
  * Cette classe défini l'étape d'une vente<BR>
@@ -34,11 +34,11 @@ public class Step extends Bid4WinObjectType<Step>
 
   /**
    * Cette méthode permet de récupérer toutes les étapes de vente
-   * @return Le set complet de toutes les étapes de vente définies
+   * @return Toutes les étapes de vente définies
    */
-  public static Bid4WinSet<Step> getStepSet()
+  public static Bid4WinCollection<Step> getSteps()
   {
-    return Bid4WinObjectType.getTypeSet(Step.class);
+    return Bid4WinObjectType.getTypes(Step.class);
   }
 
   /**

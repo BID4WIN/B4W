@@ -1,7 +1,7 @@
 package com.bid4win.persistence.entity.image.resource;
 
 import com.bid4win.commons.core.Bid4WinObject.Bid4WinObjectType;
-import com.bid4win.commons.core.collection.Bid4WinSet;
+import com.bid4win.commons.core.collection.Bid4WinCollection;
 import com.bid4win.commons.core.exception.UserException;
 import com.bid4win.commons.core.reference.MessageRef;
 import com.bid4win.commons.core.reference.MessageRef.ResourceRef;
@@ -45,11 +45,11 @@ public class Format extends Bid4WinObjectType<Format>
   }
   /**
    * Cette méthode permet de récupérer tous les format existants
-   * @return Le set complet de tous les formats définis
+   * @return Tous les formats définis
    */
-  public static Bid4WinSet<Format> getFormatSet()
+  public static Bid4WinCollection<Format> getFormats()
   {
-    return Bid4WinObjectType.getTypeSet(Format.class);
+    return Bid4WinObjectType.getTypes(Format.class);
   }
 
   /** Taille (largeur/hauteur) standard pour le format d'image */

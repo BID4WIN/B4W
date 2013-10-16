@@ -101,7 +101,7 @@ public abstract class TermsAbstract<CLASS extends TermsAbstract<CLASS>>
     // Vérifie la protection des conditions d'enchère courantes
     this.checkProtection();
     this.setCreditNbPerBid(UtilNumber.checkMinValue("creditNbPerBid", creditNbPerBid, 0, true,
-                                                    AuctionRef.AUCTION_TERMS_INVALID_ERROR));
+                                                    AuctionRef.TERMS_INVALID_ERROR));
   }
   /**
    * Cette méthode permet de définir la valeur d'un incrément d'enchère
@@ -118,7 +118,7 @@ public abstract class TermsAbstract<CLASS extends TermsAbstract<CLASS>>
     this.checkProtection();
     Amount amount = new Amount(bidIncrementValue);
     UtilNumber.checkMinValue("bidIncrementValue", amount.getValue(), 0, false,
-                             AuctionRef.AUCTION_TERMS_INVALID_ERROR);
+                             AuctionRef.TERMS_INVALID_ERROR);
     this.setBidIncrement(amount);
   }
 

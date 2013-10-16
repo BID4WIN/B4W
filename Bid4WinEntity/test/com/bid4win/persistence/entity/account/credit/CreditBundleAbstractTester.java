@@ -155,4 +155,18 @@ public abstract class CreditBundleAbstractTester<BUNDLE extends CreditBundleAbst
     assertTrue(bundle1.identical(bundle2));
     assertTrue(bundle2.identical(bundle1));
   }
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.persistence.entity.account.AccountBasedEntityTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    super.testCheckProtection();
+
+
+  }
 }

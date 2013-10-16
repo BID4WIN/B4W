@@ -47,11 +47,9 @@ public abstract class CreditInvolvementAuctionAbstract<CLASS extends CreditInvol
        extends CreditInvolvement<CLASS, USAGE, BUNDLE, HISTORY>
 {
   /** Identifiant de la vente aux enchères sur laquelle sont impliqués les crédits */
-  @Transient
-  private String auctionId = null;
+  @Transient private String auctionId = null;
   /** Vente aux enchères sur laquelle sont impliqués les crédits */
-  @Transient
-  private AUCTION auction = null;
+  @Transient private AUCTION auction = null;
 
   /**
    * Constructeur pour création par introspection
@@ -189,7 +187,6 @@ public abstract class CreditInvolvementAuctionAbstract<CLASS extends CreditInvol
    * Getter de la vente aux enchères sur laquelle sont impliqués les crédits
    * @return La vente aux enchères sur laquelle sont impliqués les crédits
    */
-  // Annotation pour la persistence
   // Annotation pour la persistence
   @Access(AccessType.PROPERTY)
   @ManyToOne(fetch = FetchType.LAZY, cascade = {})

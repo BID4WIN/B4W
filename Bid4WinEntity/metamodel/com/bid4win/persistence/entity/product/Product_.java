@@ -21,7 +21,7 @@ import com.bid4win.persistence.entity.price.Price;
 @StaticMetamodel(Product.class)
 public class Product_ extends Bid4WinEntityGeneratedID_
 {
-  /** Définition du champs permettant le forçage de la modification du produit */
+  /** Définition du champ permettant le forçage de la modification du produit */
   public static volatile SingularAttribute<Product, Integer> updateForce;
   /** Définition de la référence du produit */
   public static volatile SingularAttribute<Product, String> reference;

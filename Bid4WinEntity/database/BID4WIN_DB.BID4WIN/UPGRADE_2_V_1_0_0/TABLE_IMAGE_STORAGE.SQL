@@ -6,7 +6,7 @@ CREATE TABLE `IMAGE_STORAGE`
   `VERSION`      int(3)       NOT NULL                COMMENT 'Version de la reference du stockage d image',
   `CREATE_DATE`  varchar(23)  NOT NULL                COMMENT 'Date de creation de la reference du stockage d image',
   `UPDATE_DATE`  varchar(23)  NOT NULL                COMMENT 'Date de modification de la reference du stockage d image',
-  `UPDATE_FORCE` int(5)       NOT NULL                COMMENT 'Champs permettant le forcage de la modification de la reference du stockage d image',
+  `UPDATE_FORCE` int(5)       NOT NULL                COMMENT 'Champ permettant le forcage de la modification de la reference du stockage d image',
   `PATH`         varchar(150) NOT NULL                COMMENT 'Emplacement de stockage de l image referencee',
   `NAME`         varchar(50)  NOT NULL                COMMENT 'Nom de l image referencee',
   `IMAGE_TYPE`   varchar(5)   NOT NULL                COMMENT 'Type de l image',

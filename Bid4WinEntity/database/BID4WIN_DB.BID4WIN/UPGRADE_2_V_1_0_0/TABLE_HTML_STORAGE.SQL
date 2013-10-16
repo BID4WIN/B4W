@@ -6,7 +6,7 @@ CREATE TABLE `HTML_STORAGE`
   `VERSION`      int(3)       NOT NULL                COMMENT 'Version de la reference du stockage de page HTML',
   `CREATE_DATE`  varchar(23)  NOT NULL                COMMENT 'Date de creation de la reference du stockage de page HTML',
   `UPDATE_DATE`  varchar(23)  NOT NULL                COMMENT 'Date de modification de la reference du stockage de page HTML',
-  `UPDATE_FORCE` int(5)       NOT NULL                COMMENT 'Champs permettant le forcage de la modification de la reference du stockage de page HTML',
+  `UPDATE_FORCE` int(5)       NOT NULL                COMMENT 'Champ permettant le forcage de la modification de la reference du stockage de page HTML',
   `PATH`         varchar(150) NOT NULL                COMMENT 'Emplacement de stockage de la page HTML referencee',
   `NAME`         varchar(50)  NOT NULL                COMMENT 'Nom de la page HTML referencee',
   `FULL_PATH`    varchar(250) NOT NULL                COMMENT 'Chemin complet d acces a la page HTML referencee',

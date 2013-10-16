@@ -1,8 +1,7 @@
 package com.bid4win.persistence.entity.connection;
 
-import com.bid4win.commons.core.Bid4WinDate;
 import com.bid4win.commons.core.exception.UserException;
-import com.bid4win.commons.persistence.entity.connection.IpAddress;
+import com.bid4win.commons.persistence.entity.connection.ConnectionData;
 import com.bid4win.persistence.entity.account.Account;
 
 /**
@@ -14,7 +13,7 @@ import com.bid4win.persistence.entity.account.Account;
 public class ConnectionStub extends Connection
 {
   /** TODO A COMMENTER */
-  private Bid4WinDate startDate = new Bid4WinDate();
+  //private Bid4WinDate startDate = new Bid4WinDate();
 
   /**
    * Constructeur pour création par introspection
@@ -32,10 +31,10 @@ public class ConnectionStub extends Connection
    * @throws UserException Si l'identifiant de session, le compte utilisateur ou
    * l'adresse IP de connexion en argument est nul
    */
-  public ConnectionStub(String sessionId, Account account, IpAddress ipAddress, boolean remanent)
+  public ConnectionStub(ConnectionData data/*String sessionId*/, Account account/*, IpAddress ipAddress, boolean remanent*/)
          throws UserException
   {
-    super(sessionId, account, ipAddress, remanent);
+    super(data/*sessionId*/, account/*, ipAddress, remanent*/);
   }
 
   /**
@@ -44,9 +43,9 @@ public class ConnectionStub extends Connection
    * @return {@inheritDoc}
    * @see com.bid4win.commons.persistence.entity.connection.ConnectionAbstract#getStartDate()
    */
-  @Override
+  /*@Override
   public Bid4WinDate getStartDate()
   {
     return this.startDate;
-  }
+  }*/
 }

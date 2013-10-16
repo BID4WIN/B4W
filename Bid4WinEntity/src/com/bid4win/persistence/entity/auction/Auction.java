@@ -56,8 +56,7 @@ public abstract class Auction<CLASS extends Auction<CLASS, BID, SCHEDULE, TERMS,
        extends AuctionAbstract<CLASS, BID, SCHEDULE, TERMS, CANCEL_POLICY>
 {
   /** Taille maximale de la map des dernières enchères placées sur la vente */
-  @Transient
-  private int lastBidNbMax = 5;
+  @Transient private int lastBidNbMax = 5;
   /** Map des dernières enchères placées sur la vente */
   @Transient
   private Bid4WinMap<Integer, BID> lastBidMap = new Bid4WinMap<Integer, BID>();
@@ -168,7 +167,7 @@ public abstract class Auction<CLASS extends Auction<CLASS, BID, SCHEDULE, TERMS,
   public BID getWinningBid() throws UserException
   {
     return UtilObject.checkNotNull("lastBid", this.getLastBid(),
-                                   AuctionRef.AUCTION_BID_MISSING_ERROR);
+                                   AuctionRef.BID_MISSING_ERROR);
   }
   /**
    * Getter de l'enchère dont la position relative par rapport à la dernière enchère
@@ -267,7 +266,7 @@ public abstract class Auction<CLASS extends Auction<CLASS, BID, SCHEDULE, TERMS,
    */
   public int getBidPosition(Amount bidValue) throws UserException
   {
-    UtilObject.checkNotNull("bidValue", bidValue, CurrencyRef.CURRENCY_AMOUNT_MISSING_ERROR);
+    UtilObject.checkNotNull("bidValue", bidValue, CurrencyRef.AMOUNT_MISSING_ERROR);
     bidValue = this.getExchangeRates().changeTo(bidValue, Currency.DEFAULT);
     return (int)(bidValue.getValue() / this.getTerms().getBidIncrement().getValue());
   }
@@ -307,7 +306,7 @@ public abstract class Auction<CLASS extends Auction<CLASS, BID, SCHEDULE, TERMS,
     if(this.getBidNb() != 0)
     {
       UtilObject.checkDiffers("accountId", account.getId(), this.getLastBidder().getId(),
-                              AuctionRef.AUCTION_BID_DEFINED_ERROR);
+                              AuctionRef.BID_DEFINED_ERROR);
     }
     return account;
   }

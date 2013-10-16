@@ -48,7 +48,7 @@ public class BidHistory<CLASS extends BidHistory<CLASS, AUCTION, BID>,
   protected BidHistory(BID bid) throws UserException
   {
     super(UtilObject.checkNotNull("bid", bid,
-                                  AuctionRef.AUCTION_BID_MISSING_ERROR).getAccount(),
+                                  AuctionRef.BID_MISSING_ERROR).getAccount(),
           bid.getAuction(), bid.getPosition());
     this.setBidDate(bid.getCreateDate());
   }

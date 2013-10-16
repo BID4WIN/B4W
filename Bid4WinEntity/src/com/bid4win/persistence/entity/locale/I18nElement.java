@@ -5,6 +5,7 @@ import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 import com.bid4win.commons.core.UtilString;
 import com.bid4win.commons.core.exception.UserException;
@@ -29,7 +30,7 @@ public class I18nElement extends Bid4WinEmbeddableWithType<I18nElement, Language
   private static final long serialVersionUID = 6810506204585676299L;
 
   /** Valeur de l'élément d'internationalisation */
-  private String value = null;
+  @Transient private String value = null;
 
   /**
    * Constructeur pour création par introspection

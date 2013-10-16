@@ -13,12 +13,14 @@ import org.springframework.test.context.ContextConfiguration;
 import com.bid4win.commons.core.exception.Bid4WinException;
 import com.bid4win.commons.core.exception.ModelArgumentException;
 import com.bid4win.commons.core.exception.UserException;
+import com.bid4win.commons.core.security.exception.ProtectionException;
 import com.bid4win.commons.persistence.entity.account.AccountAbstractTester;
 import com.bid4win.commons.persistence.entity.account.security.Credential;
 import com.bid4win.commons.persistence.entity.contact.Email;
 import com.bid4win.commons.testing.Bid4WinJUnit4ClassRunner;
 import com.bid4win.persistence.entity.EntityGenerator;
 import com.bid4win.persistence.entity.account.credit.CreditBundle;
+import com.bid4win.persistence.entity.account.credit.auction.CreditInvolvementNormal;
 import com.bid4win.persistence.entity.account.credit.collection.CreditMap;
 import com.bid4win.persistence.entity.account.preference.PreferenceBundle;
 import com.bid4win.persistence.entity.account.preference.PreferenceRoot;
@@ -212,7 +214,7 @@ public class AccountTest extends AccountAbstractTester<Account, EntityGenerator>
     assertEquals("Bad result", 1, result.size());
     assertEquals("Bad credit nb", result.get(bundle2).intValue(), 1);
     // Utilise moins d'un crédit
-    result = account.useCredit(0);
+    result = account.useCredit(-1);
     assertTrue("Bad result", account.hasCredit());
     assertEquals("Bad credit nb", 4, account.getCreditNb());
     assertEquals("Bad used credit nb", 2, account.getUsedCreditNb());
@@ -225,7 +227,7 @@ public class AccountTest extends AccountAbstractTester<Account, EntityGenerator>
     try
     {
       account.useCredit(account.getCreditNb() + 1);
-      fail("Sould fail");
+      fail("Should fail with not enought credits to use");
     }
     catch(UserException ex)
     {
@@ -243,5 +245,93 @@ public class AccountTest extends AccountAbstractTester<Account, EntityGenerator>
     assertEquals("Bad result", 2, result.size());
     assertEquals("Bad credit nb", result.get(bundle2).intValue(), 1);
     assertEquals("Bad credit nb", result.get(bundle3).intValue(), 2);
+  }
+
+  /**
+   *
+   * TODO A COMMENTER
+   * @throws Bid4WinException {@inheritDoc}
+   * @see com.bid4win.commons.persistence.entity.account.AccountAbstractTester#testCheckProtection()
+   */
+  @Override
+  @Test
+  public void testCheckProtection() throws Bid4WinException
+  {
+    super.testCheckProtection();
+
+    String idAccount = this.startProtection();
+    Account account = this.createAccount(this.getGenerator().createCredential(),
+                                         this.getGenerator().createEmail());
+    User user = account.getUser();
+    String idBundle = this.startProtection();
+    CreditBundle bundle = new CreditBundle(account, this.getGenerator().createCreditOrigin(), 1, 10);
+    this.stopProtection();
+    this.stopProtection();
+
+    try
+    {
+      account.defineUser(this.getGenerator().createUser(1));
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    try
+    {
+      new CreditBundle(account, this.getGenerator().createCreditOrigin(), 1, 1);
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    try
+    {
+      new CreditInvolvementNormal(account, this.getGenerator().createNormalAuction());
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    try
+    {
+      account.useCredit(bundle.getCurrentNb());
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    this.startProtection(idAccount);
+    try
+    {
+      account.useCredit(bundle.getCurrentNb());
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    this.stopProtection();
+    this.startProtection(idBundle);
+    try
+    {
+      account.useCredit(bundle.getCurrentNb());
+      fail("Should fail with protected object");
+    }
+    catch(ProtectionException ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    this.stopProtection();
+    assertEquals("Wrong user", user, account.getUser());
+    assertEquals("Wrong credit nb", bundle.getInitialNb(), account.getCreditNb());
+    assertEquals("Wrong used credit nb", 0, account.getUsedCreditNb());
+    assertEquals("Wrong credit bundle list", 1, account.getRelationList(Account_Relations.RELATION_CREDIT_BUNDLE_LIST).size());
+    assertEquals("Wrong credit bundle", bundle.getInitialNb(),
+                 ((CreditBundle)account.getRelationList(Account_Relations.RELATION_CREDIT_BUNDLE_LIST).get(0)).getCurrentNb());
+    assertEquals("Wrong credit involevment normal map", 0, account.getRelationMap(Account_Relations.RELATION_INVOLVEMENT_NORMAL_MAP).size());
   }
 }
